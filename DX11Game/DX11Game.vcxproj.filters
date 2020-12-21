@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース">
+      <UniqueIdentifier>{93b056af-c8ca-43b9-a8c1-183aa0f7d2ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="シェーダー">
+      <UniqueIdentifier>{3047d139-b701-418c-97e9-9b6f92475194}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース\エンジン">
+      <UniqueIdentifier>{68a75463-6b4f-4124-82d2-620ce187f917}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース\エンジン\ECS">
+      <UniqueIdentifier>{7e353f47-516f-47b1-9506-c101a303e5b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース\エンジン\System">
+      <UniqueIdentifier>{44d01232-2b5d-44f3-b100-9f237a0c709f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース\エンジン\ECS\Object">
+      <UniqueIdentifier>{2e9ead22-90f3-43b7-a96b-d92d71376280}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース\エンジン\ECS\Entity">
+      <UniqueIdentifier>{49d6beeb-8f7d-4215-b516-0b90f6746771}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース\エンジン\ECS\Component">
+      <UniqueIdentifier>{692d1f84-cd51-410b-a20b-3798551abcb2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DX11Game.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\directx9.ico">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="source\HLSL\AssimpPixel.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="source\HLSL\AssimpVertex.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="source\HLSL\Pixel.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="source\HLSL\Pixel2D.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="source\HLSL\Vertex.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="source\HLSL\Vertex2D.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Engine\main.cpp">
+      <Filter>ソース\エンジン</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\System\debugproc.cpp">
+      <Filter>ソース\エンジン\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\System\input.cpp">
+      <Filter>ソース\エンジン\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\System\polygon.cpp">
+      <Filter>ソース\エンジン\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\System\Shader.cpp">
+      <Filter>ソース\エンジン\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\System\Sound.cpp">
+      <Filter>ソース\エンジン\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\System\Texture.cpp">
+      <Filter>ソース\エンジン\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECS\uniqueTypeID.cpp">
+      <Filter>ソース\エンジン\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECS\Object\Object.cpp">
+      <Filter>ソース\エンジン\ECS\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECS\Object\ObjectManager.cpp">
+      <Filter>ソース\エンジン\ECS\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECS\Entity\IEntity.cpp">
+      <Filter>ソース\エンジン\ECS\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECS\Component\IComponent.cpp">
+      <Filter>ソース\エンジン\ECS\Component</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Engine\main.h">
+      <Filter>ソース\エンジン</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\System\debugproc.h">
+      <Filter>ソース\エンジン\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\System\input.h">
+      <Filter>ソース\エンジン\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\System\Math.h">
+      <Filter>ソース\エンジン\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\System\polygon.h">
+      <Filter>ソース\エンジン\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\System\Shader.h">
+      <Filter>ソース\エンジン\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\System\Sound.h">
+      <Filter>ソース\エンジン\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\System\Texture.h">
+      <Filter>ソース\エンジン\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECS\uniqueTypeID.h">
+      <Filter>ソース\エンジン\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECS\Object\Object.h">
+      <Filter>ソース\エンジン\ECS\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECS\Object\ObjectManager.h">
+      <Filter>ソース\エンジン\ECS\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECS\Entity\IEntity.h">
+      <Filter>ソース\エンジン\ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECS\Component\IComponent.h">
+      <Filter>ソース\エンジン\ECS\Component</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

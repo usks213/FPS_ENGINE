@@ -1,0 +1,155 @@
+//==================================================================
+//												ObjectManager.cpp
+//	オブジェクトの管理クラス
+//
+//==================================================================
+//	author :	AT12A 05 宇佐美晃之
+//==================================================================
+//	開発履歴
+//
+//	2020/12/21	オブジェクトマネージャークラス作成
+//
+//===================================================================
+
+
+//===== インクルード部 =====
+#include "ObjectManager.h"
+#include <algorithm>
+
+using namespace ECS;
+
+
+//===== マクロ定義 =====
+
+
+//===== プロトタイプ宣言 =====
+
+
+//===== グローバル変数 =====
+ObjectManager* ObjectManager::g_pInstance = nullptr;
+
+
+
+//===================================
+//
+//	コンストラクタ
+//
+//===================================
+ObjectManager::ObjectManager()
+{
+}
+
+
+//===================================
+//
+//	デストラクタ
+//
+//===================================
+ObjectManager::~ObjectManager()
+{
+}
+
+
+//===================================
+//
+//	インスタンス生成
+//
+//===================================
+void ObjectManager::Create()
+{
+	// 確認
+	if (nullptr != g_pInstance) return;
+
+	// 生成
+	g_pInstance = new ObjectManager();
+}
+
+
+//===================================
+//
+//	インスタンス破棄
+//
+//===================================
+void ObjectManager::Destroy()
+{
+	// 確認
+	if (nullptr == g_pInstance) return;
+
+	// 破棄
+	delete g_pInstance;
+	g_pInstance = nullptr;
+}
+
+
+//===================================
+//
+//	オブジェクトの破棄
+//
+//===================================
+void ObjectManager::DestroyObject(std::shared_ptr<Object> obj)
+{
+	// プールを検索
+	auto itr = std::find(m_ObjectList.begin(), m_ObjectList.end(), obj);
+
+	// プールになかった
+	if (m_ObjectList.end() == itr) return;
+
+	// デストロイリストを検索
+	auto destroyItr = std::find(m_DestroyList.begin(), m_DestroyList.end(), itr);
+
+	// 既に格納されていたら
+	if (m_DestroyList.end() != destroyItr) return;
+
+	// デストロイリストに格納
+	m_DestroyList.push_back(itr);
+}
+
+//===================================
+//
+//	オブジェクトの破棄
+//
+//===================================
+void ObjectManager::DestroyObject(Object* obj)
+{
+	// プールを検索
+	auto itr = std::find_if(m_ObjectList.begin(), m_ObjectList.end(),
+		[obj](std::shared_ptr<Object> obj_s)
+		{
+			return obj_s.get() == obj;
+		});
+
+	// プールになかった
+	if (m_ObjectList.end() == itr) return;
+
+	// デストロイリストを検索
+	auto destroyItr = std::find(m_DestroyList.begin(), m_DestroyList.end(), itr);
+
+	// 既に格納されていたら
+	if (m_DestroyList.end() != destroyItr) return;
+
+	// デストロイリストに格納
+	m_DestroyList.push_back(itr);
+}
+
+
+//===================================
+//
+//	デストロイリストのクリア(オブジェクトの破棄)
+//
+//===================================
+void ObjectManager::ClearnUpObject()
+{
+	// オブジェクトの破棄
+	std::for_each(m_DestroyList.begin(), m_DestroyList.end(),
+		[this](const ObjectPool::iterator& itr)
+		{
+			//削除時実行関数
+			(*itr)->OnDestroy();
+
+			// 完全消去
+			m_ObjectList.erase(itr);
+		});
+
+	// リストをクリア
+	m_DestroyList.clear();
+}
