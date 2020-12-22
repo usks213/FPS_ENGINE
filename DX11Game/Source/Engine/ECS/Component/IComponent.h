@@ -43,8 +43,10 @@ namespace ECS
 		// デストラクタ
 		virtual ~IComponent();
 
+		// 自身の破棄
+		void Destroy() override;
 		// メッセージを受信
-		virtual void SendMessage(std::string message) {};
+		virtual void SendComponentMessage(std::string message) {};
 
 		// IDの登録
 		template <class T>

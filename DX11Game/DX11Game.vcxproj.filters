@@ -109,7 +109,7 @@
     <ClCompile Include="Source\Engine\ECS\World\World.cpp">
       <Filter>ソース\エンジン\ECS\World</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\ECS\System\System.cpp">
+    <ClCompile Include="Source\Engine\ECS\System\ISystem.cpp">
       <Filter>ソース\エンジン\ECS\System</Filter>
     </ClCompile>
   </ItemGroup>
@@ -162,7 +162,7 @@
     <ClInclude Include="Source\Engine\ECS\World\World.h">
       <Filter>ソース\エンジン\ECS\World</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\ECS\System\System.h">
+    <ClInclude Include="Source\Engine\ECS\System\ISystem.h">
       <Filter>ソース\エンジン\ECS\System</Filter>
     </ClInclude>
   </ItemGroup>

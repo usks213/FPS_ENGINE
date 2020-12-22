@@ -247,7 +247,7 @@
     <ClCompile Include="Source\Engine\ECS\Entity\IEntity.cpp" />
     <ClCompile Include="Source\Engine\ECS\Object\IObject.cpp" />
     <ClCompile Include="Source\Engine\ECS\Object\ObjectManager.cpp" />
-    <ClCompile Include="Source\Engine\ECS\System\System.cpp" />
+    <ClCompile Include="Source\Engine\ECS\System\ISystem.cpp" />
     <ClCompile Include="Source\Engine\ECS\uniqueTypeID.cpp" />
     <ClCompile Include="Source\Engine\ECS\World\World.cpp" />
     <ClCompile Include="Source\Engine\main.cpp" />
@@ -265,7 +265,7 @@
     <ClInclude Include="Source\Engine\ECS\Object\IObject.h" />
     <ClInclude Include="Source\Engine\ECS\Object\Object.h" />
     <ClInclude Include="Source\Engine\ECS\Object\ObjectManager.h" />
-    <ClInclude Include="Source\Engine\ECS\System\System.h" />
+    <ClInclude Include="Source\Engine\ECS\System\ISystem.h" />
     <ClInclude Include="Source\Engine\ECS\uniqueTypeID.h" />
     <ClInclude Include="Source\Engine\ECS\World\World.h" />
     <ClInclude Include="Source\Engine\main.h" />

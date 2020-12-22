@@ -62,7 +62,7 @@ IEntity::~IEntity()
 void IEntity::Destroy()
 {
 	// 自身消去
-	m_pEntityManager->DestroyEntity(this);
+	Object::Destroy();
 
 	// コンポーネントの削除
 	for (const auto& com : m_ComponentPool)
@@ -82,11 +82,6 @@ void IEntity::SendComponentMessage(std::string message)
 	std::for_each(m_ComponentPool.begin(), m_ComponentPool.end(),
 		[message](const auto& com)
 		{
-			com->SendMessage(message);
+			com->SendComponentMessage(message);
 		});
-
-	//for (const auto& com : m_ComponentPool)
-	//{
-	//	com->SendMessage(message);
-	//}
 }

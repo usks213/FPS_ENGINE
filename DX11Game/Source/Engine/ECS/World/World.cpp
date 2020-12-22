@@ -15,7 +15,7 @@
 //===== インクルード部 =====
 #include "World.h"
 #include "../Entity/EntityManager.h"
-#include "../System/System.h"
+#include "../System/ISystem.h"
 #include <algorithm>
 
 using namespace ECS;
@@ -82,7 +82,7 @@ void World::Update()
 void World::sortSystem()
 {
 	std::sort(m_SystemList.begin(), m_SystemList.end(),
-		[](const std::unique_ptr<System>& lhs, const std::unique_ptr<System>& rhs)
+		[](const std::unique_ptr<ISystem>& lhs, const std::unique_ptr<ISystem>& rhs)
 		{
 			return lhs->GetUpdateOrder() < rhs->GetUpdateOrder();
 		});
@@ -93,7 +93,7 @@ void World::sortSystem()
 //	システムOnCreateのコールバック
 //
 //===================================
-void World::CallOnCreate(System* pSystem)
+void World::CallOnCreate(ISystem* pSystem)
 {
 	// OnCreateを呼び出す
 	pSystem->OnCreate();

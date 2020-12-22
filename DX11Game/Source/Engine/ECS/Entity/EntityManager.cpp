@@ -57,7 +57,7 @@ EntityManager::~EntityManager()
 //===================================
 void EntityManager::DestroyEntity(const std::shared_ptr<IEntity>& entity)
 {
-	ObjectManager::GetInstance()->DestroyObject(entity);
+	entity->Destroy();
 }
 
 //===================================
@@ -67,7 +67,7 @@ void EntityManager::DestroyEntity(const std::shared_ptr<IEntity>& entity)
 //===================================
 void EntityManager::DestroyEntity(IEntity* entity)
 {
-	ObjectManager::GetInstance()->DestroyObject(entity);
+	entity->Destroy();
 }
 
 

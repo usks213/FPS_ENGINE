@@ -16,6 +16,8 @@
 //====== インクルード部 ======
 #include <vector>
 #include <memory>
+#include "../uniqueTypeID.h"
+#include "../System/ISystem.h"
 
 
 //===== マクロ定義 =====
@@ -26,7 +28,6 @@ namespace ECS
 {
 	// 前定義
 	class EntityManager;
-	class System;
 
 	// ワールドクラス
 	class World
@@ -35,7 +36,7 @@ namespace ECS
 		// エンティティマネージャー
 		std::unique_ptr<EntityManager> m_pEntityManager;
 		// システムリスト
-		std::vector<std::unique_ptr<System>> m_SystemList;
+		std::vector<std::unique_ptr<ISystem>> m_SystemList;
 
 	public:
 		// コンストラクタ
@@ -48,17 +49,10 @@ namespace ECS
 
 		// システムの追加
 		template<class T>
-		void AddSystem()
-		{
-			// 新規生成
-			const auto& ptr = new T(this);
-			// リストに追加
-			m_SystemList.emplace_back(ptr);
-			// 生成コールバック
-			CallOnCreate(ptr);
-			// ソート
-			sortSystem();
-		}
+		void AddSystem();
+		// システムの取得
+		template<class T>
+		T* GetSystem();
 
 		// エンティティマネージャーを取得
 		EntityManager* GetEntityManager() { return m_pEntityManager.get(); }
@@ -67,7 +61,41 @@ namespace ECS
 		// システムリストのソート
 		void sortSystem();
 		// OnCreateコールバック関数
-		static void CallOnCreate(System* pSystem);
+		static void CallOnCreate(ISystem* pSystem);
 	};
 
+
+	// システムの追加
+	template<class T>
+	void World::AddSystem()
+	{
+		// 新規生成
+		T* ptr = new T(this);
+		// システムIDの登録
+		ptr->SetTypeID<T>();
+		// リストに追加
+		m_SystemList.emplace_back(ptr);
+		// 生成コールバック
+		CallOnCreate(ptr);
+		// ソート
+		sortSystem();
+	}
+
+	// システムの取得
+	template<class T>
+	T* World::GetSystem()
+	{
+		for (const auto& sys : m_SystemList)
+		{
+			// コンポーネントIDを判定
+			if (sys->GetID() == CUniqueTypeID::Get<T>())
+			{
+				// 見つかったらキャスト
+				T* buffer = static_cast<T*>(sys.get());
+				return buffer;
+			}
+		}
+		// なかったら
+		return nullptr;
+	}
 }

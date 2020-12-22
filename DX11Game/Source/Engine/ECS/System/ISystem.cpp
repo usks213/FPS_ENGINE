@@ -1,5 +1,5 @@
 //==================================================================
-//												System.cpp
+//												ISystem.cpp
 //	システムベース
 //
 //==================================================================
@@ -13,7 +13,8 @@
 
 
 //===== インクルード部 =====
-#include "System.h"
+#include "ISystem.h"
+#include "../World/World.h"
 #include <algorithm>
 
 using namespace ECS;
@@ -34,9 +35,10 @@ using namespace ECS;
 //	コンストラクタ
 //
 //===================================
-System::System(World* pWorld)
+ISystem::ISystem(World* pWorld)
 	: m_pWorld(pWorld),
-	m_nUpdateOrder(0)
+	m_nUpdateOrder(0),
+	m_nTypeID(-1)
 {
 }
 
@@ -46,7 +48,7 @@ System::System(World* pWorld)
 //	デストラクタ
 //
 //===================================
-System::~System()
+ISystem::~ISystem()
 {
 }
 
@@ -56,7 +58,7 @@ System::~System()
 //	生成時コールバック
 //
 //===================================
-void System::OnCreate()
+void ISystem::OnCreate()
 {
 }
 
@@ -65,6 +67,16 @@ void System::OnCreate()
 //	削除時コールバック
 //
 //===================================
-void System::OnDestroy()
+void ISystem::OnDestroy()
 {
+}
+
+//===================================
+//
+//	エンティティマネージャーの取得
+//
+//===================================
+EntityManager* ISystem::GetEntityManager()
+{ 
+	return m_pWorld->GetEntityManager();
 }

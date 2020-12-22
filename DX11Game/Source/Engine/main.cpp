@@ -10,7 +10,7 @@
 //	2020/12/21	ECSベースで１から開発スタート
 //				Object,Entity,Component の作成から
 //
-//	2020/12/22	EntityManager,WorldManager,World の作成
+//	2020/12/22	World,EntityManager,System の作成
 //
 //======================================================================
 #include "main.h"
@@ -21,7 +21,7 @@
 
 #include "ECS/Object/ObjectManager.h"
 #include "ECS/Entity/EntityManager.h"
-#include "ECS/System/System.h"
+#include "ECS/System/ISystem.h"
 #include "ECS/Entity/IEntity.h"
 #include "ECS/Component/IComponent.h"
 
@@ -441,12 +441,15 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 
 	ECS::World world;
 
-	world.AddSystem<ECS::System>();
+	world.AddSystem<ECS::ISystem>();
 
 	std::weak_ptr<ECS::IEntity> entity = world.GetEntityManager()->CreateEntity<ECS::IEntity>();
 	entity.lock()->AddComponent<ECS::IComponent>();
-	entity.lock()->RemoveComponent<ECS::IComponent>();
+	//entity.lock()->RemoveComponent<ECS::IComponent>();
 	world.GetEntityManager()->DestroyEntity(entity.lock());
+
+	ECS::ISystem* sys = world.GetSystem<ECS::ISystem>();
+	sys->OnUpdate();
 
 
 	ECS::ObjectManager::GetInstance()->ClearnUpObject();
