@@ -1,20 +1,20 @@
 //==================================================================
-//												ISystem.cpp
-//	システムベース
+//												TransformSystem.cpp
+//	トランスフォーム管理システム
 //
 //==================================================================
 //	author :	AT12A 05 宇佐美晃之
 //==================================================================
 //	開発履歴
 //
-//	2020/12/22	システムクラス作成
+//	2020/12/23	トランスフォームシステム作成
 //
 //===================================================================
 
 
 //===== インクルード部 =====
-#include "ISystem.h"
-#include "../World/World.h"
+#include "TransformSystem.h"
+#include "../ECSCompoent/Transform.h"
 #include <algorithm>
 
 using namespace ECS;
@@ -35,11 +35,11 @@ using namespace ECS;
 //	コンストラクタ
 //
 //===================================
-ISystem::ISystem(World* pWorld)
-	: m_pWorld(pWorld),
-	m_nUpdateOrder(-1),
-	m_nTypeID(-1)
+TransformSystem::TransformSystem(World* pWorld)
+	: System<Transform>(pWorld)
 {
+	// 更新順
+	SetUpdateOrder(UpdateOrder::eTransform);
 }
 
 
@@ -48,7 +48,7 @@ ISystem::ISystem(World* pWorld)
 //	デストラクタ
 //
 //===================================
-ISystem::~ISystem()
+TransformSystem::~TransformSystem()
 {
 }
 
@@ -58,8 +58,22 @@ ISystem::~ISystem()
 //	生成時コールバック
 //
 //===================================
-void ISystem::OnCreate()
+void TransformSystem::OnCreate()
 {
+}
+
+//===================================
+//
+//	更新時コールバック
+//
+//===================================
+void TransformSystem::OnUpdate()
+{
+	std::for_each(m_ComponentList.begin(), m_ComponentList.end(),
+		[](Transform* trans)
+		{
+			trans->UpdateMatrix();
+		});
 }
 
 //===================================
@@ -67,16 +81,6 @@ void ISystem::OnCreate()
 //	削除時コールバック
 //
 //===================================
-void ISystem::OnDestroy()
+void TransformSystem::OnDestroy()
 {
-}
-
-//===================================
-//
-//	エンティティマネージャーの取得
-//
-//===================================
-EntityManager* ISystem::GetEntityManager()
-{ 
-	return m_pWorld->GetEntityManager();
 }

@@ -1,20 +1,20 @@
 //==================================================================
-//												Object.h
-//	全ての元となるオブジェクト
+//												TransformSystem.h
+//	トランスフォーム管理システム
 //
 //==================================================================
 //	author :	AT12A 05 宇佐美晃之
 //==================================================================
 //	開発履歴
 //
-//	2020/12/21	オブジェクトクラス作成
+//	2020/12/23	トランスフォームシステム作成
 //
 //===================================================================
 
 #pragma once
 
 //====== インクルード部 ======
-#include <memory>
+#include "../ECS/System/System.h"
 
 
 //===== マクロ定義 =====
@@ -23,29 +23,22 @@
 //===== クラス定義 =====
 namespace ECS
 {
-	class Object
+	// 前定義
+	class Transform;
+
+	class TransformSystem : public System<Transform>
 	{
-		friend class ObjectManager;
 	public:
 		// コンストラクタ
-		Object();
+		explicit TransformSystem(World* pWorld);
 		// デストラクタ
-		virtual ~Object();
+		virtual ~TransformSystem();
 
-		// 自身の破棄
-		virtual void Destroy();
-
-	protected:
-		// オブジェクト生成時
-		virtual void OnCreate(){}
-		// オブジェクト破棄時
-		virtual void OnDestroy(){}
-
-	protected:
-		// 自身のweakポインタ
-		std::weak_ptr<Object> m_self;
-
-	private:
+		// 生成時
+		virtual void OnCreate();
+		// 更新
+		virtual void OnUpdate();
+		// 削除時
+		virtual void OnDestroy();
 	};
-
 }

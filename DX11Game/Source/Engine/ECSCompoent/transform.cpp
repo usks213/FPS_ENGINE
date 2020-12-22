@@ -1,5 +1,5 @@
 //==================================================================
-//								transform.cpp
+//								Transform.cpp
 //	トランスフォーム
 //
 //==================================================================
@@ -13,8 +13,12 @@
 
 
 //====== インクルード部 ======
-#include "transform.h"
+#include "Transform.h"
+#include "../ECSSystem/TransformSystem.h"
 
+#include "../ECS/Entity/EntityManager.h"
+
+using namespace ECS;
 
 //===== マクロ定義 =====
 
@@ -25,14 +29,12 @@
 //	コンストラクタ
 //
 //========================================
-CTransform::CTransform()
+Transform::Transform()
 {
 	m_pos = Vector3{ 0.0f, 0.0f, 0.0f };
 	m_scale = Vector3{ 1.0f, 1.0f, 1.0f };
 	m_rot = Vector3{ 0.0f, 0.0f, 0.0f };
-	m_dir = Vector3{ 0.0f, 0.0f, 0.0f };
 
-	LateUpdate();
 }
 
 //========================================
@@ -40,18 +42,55 @@ CTransform::CTransform()
 //	デストラクタ
 //
 //========================================
-CTransform::~CTransform()
+Transform::~Transform()
 {
 
 }
 
+//========================================
+//
+//	生成時
+//
+//========================================
+void Transform::OnCreate()
+{
+	// システムに格納
+	GetEntityManager()->GetWorld()
+		->GetSystem<TransformSystem>()->AddList(this);
+}
+
+//========================================
+//
+//	破棄時
+//
+//========================================
+void Transform::OnDestroy()
+{
+	// システムから除外
+	GetEntityManager()->GetWorld()
+		->GetSystem<TransformSystem>()->RemoveList(this);
+}
+
+//========================================
+//
+//	メッセージ受信
+//
+//========================================
+void Transform::SendComponentMessage(std::string message)
+{
+	// Updateメッセージでマトリックスを更新
+	if ("Update" == message)
+	{
+		UpdateMatrix();
+	}
+}
 
 //========================================
 //
 //	更新
 //
 //========================================
-void CTransform::LateUpdate()
+void Transform::UpdateMatrix()
 {
 	XMMATRIX mtxWorld, mtxScale, mtxRot, mtxTranslate;
 

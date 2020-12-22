@@ -35,6 +35,15 @@
     <Filter Include="ソース\エンジン\ECS\System">
       <UniqueIdentifier>{1d1a2805-7c9b-4ca8-b042-b7a6cc35a356}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース\エンジン\ECSComponent">
+      <UniqueIdentifier>{d5b47eb0-bfac-4c0e-af95-c60d60c3ccd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース\エンジン\ECSEntity">
+      <UniqueIdentifier>{5ef95526-4a26-4180-8e22-2502ab85b059}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース\エンジン\ECSSystem">
+      <UniqueIdentifier>{15aae978-86ad-4437-963c-fd6ac79369f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11Game.rc">
@@ -112,6 +121,12 @@
     <ClCompile Include="Source\Engine\ECS\System\ISystem.cpp">
       <Filter>ソース\エンジン\ECS\System</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\ECSCompoent\Transform.cpp">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSSystem\TransformSystem.cpp">
+      <Filter>ソース\エンジン\ECSSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\main.h">
@@ -164,6 +179,15 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\ECS\System\ISystem.h">
       <Filter>ソース\エンジン\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSCompoent\Transform.h">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECS\System\System.h">
+      <Filter>ソース\エンジン\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSSystem\TransformSystem.h">
+      <Filter>ソース\エンジン\ECSSystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

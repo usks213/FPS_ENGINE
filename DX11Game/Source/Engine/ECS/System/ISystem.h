@@ -7,7 +7,7 @@
 //==================================================================
 //	開発履歴
 //
-//	2020/12/22	エンティティマネージャークラス作成
+//	2020/12/22	システムクラス作成
 //
 //===================================================================
 
@@ -67,4 +67,20 @@ namespace ECS
 		// 型ID
 		int m_nTypeID;
 	};
+
+
+	namespace UpdateOrder
+	{
+		enum EUpdateOrder
+		{
+			eScript = 0,
+			eAnimator,
+			eRigidbody,
+			eCollision,
+			eTransform,
+			eRenderer,
+
+			eMaxUpdateOrder,
+		};
+	}
 }

@@ -84,6 +84,7 @@ void World::sortSystem()
 	std::sort(m_SystemList.begin(), m_SystemList.end(),
 		[](const std::unique_ptr<ISystem>& lhs, const std::unique_ptr<ISystem>& rhs)
 		{
+			// ¸‡
 			return lhs->GetUpdateOrder() < rhs->GetUpdateOrder();
 		});
 }

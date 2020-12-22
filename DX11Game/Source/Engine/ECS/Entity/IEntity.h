@@ -62,7 +62,6 @@ namespace ECS
 
 		// 親のエンティティマネージャーを取得
 		EntityManager* GetEntityManager() { return m_pEntityManager; }
-
 	};
 
 	// コンポーネント追加
@@ -74,7 +73,9 @@ namespace ECS
 		// コンポーネントIDを登録
 		buffer->SetTypeID<T>();
 		// 親オブジェクトを登録
-		buffer->SetParent(m_self);
+		buffer->m_Parent = m_self;
+		// 親のエンティティマネージャーを登録
+		buffer->m_pEntityManager = m_pEntityManager;
 		// リストに格納
 		m_ComponentPool.push_front(buffer);
 		// オブジェクトプールに格納

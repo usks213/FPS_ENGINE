@@ -11,6 +11,9 @@
 //				Object,Entity,Component の作成から
 //
 //	2020/12/22	World,EntityManager,System の作成
+//	
+//	2020/12/23	Transform,TransformSystem の作成
+//				システムとコンポーネントのやり取りうまくいった！！
 //
 //======================================================================
 #include "main.h"
@@ -24,6 +27,9 @@
 #include "ECS/System/ISystem.h"
 #include "ECS/Entity/IEntity.h"
 #include "ECS/Component/IComponent.h"
+
+#include "ECSCompoent/Transform.h"
+#include "ECSSystem/TransformSystem.h"
 
 
 //#include "System/mesh.h"
@@ -441,18 +447,17 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 
 	ECS::World world;
 
-	world.AddSystem<ECS::ISystem>();
+	world.AddSystem<ECS::TransformSystem>();
 
 	std::weak_ptr<ECS::IEntity> entity = world.GetEntityManager()->CreateEntity<ECS::IEntity>();
-	entity.lock()->AddComponent<ECS::IComponent>();
-	//entity.lock()->RemoveComponent<ECS::IComponent>();
-	world.GetEntityManager()->DestroyEntity(entity.lock());
+	entity.lock()->AddComponent<ECS::Transform>();
 
-	ECS::ISystem* sys = world.GetSystem<ECS::ISystem>();
-	sys->OnUpdate();
+	world.Update();
 
-
+	entity.lock()->Destroy();
 	ECS::ObjectManager::GetInstance()->ClearnUpObject();
+
+	world.Update();
 
 	ECS::ObjectManager::Destroy();
 

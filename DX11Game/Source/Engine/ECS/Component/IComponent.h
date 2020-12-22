@@ -25,14 +25,18 @@
 //===== クラス定義 =====
 namespace ECS
 {
+	// 前定義
+	class EntityManager;
 	class IEntity;
 
 	class IComponent : public Object<IComponent>
 	{
+		friend IEntity;
 	protected:
 		// 親のエンティティ
 		std::weak_ptr<IEntity> m_Parent;
-
+		// 親のエンティティマネージャー
+		EntityManager* m_pEntityManager;
 	private:
 		// 型ID
 		int m_nTypeID;
@@ -54,10 +58,10 @@ namespace ECS
 		// IDの取得
 		int GetID() { return m_nTypeID; }
 
-		// 親エンティティのセット
-		void SetParent(std::weak_ptr<IEntity> entity) { m_Parent = entity; };
 		// 親のエンティティの取得
 		std::weak_ptr<IEntity> GetParent() { return m_Parent; }
+		// 親のエンティティマネージャーを取得
+		EntityManager* GetEntityManager() { return m_pEntityManager; }
 	};
 
 }
