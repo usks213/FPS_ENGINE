@@ -34,7 +34,8 @@ using namespace ECS;
 //	コンストラクタ
 //
 //===================================
-EntityManager::EntityManager()
+EntityManager::EntityManager(World* pWorld)
+	: m_pWorld(pWorld)
 {
 }
 

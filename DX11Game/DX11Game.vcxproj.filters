@@ -29,6 +29,12 @@
     <Filter Include="ソース\エンジン\ECS\Component">
       <UniqueIdentifier>{692d1f84-cd51-410b-a20b-3798551abcb2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース\エンジン\ECS\World">
+      <UniqueIdentifier>{cc7d9122-3f8c-4fc1-8020-10746702a97d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース\エンジン\ECS\System">
+      <UniqueIdentifier>{1d1a2805-7c9b-4ca8-b042-b7a6cc35a356}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11Game.rc">
@@ -100,6 +106,12 @@
     <ClCompile Include="Source\Engine\ECS\Object\IObject.cpp">
       <Filter>ソース\エンジン\ECS\Object</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\ECS\World\World.cpp">
+      <Filter>ソース\エンジン\ECS\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECS\System\System.cpp">
+      <Filter>ソース\エンジン\ECS\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\main.h">
@@ -146,6 +158,12 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\ECS\Object\Object.h">
       <Filter>ソース\エンジン\ECS\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECS\World\World.h">
+      <Filter>ソース\エンジン\ECS\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECS\System\System.h">
+      <Filter>ソース\エンジン\ECS\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

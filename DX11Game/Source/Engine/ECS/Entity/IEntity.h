@@ -41,7 +41,7 @@ namespace ECS
 
 	public:
 		// コンストラクタ
-		IEntity(EntityManager* entityManager);
+		explicit IEntity(EntityManager* entityManager);
 		// デストラクタ
 		virtual ~IEntity();
 		

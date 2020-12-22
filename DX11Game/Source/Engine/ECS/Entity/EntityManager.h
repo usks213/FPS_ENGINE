@@ -15,6 +15,7 @@
 
 //====== インクルード部 ======
 #include <list>
+#include "../World/World.h"
 #include "IEntity.h"
 
 
@@ -28,16 +29,18 @@ namespace ECS
 	{
 	public:
 		// コンストラクタ
-		EntityManager();
+		explicit EntityManager(World* pWorld);
 		// デストラクタ
 		~EntityManager();
 
 	private:
 		// エンティティプール
 		using EntityPool = std::list<std::weak_ptr<IEntity>>;
-
 		// エンティティプール
 		EntityPool m_EntityList;
+
+		// 親のワールド
+		World* m_pWorld;
 
 	public:
 		// エンティティの生成

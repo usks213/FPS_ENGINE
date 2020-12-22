@@ -8,9 +8,9 @@
 //	開発履歴
 //
 //	2020/12/21	ECSベースで１から開発スタート
-//				Object,Entity,Component,System(Manager)の作成から
+//				Object,Entity,Component の作成から
 //
-//	2020/12/22
+//	2020/12/22	EntityManager,WorldManager,World の作成
 //
 //======================================================================
 #include "main.h"
@@ -21,6 +21,7 @@
 
 #include "ECS/Object/ObjectManager.h"
 #include "ECS/Entity/EntityManager.h"
+#include "ECS/System/System.h"
 #include "ECS/Entity/IEntity.h"
 #include "ECS/Component/IComponent.h"
 
@@ -438,21 +439,19 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 
 	ECS::ObjectManager::Create();
 
-	ECS::EntityManager manager;
+	ECS::World world;
 
-	std::weak_ptr<ECS::IEntity> entity = manager.CreateEntity<ECS::IEntity>();
+	world.AddSystem<ECS::System>();
 
+	std::weak_ptr<ECS::IEntity> entity = world.GetEntityManager()->CreateEntity<ECS::IEntity>();
 	entity.lock()->AddComponent<ECS::IComponent>();
-	entity.lock()->GetComponent<ECS::IComponent>();
 	entity.lock()->RemoveComponent<ECS::IComponent>();
-	//ECS::ObjectManager::GetInstance()->ClearnUpObject();
+	world.GetEntityManager()->DestroyEntity(entity.lock());
 
 
-	manager.DestroyEntity(entity.lock());
 	ECS::ObjectManager::GetInstance()->ClearnUpObject();
 
-
-	//ECS::ObjectManager::Destroy();
+	ECS::ObjectManager::Destroy();
 
 	return hr;
 }
