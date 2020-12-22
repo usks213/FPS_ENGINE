@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -243,8 +243,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\ECS\Component\IComponent.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Entity\EntityManager.cpp" />
     <ClCompile Include="Source\Engine\ECS\Entity\IEntity.cpp" />
-    <ClCompile Include="Source\Engine\ECS\Object\Object.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Object\IObject.cpp" />
     <ClCompile Include="Source\Engine\ECS\Object\ObjectManager.cpp" />
     <ClCompile Include="Source\Engine\ECS\uniqueTypeID.cpp" />
     <ClCompile Include="Source\Engine\main.cpp" />
@@ -257,7 +258,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\ECS\Component\IComponent.h" />
+    <ClInclude Include="Source\Engine\ECS\Entity\EntityManager.h" />
     <ClInclude Include="Source\Engine\ECS\Entity\IEntity.h" />
+    <ClInclude Include="Source\Engine\ECS\Object\IObject.h" />
     <ClInclude Include="Source\Engine\ECS\Object\Object.h" />
     <ClInclude Include="Source\Engine\ECS\Object\ObjectManager.h" />
     <ClInclude Include="Source\Engine\ECS\uniqueTypeID.h" />

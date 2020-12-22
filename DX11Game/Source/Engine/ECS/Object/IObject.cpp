@@ -1,5 +1,5 @@
 //==================================================================
-//												Object.cpp
+//												IObject.cpp
 //	全ての元となるオブジェクト
 //
 //==================================================================
@@ -13,7 +13,7 @@
 
 
 //===== インクルード部 =====
-#include "Object.h"
+#include "IObject.h"
 #include "ObjectManager.h"
 
 
@@ -34,7 +34,7 @@ using namespace ECS;
 //	コンストラクタ
 //
 //===================================
-Object::Object()
+IObject::IObject()
 {
 }
 
@@ -44,7 +44,7 @@ Object::Object()
 //	デストラクタ
 //
 //===================================
-Object::~Object()
+IObject::~IObject()
 {
 }
 
@@ -53,7 +53,7 @@ Object::~Object()
 //	自身の破棄
 //
 //===================================
-void Object::Destroy()
+void IObject::Destroy()
 {
 	ObjectManager::GetInstance()->DestroyObject(this);
 }

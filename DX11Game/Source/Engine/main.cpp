@@ -20,6 +20,7 @@
 #include "System/Sound.h"
 
 #include "ECS/Object/ObjectManager.h"
+#include "ECS/Entity/EntityManager.h"
 #include "ECS/Entity/IEntity.h"
 #include "ECS/Component/IComponent.h"
 
@@ -437,19 +438,21 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 
 	ECS::ObjectManager::Create();
 
+	ECS::EntityManager manager;
 
-	const auto& obj = ECS::ObjectManager::GetInstance()->CreateObject<ECS::IEntity>();
+	std::weak_ptr<ECS::IEntity> entity = manager.CreateEntity<ECS::IEntity>();
 
-	obj->AddComponent<ECS::IComponent>();
-	const auto& com = obj->GetComponent<ECS::IComponent>();
-	obj->RemoveComponent<ECS::IComponent>();
+	entity.lock()->AddComponent<ECS::IComponent>();
+	entity.lock()->GetComponent<ECS::IComponent>();
+	entity.lock()->RemoveComponent<ECS::IComponent>();
+	//ECS::ObjectManager::GetInstance()->ClearnUpObject();
+
+
+	manager.DestroyEntity(entity.lock());
 	ECS::ObjectManager::GetInstance()->ClearnUpObject();
 
-	ECS::ObjectManager::GetInstance()->DestroyObject(obj);
-	ECS::ObjectManager::GetInstance()->ClearnUpObject();
 
-
-	ECS::ObjectManager::Destroy();
+	//ECS::ObjectManager::Destroy();
 
 	return hr;
 }

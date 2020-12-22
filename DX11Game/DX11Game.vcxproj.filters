@@ -85,9 +85,6 @@
     <ClCompile Include="Source\Engine\ECS\uniqueTypeID.cpp">
       <Filter>ソース\エンジン\ECS</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\ECS\Object\Object.cpp">
-      <Filter>ソース\エンジン\ECS\Object</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Engine\ECS\Object\ObjectManager.cpp">
       <Filter>ソース\エンジン\ECS\Object</Filter>
     </ClCompile>
@@ -96,6 +93,12 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\ECS\Component\IComponent.cpp">
       <Filter>ソース\エンジン\ECS\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECS\Entity\EntityManager.cpp">
+      <Filter>ソース\エンジン\ECS\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECS\Object\IObject.cpp">
+      <Filter>ソース\エンジン\ECS\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -126,9 +129,6 @@
     <ClInclude Include="Source\Engine\ECS\uniqueTypeID.h">
       <Filter>ソース\エンジン\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\ECS\Object\Object.h">
-      <Filter>ソース\エンジン\ECS\Object</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\ECS\Object\ObjectManager.h">
       <Filter>ソース\エンジン\ECS\Object</Filter>
     </ClInclude>
@@ -137,6 +137,15 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\ECS\Component\IComponent.h">
       <Filter>ソース\エンジン\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECS\Entity\EntityManager.h">
+      <Filter>ソース\エンジン\ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECS\Object\IObject.h">
+      <Filter>ソース\エンジン\ECS\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECS\Object\Object.h">
+      <Filter>ソース\エンジン\ECS\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

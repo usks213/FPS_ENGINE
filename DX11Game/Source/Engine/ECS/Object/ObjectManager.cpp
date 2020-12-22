@@ -86,7 +86,7 @@ void ObjectManager::Destroy()
 //	オブジェクトの破棄
 //
 //===================================
-void ObjectManager::DestroyObject(std::shared_ptr<Object> obj)
+void ObjectManager::DestroyObject(const std::shared_ptr<IObject>& obj)
 {
 	// プールを検索
 	auto itr = std::find(m_ObjectList.begin(), m_ObjectList.end(), obj);
@@ -109,11 +109,11 @@ void ObjectManager::DestroyObject(std::shared_ptr<Object> obj)
 //	オブジェクトの破棄
 //
 //===================================
-void ObjectManager::DestroyObject(Object* obj)
+void ObjectManager::DestroyObject(IObject* obj)
 {
 	// プールを検索
 	auto itr = std::find_if(m_ObjectList.begin(), m_ObjectList.end(),
-		[obj](std::shared_ptr<Object> obj_s)
+		[obj](std::shared_ptr<IObject> obj_s)
 		{
 			return obj_s.get() == obj;
 		});

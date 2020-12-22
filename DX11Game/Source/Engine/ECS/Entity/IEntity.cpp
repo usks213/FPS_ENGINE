@@ -34,7 +34,8 @@ using namespace ECS;
 //	コンストラクタ
 //
 //===================================
-IEntity::IEntity()
+IEntity::IEntity(EntityManager* entityManager)
+	: m_pEntityManager(entityManager)
 {
 }
 
@@ -46,6 +47,11 @@ IEntity::IEntity()
 //===================================
 IEntity::~IEntity()
 {
+	// エンティティプールから除外
+	m_pEntityManager->RemoveEntityPool(m_self);
+
+	// コンポーネントクリア
+	m_ComponentPool.clear();
 }
 
 //===================================
@@ -55,8 +61,14 @@ IEntity::~IEntity()
 //===================================
 void IEntity::Destroy()
 {
-	//IEntityManager::GetInstance()->DestroyIEntity(this);
-	Object::Destroy();
+	// 自身消去
+	m_pEntityManager->DestroyEntity(this);
+
+	// コンポーネントの削除
+	for (const auto& com : m_ComponentPool)
+	{
+		com->Destroy();
+	}
 }
 
 //===================================

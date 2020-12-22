@@ -15,7 +15,7 @@
 
 //====== インクルード部 ======
 #include <list>
-#include "Object.h"
+#include "IObject.h"
 
 
 //===== マクロ定義 =====
@@ -47,7 +47,7 @@ namespace ECS
 
 	private:
 		// オブジェクトプール
-		using ObjectPool = std::list<std::shared_ptr<Object>>;
+		using ObjectPool = std::list<std::shared_ptr<IObject>>;
 
 		// オブジェクトプール
 		ObjectPool m_ObjectList;
@@ -57,11 +57,11 @@ namespace ECS
 	public:
 		// オブジェクトの生成
 		template<class T> 
-		std::shared_ptr<T> CreateObject();
+		void AddObjectPool(const std::shared_ptr<T>& obj);
 
 		// オブジェクトの破棄
-		void DestroyObject(std::shared_ptr<Object> obj);
-		void DestroyObject(Object* obj);
+		void DestroyObject(const std::shared_ptr<IObject>& obj);
+		void DestroyObject(IObject* obj);
 
 		// デストロイリストのクリア
 		void ClearnUpObject();
@@ -70,20 +70,15 @@ namespace ECS
 
 	// オブジェクトの生成
 	template<class T>
-	std::shared_ptr<T> ObjectManager::CreateObject()
+	void ObjectManager::AddObjectPool(const std::shared_ptr<T>& ptr)
 	{
-		// 生成
-		const auto& ptr = std::shared_ptr<T>(new T());
-
 		// 格納
 		m_ObjectList.push_back(ptr);
-
-		// 生成後関数
-		ptr->OnCreate();
 
 		// 自身を格納
 		ptr->m_self = ptr;
 
-		return ptr;
+		// 生成後関数
+		ptr->OnCreate();
 	}
 }

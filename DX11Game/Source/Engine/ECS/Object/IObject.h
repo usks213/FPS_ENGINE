@@ -1,20 +1,20 @@
 //==================================================================
-//												Object.h
-//	全ての元となるオブジェクトテンプレート
+//												IObject.h
+//	全ての元となるオブジェクト
 //
 //==================================================================
 //	author :	AT12A 05 宇佐美晃之
 //==================================================================
 //	開発履歴
 //
-//	2020/12/22	オブジェクトテンプレートクラス作成
+//	2020/12/21	オブジェクトクラス作成
 //
 //===================================================================
 
 #pragma once
 
 //====== インクルード部 ======
-#include "IObject.h"
+#include <memory>
 
 
 //===== マクロ定義 =====
@@ -23,17 +23,25 @@
 //===== クラス定義 =====
 namespace ECS
 {
-	template <class T>
-	class Object : public IObject
+	class IObject
 	{
-	public:
-		// 自身のweakポインタ
-		std::weak_ptr<T> m_self;
+		friend class ObjectManager;
 
 	public:
 		// コンストラクタ
-		Object(){}
+		IObject();
 		// デストラクタ
-		virtual ~Object(){}
+		virtual ~IObject();
+
+		// 自身の破棄
+		virtual void Destroy();
+
+	protected:
+		// オブジェクト生成時
+		virtual void OnCreate(){}
+		// オブジェクト破棄時
+		virtual void OnDestroy(){}
+
 	};
+
 }

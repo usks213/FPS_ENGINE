@@ -15,6 +15,7 @@
 
 //====== インクルード部 ======
 #include "../Component/IComponent.h"
+#include "../Object/ObjectManager.h"
 #include <list>
 
 
@@ -24,22 +25,23 @@
 //===== クラス定義 =====
 namespace ECS
 {
-	class IEntity : public Object
+	// 前定義
+	class EntityManager;
+
+	class IEntity : public Object<IEntity>
 	{
 		friend IComponent;
 		using ComponentPool = std::list<std::shared_ptr<IComponent>>;
 
-	public:
-		// 自身のweakポインタ
-		std::weak_ptr<IEntity> m_self;
-
 	private:
 		// コンポーネントプール
 		ComponentPool m_ComponentPool;
+		// 親のエンティティマネージャー
+		EntityManager* m_pEntityManager;
 
 	public:
 		// コンストラクタ
-		IEntity();
+		IEntity(EntityManager* entityManager);
 		// デストラクタ
 		virtual ~IEntity();
 		
@@ -54,11 +56,12 @@ namespace ECS
 		bool RemoveComponent();
 
 		// 自身の破棄
-		virtual void Destroy() override;
+		void Destroy() override;
 		// メッセージ送信
 		void SendComponentMessage(std::string message);
 
-	protected:
+		// 親のエンティティマネージャーを取得
+		EntityManager* GetEntityManager() { return m_pEntityManager; }
 
 	};
 
@@ -74,6 +77,8 @@ namespace ECS
 		buffer->SetParent(m_self);
 		// リストに格納
 		m_ComponentPool.push_front(buffer);
+		// オブジェクトプールに格納
+		ECS::ObjectManager::GetInstance()->AddObjectPool(buffer);
 		// 初期化
 		//buffer->Start();
 
@@ -108,8 +113,8 @@ namespace ECS
 			// コンポーネントIDを判定
 			if ((*itr)->GetID() == CUniqueTypeID::Get<T>())
 			{
+				// コンポーネントの削除
 				(*itr)->Destroy();
-				m_ComponentPool.erase(itr);
 
 				return true;
 			}

@@ -1,19 +1,19 @@
 //==================================================================
-//												ObjectManager.cpp
-//	オブジェクトの管理クラス
+//												EntityManager.cpp
+//	エンティティの管理クラス
 //
 //==================================================================
 //	author :	AT12A 05 宇佐美晃之
 //==================================================================
 //	開発履歴
 //
-//	2020/12/21	オブジェクトマネージャークラス作成
+//	2020/12/22	エンティティマネージャークラス作成
 //
 //===================================================================
 
 
 //===== インクルード部 =====
-#include "ObjectManager.h"
+#include "EntityManager.h"
 #include <algorithm>
 
 using namespace ECS;
@@ -26,7 +26,6 @@ using namespace ECS;
 
 
 //===== グローバル変数 =====
-ObjectManager* ObjectManager::g_pInstance = nullptr;
 
 
 
@@ -35,7 +34,7 @@ ObjectManager* ObjectManager::g_pInstance = nullptr;
 //	コンストラクタ
 //
 //===================================
-ObjectManager::ObjectManager()
+EntityManager::EntityManager()
 {
 }
 
@@ -45,111 +44,60 @@ ObjectManager::ObjectManager()
 //	デストラクタ
 //
 //===================================
-ObjectManager::~ObjectManager()
+EntityManager::~EntityManager()
 {
 }
 
 
 //===================================
 //
-//	インスタンス生成
+//	エンティティの破棄
 //
 //===================================
-void ObjectManager::Create()
+void EntityManager::DestroyEntity(const std::shared_ptr<IEntity>& entity)
 {
-	// 確認
-	if (nullptr != g_pInstance) return;
+	ObjectManager::GetInstance()->DestroyObject(entity);
+}
 
-	// 生成
-	g_pInstance = new ObjectManager();
+//===================================
+//
+//	エンティティの破棄
+//
+//===================================
+void EntityManager::DestroyEntity(IEntity* entity)
+{
+	ObjectManager::GetInstance()->DestroyObject(entity);
 }
 
 
 //===================================
 //
-//	インスタンス破棄
+//	エンティティの追加
 //
 //===================================
-void ObjectManager::Destroy()
+void EntityManager::AddEntityPool(const std::weak_ptr<IEntity>& entity)
 {
-	// 確認
-	if (nullptr == g_pInstance) return;
-
-	// 破棄
-	delete g_pInstance;
-	g_pInstance = nullptr;
+	m_EntityList.push_back(entity);
 }
 
 
 //===================================
 //
-//	オブジェクトの破棄
+//	エンティティの除外
 //
 //===================================
-void ObjectManager::DestroyObject(std::shared_ptr<Object> obj)
+void EntityManager::RemoveEntityPool(const std::weak_ptr<IEntity>& entity)
 {
-	// プールを検索
-	auto itr = std::find(m_ObjectList.begin(), m_ObjectList.end(), obj);
-
-	// プールになかった
-	if (m_ObjectList.end() == itr) return;
-
-	// デストロイリストを検索
-	auto destroyItr = std::find(m_DestroyList.begin(), m_DestroyList.end(), itr);
-
-	// 既に格納されていたら
-	if (m_DestroyList.end() != destroyItr) return;
-
-	// デストロイリストに格納
-	m_DestroyList.push_back(itr);
-}
-
-//===================================
-//
-//	オブジェクトの破棄
-//
-//===================================
-void ObjectManager::DestroyObject(Object* obj)
-{
-	// プールを検索
-	auto itr = std::find_if(m_ObjectList.begin(), m_ObjectList.end(),
-		[obj](std::shared_ptr<Object> obj_s)
+	// 一致するエンティティの検索
+	auto itr = std::find_if(m_EntityList.begin(), m_EntityList.end(),
+		[entity](const std::weak_ptr<IEntity>& entity2)
 		{
-			return obj_s.get() == obj;
+			return entity.lock().get() == entity2.lock().get();
 		});
 
-	// プールになかった
-	if (m_ObjectList.end() == itr) return;
+	// 見つからなかった
+	if (m_EntityList.end() == itr) return;
 
-	// デストロイリストを検索
-	auto destroyItr = std::find(m_DestroyList.begin(), m_DestroyList.end(), itr);
-
-	// 既に格納されていたら
-	if (m_DestroyList.end() != destroyItr) return;
-
-	// デストロイリストに格納
-	m_DestroyList.push_back(itr);
-}
-
-
-//===================================
-//
-//	デストロイリストのクリア(オブジェクトの破棄)
-//
-//===================================
-void ObjectManager::ClearnUpObject()
-{
-	// オブジェクトの破棄
-	std::for_each(m_DestroyList.begin(), m_DestroyList.end(),
-		[this](const ObjectPool::iterator& itr)
-		{
-			//削除時実行関数
-			(*itr)->OnDestroy();
-
-			// 完全消去
-			m_ObjectList.erase(itr);
-		});
-
-	// リストをクリア
-	m_DestroyList.clear();
+	// プールから削除
+	m_EntityList.erase(itr);
 }

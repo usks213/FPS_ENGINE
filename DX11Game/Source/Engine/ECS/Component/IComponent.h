@@ -27,14 +27,12 @@ namespace ECS
 {
 	class IEntity;
 
-	class IComponent : public Object
+	class IComponent : public Object<IComponent>
 	{
 	protected:
-		// 自身のweakポインタ
-		std::weak_ptr<IComponent> m_self;
-
 		// 親のエンティティ
 		std::weak_ptr<IEntity> m_Parent;
+
 	private:
 		// 型ID
 		int m_nTypeID;
