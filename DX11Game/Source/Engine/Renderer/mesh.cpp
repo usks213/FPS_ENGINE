@@ -5,11 +5,11 @@
 //
 //=============================================================================
 #include "mesh.h"
-#include "Shader.h"
-#include "Texture.h"
+#include "../System/Shader.h"
+#include "../System/Texture.h"
 
-#include "polygon.h"
-#include "input.h"
+#include "../System/polygon.h"
+#include "../System/input.h"
 
 //*****************************************************************************
 // É}ÉNÉçíËã`

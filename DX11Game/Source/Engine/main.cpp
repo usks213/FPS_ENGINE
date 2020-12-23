@@ -14,6 +14,7 @@
 //	
 //	2020/12/23	Transform,TransformSystem の作成
 //				システムとコンポーネントのやり取りうまくいった！！
+//				Renderer, RendererSystem の作成
 //
 //======================================================================
 #include "main.h"
@@ -30,10 +31,14 @@
 
 #include "ECSCompoent/Transform.h"
 #include "ECSSystem/TransformSystem.h"
+#include "ECSCompoent/MeshRenderer.h"
+#include "ECSSystem/RendererSystem.h"
 
+#include "Renderer/Camera.h"
+#include "Renderer/Light.h"
+#include "Renderer/mesh.h"
+#include "Renderer/AssimpModel.h"
 
-//#include "System/mesh.h"
-//#include "System/AssimpModel.h"
 
 //-------- ライブラリのリンク
 #pragma comment(lib, "winmm")
@@ -75,8 +80,12 @@ ID3D11DepthStencilState*	g_pDSS[2];				// Z/ステンシル ステート
 
 int							g_nCountFPS;			// FPSカウンタ
 
-//CCamera						g_camera;				// カメラ
-//CLight						g_light;				// 光源
+CCamera						g_camera;				// カメラ
+CLight						g_light;				// 光源
+
+using namespace ECS;
+
+World g_world;
 
 
 //=============================================================================
@@ -420,46 +429,43 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	if (FAILED(hr))
 		return hr;
 
-	//// Assimp用シェーダ初期化
-	//if (!CAssimpModel::InitShader(g_pDevice))
-	//	return E_FAIL;
+	// Assimp用シェーダ初期化
+	if (!CAssimpModel::InitShader(g_pDevice))
+		return E_FAIL;
 
-	//// メッシュ初期化
-	//hr = InitMesh();
-	//if (FAILED(hr))
-	//	return hr;
-	//SetMeshCamera(&g_camera);
-	//SetMeshLight(&g_light);
+	// メッシュ初期化
+	hr = InitMesh();
+	if (FAILED(hr))
+		return hr;
+	SetMeshCamera(&g_camera);
+	SetMeshLight(&g_light);
 
-	//// ライト
-	//g_light.Init();
-	//CLight::SetMainLight(&g_light);
+	// ライト
+	g_light.Init();
+	CLight::SetMainLight(&g_light);
 
-	//// カメラ
-	//g_camera.Init();
-	//CCamera::SetMainCamera(&g_camera);
+	// カメラ
+	g_camera.Init();
+	CCamera::SetMainCamera(&g_camera);
 
-	// シーン
-	//CSceneManager::Get()->Init();
-
-
+	// オブジェクト
 	ECS::ObjectManager::Create();
 
-	ECS::World world;
+	
+	// システムを追加
+	g_world.AddSystem<TransformSystem>();
+	g_world.AddSystem<RendererSystem>();
 
-	world.AddSystem<ECS::TransformSystem>();
+	// エンティティを追加
+	const auto& entity = g_world.GetEntityManager()->CreateEntity<IEntity>();
+	// コンポーネントの追加
+	const auto& trans =		entity->AddComponent<Transform>();
+	const auto& renderer =	entity->AddComponent<MeshRenderer>();
 
-	std::weak_ptr<ECS::IEntity> entity = world.GetEntityManager()->CreateEntity<ECS::IEntity>();
-	entity.lock()->AddComponent<ECS::Transform>();
-
-	world.Update();
-
-	entity.lock()->Destroy();
-	ECS::ObjectManager::GetInstance()->ClearnUpObject();
-
-	world.Update();
-
-	ECS::ObjectManager::Destroy();
+	// 設定
+	trans->m_scale = Vector3(100, 100, 100);
+	renderer->MakeSphere("test", 100, 1);
+	renderer->SetDiffuseColor({ 0, 1, 0, 1 });
 
 	return hr;
 }
@@ -482,14 +488,14 @@ void ReleaseBackBuffer()
 //=============================================================================
 void Uninit(void)
 {
-	// シーン
-	//CSceneManager::Get()->Uninit();
+	// オブジェクト
+	ECS::ObjectManager::Destroy();
 
-	//// メッシュ終了処理
-	//UninitMesh();
+	// メッシュ終了処理
+	UninitMesh();
 
-	//// Assimp用シェーダ終了処理
-	//CAssimpModel::UninitShader();
+	// Assimp用シェーダ終了処理
+	CAssimpModel::UninitShader();
 
 	// 入力処理終了処理
 	UninitInput();
@@ -550,14 +556,13 @@ void Update(void)
 	// ポリゴン表示更新
 	UpdatePolygon();
 
-	// シーン
-	//CSceneManager::Get()->Update();
+	// ワールドの更新
+	g_world.Update();
 
-
-	//// カメラ更新
-	//g_camera.Update();
-
-	//g_light.Update();
+	// カメラ更新
+	g_camera.Update();
+	// ライトの更新
+	g_light.Update();
 
 
 	// サウンド更新処理
@@ -575,7 +580,7 @@ void Draw(void)
 	g_pDeviceContext->ClearDepthStencilView(g_pDepthStencilView,
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	//ClearShadowBuffer();
+	ClearShadowBuffer();
 
 	// 各ターゲットビューをレンダーターゲットに設定
 	g_pDeviceContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
@@ -584,11 +589,8 @@ void Draw(void)
 	// Zバッファ有効
 	SetZBuffer(true);
 
-	// シーン
-	//CSceneManager::Get()->Draw();
-	
-	// モデルの描画
-	//CMeshRenderer::ListDraw(g_pDeviceContext);
+	// ワールドの描画
+	g_world.Draw();
 
 	// Zバッファ無効
 	SetZBuffer(false);

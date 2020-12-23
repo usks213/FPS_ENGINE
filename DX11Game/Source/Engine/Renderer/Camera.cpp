@@ -5,8 +5,8 @@
 //
 //=============================================================================
 #include "Camera.h"
-#include "input.h"
-#include "debugproc.h"
+#include "../System/input.h"
+#include "../System/debugproc.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -182,10 +182,11 @@ void CCamera::Update()
 
 // ターゲット座標取得
 	//if (m_pTargetPos == nullptr) return;
-	const auto& trans = m_targetTrans.lock();
-	if (!trans) return;
+	//const auto& trans = m_targetTrans.lock();
+	//if (!trans) return;
 
-	XMFLOAT3 pos = *trans->m_pos.GetFloat3();
+	//XMFLOAT3 pos = *trans->m_pos.GetFloat3();
+	XMFLOAT3 pos = { 0, 0, 0 };
 
 	// オフセット
 	//pos.y += 100;

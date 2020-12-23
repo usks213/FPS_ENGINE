@@ -8,6 +8,8 @@
 //	開発履歴
 //
 //	2020/07/22	トランスフォームクラスの作成
+//	2020/09/23	コンポーネント化
+//	2020/12/23	ECS用に再設計
 //
 //===================================================================
 
@@ -55,8 +57,8 @@ Transform::~Transform()
 void Transform::OnCreate()
 {
 	// システムに格納
-	GetEntityManager()->GetWorld()
-		->GetSystem<TransformSystem>()->AddList(this);
+	TransformSystem* sys = GetEntityManager()->GetWorld()->GetSystem<TransformSystem>();
+	if (sys) sys->AddList(this);
 }
 
 //========================================
@@ -67,8 +69,8 @@ void Transform::OnCreate()
 void Transform::OnDestroy()
 {
 	// システムから除外
-	GetEntityManager()->GetWorld()
-		->GetSystem<TransformSystem>()->RemoveList(this);
+	TransformSystem* sys = GetEntityManager()->GetWorld()->GetSystem<TransformSystem>();
+	if (sys) sys->RemoveList(this);
 }
 
 //========================================

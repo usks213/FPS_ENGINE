@@ -4,15 +4,13 @@
 #include <assimp/cimport.h>
 #include <assimp/Importer.hpp>
 #include "AssimpModel.h"
-#include "Texture.h"
-#include "Shader.h"
-#include "main.h"
+#include "../System/Texture.h"
+#include "../System/Shader.h"
+#include "../main.h"
 #include "mesh.h"
-#include "input.h"
+#include "../System/input.h"
 
-#include "debugproc.h"
-#include "CObject.h"
-#include "Renderer.h"
+#include "../System/debugproc.h"
 
 
 #ifdef _DEBUG

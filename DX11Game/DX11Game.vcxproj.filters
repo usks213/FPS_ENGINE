@@ -44,6 +44,9 @@
     <Filter Include="ソース\エンジン\ECSSystem">
       <UniqueIdentifier>{15aae978-86ad-4437-963c-fd6ac79369f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース\エンジン\Renderer">
+      <UniqueIdentifier>{8d3e5d06-bcab-4e53-9eed-e4e12a5722bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11Game.rc">
@@ -127,6 +130,27 @@
     <ClCompile Include="Source\Engine\ECSSystem\TransformSystem.cpp">
       <Filter>ソース\エンジン\ECSSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\ECSCompoent\Renderer.cpp">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSSystem\RendererSystem.cpp">
+      <Filter>ソース\エンジン\ECSSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Renderer\AssimpModel.cpp">
+      <Filter>ソース\エンジン\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Renderer\Camera.cpp">
+      <Filter>ソース\エンジン\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Renderer\Light.cpp">
+      <Filter>ソース\エンジン\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Renderer\mesh.cpp">
+      <Filter>ソース\エンジン\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSCompoent\MeshRenderer.cpp">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\main.h">
@@ -188,6 +212,27 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\ECSSystem\TransformSystem.h">
       <Filter>ソース\エンジン\ECSSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSCompoent\Renderer.h">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSSystem\RendererSystem.h">
+      <Filter>ソース\エンジン\ECSSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Renderer\AssimpModel.h">
+      <Filter>ソース\エンジン\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Renderer\Camera.h">
+      <Filter>ソース\エンジン\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Renderer\Light.h">
+      <Filter>ソース\エンジン\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Renderer\mesh.h">
+      <Filter>ソース\エンジン\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSCompoent\MeshRenderer.h">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -6,7 +6,7 @@
 //=============================================================================
 #pragma once
 
-#include "main.h"
+#include "../main.h"
 #include "Camera.h"
 #include "Light.h"
 

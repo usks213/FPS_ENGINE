@@ -94,7 +94,7 @@ float4 main(VS_OUTPUT input) : SV_Target0
 #ifdef LINEAR
 				float epsilon = 0.0005 / margin;
 #else
-            float epsilon = 0.0005 / margin;
+            float epsilon = 0.005 / margin;
 #endif
             epsilon = clamp(epsilon, 0, 0.1);
 
@@ -102,7 +102,7 @@ float4 main(VS_OUTPUT input) : SV_Target0
 				g_shadowSampler,
 				shadowTexCoords,
 				pixelDepth - epsilon));
-            sc = float3(0.01f, 0.01f, 0.01f);
+            sc = float3(0.5f, 0.5f, 0.5f);
             sc = lerp(sc, float3(1.0f, 1.0f, 1.0f), lighting);
 
         }

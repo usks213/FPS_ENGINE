@@ -242,7 +242,10 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Engine\ECSCompoent\MeshRenderer.cpp" />
+    <ClCompile Include="Source\Engine\ECSCompoent\Renderer.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\Transform.cpp" />
+    <ClCompile Include="Source\Engine\ECSSystem\RendererSystem.cpp" />
     <ClCompile Include="Source\Engine\ECSSystem\TransformSystem.cpp" />
     <ClCompile Include="Source\Engine\ECS\Component\IComponent.cpp" />
     <ClCompile Include="Source\Engine\ECS\Entity\EntityManager.cpp" />
@@ -253,6 +256,10 @@
     <ClCompile Include="Source\Engine\ECS\uniqueTypeID.cpp" />
     <ClCompile Include="Source\Engine\ECS\World\World.cpp" />
     <ClCompile Include="Source\Engine\main.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\AssimpModel.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\Camera.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\Light.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\mesh.cpp" />
     <ClCompile Include="Source\Engine\System\debugproc.cpp" />
     <ClCompile Include="Source\Engine\System\input.cpp" />
     <ClCompile Include="Source\Engine\System\polygon.cpp" />
@@ -261,7 +268,10 @@
     <ClCompile Include="Source\Engine\System\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Engine\ECSCompoent\MeshRenderer.h" />
+    <ClInclude Include="Source\Engine\ECSCompoent\Renderer.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\Transform.h" />
+    <ClInclude Include="Source\Engine\ECSSystem\RendererSystem.h" />
     <ClInclude Include="Source\Engine\ECSSystem\TransformSystem.h" />
     <ClInclude Include="Source\Engine\ECS\Component\IComponent.h" />
     <ClInclude Include="Source\Engine\ECS\Entity\EntityManager.h" />
@@ -274,6 +284,10 @@
     <ClInclude Include="Source\Engine\ECS\uniqueTypeID.h" />
     <ClInclude Include="Source\Engine\ECS\World\World.h" />
     <ClInclude Include="Source\Engine\main.h" />
+    <ClInclude Include="Source\Engine\Renderer\AssimpModel.h" />
+    <ClInclude Include="Source\Engine\Renderer\Camera.h" />
+    <ClInclude Include="Source\Engine\Renderer\Light.h" />
+    <ClInclude Include="Source\Engine\Renderer\mesh.h" />
     <ClInclude Include="Source\Engine\System\debugproc.h" />
     <ClInclude Include="Source\Engine\System\input.h" />
     <ClInclude Include="Source\Engine\System\Math.h" />

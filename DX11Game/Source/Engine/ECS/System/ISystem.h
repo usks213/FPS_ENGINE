@@ -39,6 +39,8 @@ namespace ECS
 		virtual void OnCreate();
 		// XV
 		virtual void OnUpdate() {};
+		// •`‰æ
+		virtual void OnDraw() {};
 		// íœ
 		virtual void OnDestroy();
 

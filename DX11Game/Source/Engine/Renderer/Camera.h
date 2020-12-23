@@ -1,5 +1,5 @@
 #pragma once
-#include "main.h"
+#include "../main.h"
 //#include "transform.h"
 
 #define	VIEW_NEAR_Z			(50.0f)					// ƒrƒ…[•½–Ê‚ÌNearZ’l
