@@ -151,6 +151,18 @@
     <ClCompile Include="Source\Engine\ECSCompoent\MeshRenderer.cpp">
       <Filter>ソース\エンジン\ECSComponent</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\ECSCompoent\Collider.cpp">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSSystem\CollisionSystem.cpp">
+      <Filter>ソース\エンジン\ECSSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSCompoent\BoxCollider.cpp">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSCompoent\SphereCollider.cpp">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\main.h">
@@ -232,6 +244,18 @@
       <Filter>ソース\エンジン\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\ECSCompoent\MeshRenderer.h">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSCompoent\Collider.h">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSSystem\CollisionSystem.h">
+      <Filter>ソース\エンジン\ECSSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSCompoent\BoxCollider.h">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSCompoent\SphereCollider.h">
       <Filter>ソース\エンジン\ECSComponent</Filter>
     </ClInclude>
   </ItemGroup>

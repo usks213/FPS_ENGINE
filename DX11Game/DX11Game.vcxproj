@@ -242,9 +242,13 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Engine\ECSCompoent\BoxCollider.cpp" />
+    <ClCompile Include="Source\Engine\ECSCompoent\Collider.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\MeshRenderer.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\Renderer.cpp" />
+    <ClCompile Include="Source\Engine\ECSCompoent\SphereCollider.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\Transform.cpp" />
+    <ClCompile Include="Source\Engine\ECSSystem\CollisionSystem.cpp" />
     <ClCompile Include="Source\Engine\ECSSystem\RendererSystem.cpp" />
     <ClCompile Include="Source\Engine\ECSSystem\TransformSystem.cpp" />
     <ClCompile Include="Source\Engine\ECS\Component\IComponent.cpp" />
@@ -268,9 +272,13 @@
     <ClCompile Include="Source\Engine\System\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Engine\ECSCompoent\BoxCollider.h" />
+    <ClInclude Include="Source\Engine\ECSCompoent\Collider.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\MeshRenderer.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\Renderer.h" />
+    <ClInclude Include="Source\Engine\ECSCompoent\SphereCollider.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\Transform.h" />
+    <ClInclude Include="Source\Engine\ECSSystem\CollisionSystem.h" />
     <ClInclude Include="Source\Engine\ECSSystem\RendererSystem.h" />
     <ClInclude Include="Source\Engine\ECSSystem\TransformSystem.h" />
     <ClInclude Include="Source\Engine\ECS\Component\IComponent.h" />

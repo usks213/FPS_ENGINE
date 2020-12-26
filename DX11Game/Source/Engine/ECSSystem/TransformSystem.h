@@ -26,7 +26,7 @@ namespace ECS
 	// 前定義
 	class Transform;
 
-	class TransformSystem : public System<Transform>
+	class TransformSystem final : public System<Transform>
 	{
 	public:
 		// コンストラクタ
@@ -35,10 +35,10 @@ namespace ECS
 		virtual ~TransformSystem();
 
 		// 生成時
-		virtual void OnCreate();
+		void OnCreate() override;
 		// 更新
-		virtual void OnUpdate();
+		void OnUpdate() override;
 		// 削除時
-		virtual void OnDestroy();
+		void OnDestroy() override;
 	};
 }

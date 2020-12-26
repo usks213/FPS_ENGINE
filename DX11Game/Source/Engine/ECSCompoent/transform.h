@@ -40,7 +40,7 @@ namespace ECS
 		void OnDestroy() override;
 
 		// メッセージ受信
-		void SendComponentMessage(std::string message) override;
+		void SendComponentMessage(std::string message, void* value) override;
 
 		// マトリックスの更新
 		void UpdateMatrix();

@@ -50,7 +50,7 @@ namespace ECS
 		// 自身の破棄
 		void Destroy() override;
 		// メッセージを受信
-		virtual void SendComponentMessage(std::string message) {};
+		virtual void SendComponentMessage(std::string message, void* value) {};
 
 		// IDの登録
 		template <class T>

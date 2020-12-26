@@ -173,6 +173,12 @@ public:
 		Vector3 vec = *this;
 		return sqrtf(vec->x * vec->x + vec->y * vec->y + vec->z * vec->z);
 	}
+	// ベクトルの大きさ 平方根なし
+	float magnitudeNoSqrt()
+	{
+		Vector3 vec = *this;
+		return vec->x * vec->x + vec->y * vec->y + vec->z * vec->z;
+	}
 
 	// ベクトルの正規化
 	Vector3 normalized()

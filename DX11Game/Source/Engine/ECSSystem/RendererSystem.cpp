@@ -92,14 +92,14 @@ void RendererSystem::OnDraw()
 
 	// ‘O•`‰æ
 	std::for_each(m_ComponentList.begin(), m_ComponentList.end(),
-		[pDC](Renderer* trans)
+		[&pDC](Renderer* trans)
 		{
 			trans->EarlyDraw(pDC);
 		});
 
 	// Œã•`‰æ
 	std::for_each(m_ComponentList.begin(), m_ComponentList.end(),
-		[pDC](Renderer* trans)
+		[&pDC](Renderer* trans)
 		{
 			trans->LateDraw(pDC);
 		});

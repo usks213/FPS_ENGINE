@@ -26,7 +26,7 @@ namespace ECS
 	// 前定義
 	class Renderer;
 
-	class RendererSystem : public System<Renderer>
+	class RendererSystem final : public System<Renderer>
 	{
 	public:
 		// コンストラクタ
@@ -35,10 +35,10 @@ namespace ECS
 		virtual ~RendererSystem();
 
 		// 生成時
-		virtual void OnCreate();
+		void OnCreate() override;
 		// 更新
-		virtual void OnDraw();
+		void OnDraw() override;
 		// 削除時
-		virtual void OnDestroy();
+		void OnDestroy() override;
 	};
 }

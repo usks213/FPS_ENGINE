@@ -78,7 +78,7 @@ void Transform::OnDestroy()
 //	メッセージ受信
 //
 //========================================
-void Transform::SendComponentMessage(std::string message)
+void Transform::SendComponentMessage(std::string message, void* value)
 {
 	// Updateメッセージでマトリックスを更新
 	if ("Update" == message)
