@@ -73,7 +73,7 @@ namespace ECS
 		void OnDestroy() override;
 
 		// メッセージ受信
-		void SendComponentMessage(std::string message, void* value) override;
+		void SendComponentMessage(const std::string& message, void* value) override;
 
 		// 各コライダーの当たり判定
 		virtual bool Judgment(Collider* other) = 0;

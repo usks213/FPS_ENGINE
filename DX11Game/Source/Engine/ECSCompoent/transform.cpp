@@ -78,10 +78,10 @@ void Transform::OnDestroy()
 //	メッセージ受信
 //
 //========================================
-void Transform::SendComponentMessage(std::string message, void* value)
+void Transform::SendComponentMessage(const std::string& message, void* value)
 {
 	// Updateメッセージでマトリックスを更新
-	if ("Update" == message)
+	if ("UpdateMatrix" == message)
 	{
 		UpdateMatrix();
 	}

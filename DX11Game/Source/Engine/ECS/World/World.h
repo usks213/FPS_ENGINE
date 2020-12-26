@@ -46,8 +46,8 @@ namespace ECS
 
 		// システムリストの更新
 		void Update();
-		// システムリストの描画
-		void Draw();
+		// システムリストの後更新
+		void LateUpdate();
 
 		// システムの追加
 		template<class T>

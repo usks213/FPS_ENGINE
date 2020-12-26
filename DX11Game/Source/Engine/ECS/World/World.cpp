@@ -75,16 +75,16 @@ void World::Update()
 
 //===================================
 //
-//	システムリストの描画
+//	システムリストの後更新
 //
 //===================================
-void World::Draw()
+void World::LateUpdate()
 {
 	// システムリストの更新処理
 	for (auto&& system : m_SystemList)
 	{
 		// OnUpdateを呼び出す
-		system->OnDraw();
+		system->OnLateUpdate();
 	}
 }
 

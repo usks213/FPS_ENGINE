@@ -39,8 +39,8 @@ namespace ECS
 		virtual void OnCreate();
 		// 更新
 		virtual void OnUpdate() {};
-		// 描画
-		virtual void OnDraw() {};
+		// 後更新
+		virtual void OnLateUpdate() {};
 		// 削除時
 		virtual void OnDestroy();
 

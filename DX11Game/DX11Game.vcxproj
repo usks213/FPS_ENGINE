@@ -246,10 +246,13 @@
     <ClCompile Include="Source\Engine\ECSCompoent\Collider.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\MeshRenderer.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\Renderer.cpp" />
+    <ClCompile Include="Source\Engine\ECSCompoent\Script.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\SphereCollider.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\Transform.cpp" />
+    <ClCompile Include="Source\Engine\ECSEntity\GameObject.cpp" />
     <ClCompile Include="Source\Engine\ECSSystem\CollisionSystem.cpp" />
     <ClCompile Include="Source\Engine\ECSSystem\RendererSystem.cpp" />
+    <ClCompile Include="Source\Engine\ECSSystem\ScriptSystem.cpp" />
     <ClCompile Include="Source\Engine\ECSSystem\TransformSystem.cpp" />
     <ClCompile Include="Source\Engine\ECS\Component\IComponent.cpp" />
     <ClCompile Include="Source\Engine\ECS\Entity\EntityManager.cpp" />
@@ -270,16 +273,20 @@
     <ClCompile Include="Source\Engine\System\Shader.cpp" />
     <ClCompile Include="Source\Engine\System\Sound.cpp" />
     <ClCompile Include="Source\Engine\System\Texture.cpp" />
+    <ClCompile Include="Source\Scripts\ScriptBaseLayout.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\ECSCompoent\BoxCollider.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\Collider.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\MeshRenderer.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\Renderer.h" />
+    <ClInclude Include="Source\Engine\ECSCompoent\Script.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\SphereCollider.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\Transform.h" />
+    <ClInclude Include="Source\Engine\ECSEntity\GameObject.h" />
     <ClInclude Include="Source\Engine\ECSSystem\CollisionSystem.h" />
     <ClInclude Include="Source\Engine\ECSSystem\RendererSystem.h" />
+    <ClInclude Include="Source\Engine\ECSSystem\ScriptSystem.h" />
     <ClInclude Include="Source\Engine\ECSSystem\TransformSystem.h" />
     <ClInclude Include="Source\Engine\ECS\Component\IComponent.h" />
     <ClInclude Include="Source\Engine\ECS\Entity\EntityManager.h" />
@@ -303,6 +310,7 @@
     <ClInclude Include="Source\Engine\System\Shader.h" />
     <ClInclude Include="Source\Engine\System\Sound.h" />
     <ClInclude Include="Source\Engine\System\Texture.h" />
+    <ClInclude Include="Source\Scripts\ScriptBaseLayout.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

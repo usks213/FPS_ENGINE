@@ -58,7 +58,7 @@ namespace ECS
 		// 自身の破棄
 		void Destroy() override;
 		// メッセージ送信
-		void SendComponentMessage(std::string message, void* value);
+		void SendComponentMessage(const std::string& message, void* value = nullptr);
 
 		// 親のエンティティマネージャーを取得
 		EntityManager* GetEntityManager() { return m_pEntityManager; }

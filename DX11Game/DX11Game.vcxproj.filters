@@ -47,6 +47,12 @@
     <Filter Include="ソース\エンジン\Renderer">
       <UniqueIdentifier>{8d3e5d06-bcab-4e53-9eed-e4e12a5722bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース\スクリプト">
+      <UniqueIdentifier>{e0fd2763-76bb-4bd9-a8d6-564299cecf64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース\ゲームオブジェクト">
+      <UniqueIdentifier>{8312bb02-83ed-4055-b583-6177a84d8e07}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11Game.rc">
@@ -163,6 +169,18 @@
     <ClCompile Include="Source\Engine\ECSCompoent\SphereCollider.cpp">
       <Filter>ソース\エンジン\ECSComponent</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\ECSCompoent\Script.cpp">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSSystem\ScriptSystem.cpp">
+      <Filter>ソース\エンジン\ECSSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSEntity\GameObject.cpp">
+      <Filter>ソース\エンジン\ECSEntity</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\ScriptBaseLayout.cpp">
+      <Filter>ソース\スクリプト</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\main.h">
@@ -257,6 +275,18 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\ECSCompoent\SphereCollider.h">
       <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSCompoent\Script.h">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSSystem\ScriptSystem.h">
+      <Filter>ソース\エンジン\ECSSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSEntity\GameObject.h">
+      <Filter>ソース\エンジン\ECSEntity</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\ScriptBaseLayout.h">
+      <Filter>ソース\スクリプト</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

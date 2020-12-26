@@ -76,7 +76,7 @@ void IEntity::Destroy()
 //	コンポーネントにメッセージ送信
 //
 //===================================
-void IEntity::SendComponentMessage(std::string message, void* value)
+void IEntity::SendComponentMessage(const std::string& message, void* value)
 {
 	// メッセージ処理
 	std::for_each(m_ComponentPool.begin(), m_ComponentPool.end(),

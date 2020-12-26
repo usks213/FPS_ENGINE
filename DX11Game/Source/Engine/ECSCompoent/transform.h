@@ -26,6 +26,9 @@
 //===== クラス定義 =====
 namespace ECS
 {
+	// 前定義
+	class GameObject;
+
 	class Transform final : public IComponent
 	{
 	public:
@@ -40,7 +43,7 @@ namespace ECS
 		void OnDestroy() override;
 
 		// メッセージ受信
-		void SendComponentMessage(std::string message, void* value) override;
+		void SendComponentMessage(const std::string& message, void* value) override;
 
 		// マトリックスの更新
 		void UpdateMatrix();
@@ -55,8 +58,16 @@ namespace ECS
 		Vector3 m_scale;			// 縦横サイズ
 		Vector3 m_rot;				// オブジェクトの回転角度
 
+		// ゲームオブジェクトセット
+		void SetGameObject(std::weak_ptr<GameObject>& gameObject) { m_gameObject = gameObject; }
+		// ゲームオブジェクトの取得
+		const std::weak_ptr<GameObject>& gameObject()			  { return m_gameObject; }
+
 	private:
 		// マトリックス
 		XMFLOAT4X4 m_mtxWorld;
+
+		// 親のゲームオブジェクト
+		std::weak_ptr<GameObject> m_gameObject;
 	};
 }

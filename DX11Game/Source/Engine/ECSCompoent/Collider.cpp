@@ -94,7 +94,7 @@ void Collider::OnDestroy()
 //	メッセージ受信
 //
 //========================================
-void Collider::SendComponentMessage(std::string message, void* value)
+void Collider::SendComponentMessage(const std::string& message, void* value)
 {
 	// Updateメッセージでマトリックスを更新
 	if ("Update" == message)

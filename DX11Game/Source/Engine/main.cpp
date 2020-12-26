@@ -16,6 +16,12 @@
 //				システムとコンポーネントのやり取りうまくいった！！
 //				Renderer, RendererSystem の作成
 //
+//	2020/12/26	Collider,CollisionSystem の作成
+//				BoxCollider,SphereCollider の作成
+//
+//	2020/12/27	GameObject,Script,ScriptSystem の作成
+//				ScriptBaseLayout の作成
+//
 //======================================================================
 #include "main.h"
 #include "System/input.h"
@@ -590,7 +596,7 @@ void Draw(void)
 	SetZBuffer(true);
 
 	// ワールドの描画
-	g_world.Draw();
+	g_world.LateUpdate();
 
 	// Zバッファ無効
 	SetZBuffer(false);
