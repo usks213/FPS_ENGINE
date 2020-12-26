@@ -32,7 +32,7 @@ namespace ECS
 		~SphereCollider();
 
 		// 当たり判定サイズ
-		void SetRadius(float radius) { m_bound.SetSize(Vector3(1,1,1) * radius); }
+		void SetRadius(float radius) { m_bound.SetSize(Vector3(2,2,2) * radius); }
 
 	protected:
 		// 各コライダーの当たり判定

@@ -29,21 +29,35 @@
 #include "System/debugproc.h"
 #include "System/Sound.h"
 
+// ECS
 #include "ECS/Object/ObjectManager.h"
 #include "ECS/Entity/EntityManager.h"
 #include "ECS/System/ISystem.h"
 #include "ECS/Entity/IEntity.h"
 #include "ECS/Component/IComponent.h"
+#include "ECSEntity/GameObject.h"
 
-#include "ECSCompoent/Transform.h"
+// システム
 #include "ECSSystem/TransformSystem.h"
-#include "ECSCompoent/MeshRenderer.h"
 #include "ECSSystem/RendererSystem.h"
+#include "ECSSystem/CollisionSystem.h"
+#include "ECSSystem/ScriptSystem.h"
 
+// コンポーネント
+#include "ECSCompoent/Transform.h"
+#include "ECSCompoent/MeshRenderer.h"
+#include "ECSCompoent/SphereCollider.h"
+#include "ECSCompoent/BoxCollider.h"
+
+// レンダラー
 #include "Renderer/Camera.h"
 #include "Renderer/Light.h"
 #include "Renderer/mesh.h"
 #include "Renderer/AssimpModel.h"
+
+// スクリプト
+#include "../Scripts/PlayerScript.h"
+
 
 
 //-------- ライブラリのリンク
@@ -461,17 +475,38 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	// システムを追加
 	g_world.AddSystem<TransformSystem>();
 	g_world.AddSystem<RendererSystem>();
+	g_world.AddSystem<CollisionSystem>();
+	g_world.AddSystem<ScriptSystem>();
 
-	// エンティティを追加
-	const auto& entity = g_world.GetEntityManager()->CreateEntity<IEntity>();
-	// コンポーネントの追加
-	const auto& trans =		entity->AddComponent<Transform>();
-	const auto& renderer =	entity->AddComponent<MeshRenderer>();
 
-	// 設定
-	trans->m_scale = Vector3(100, 100, 100);
-	renderer->MakeSphere("test", 100, 1);
-	renderer->SetDiffuseColor({ 0, 1, 0, 1 });
+	// ゲームオブジェクトを追加
+	const auto& player = g_world.GetEntityManager()->CreateEntity<GameObject>();
+	player->AddComponent<PlayerScript>();
+	
+	Vector3 pos = { -200, 0,0 };
+	for (int i = 0; i < 3; i++)
+	{
+		const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
+		/*test->AddComponent<MeshRenderer>()->MakeSphere("test", 100, 100);
+		test->AddComponent<SphereCollider>()->SetRadius(100);*/
+		test->AddComponent<MeshRenderer>()->MakeCube("test");
+		test->AddComponent<BoxCollider>();
+
+		pos->x += 200;
+		test->transform().lock()->m_pos = pos;
+		test->transform().lock()->m_scale = Vector3{ 100, 100, 100 };
+	}
+
+	pos = Vector3{ -200, 0,200 };
+	for (int i = 0; i < 3; i++)
+	{
+		const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
+		test->AddComponent<MeshRenderer>()->MakeSphere("test2", 100, 100);
+		test->AddComponent<SphereCollider>()->SetRadius(100);
+
+		pos->x += 200;
+		test->transform().lock()->m_pos = pos;
+	}
 
 	return hr;
 }

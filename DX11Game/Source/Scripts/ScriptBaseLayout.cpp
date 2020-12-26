@@ -24,6 +24,9 @@
 // マネージャー
 #include "../Engine/ECS/Entity/EntityManager.h"
 
+// エンティティ
+#include "../Engine/ECSEntity/GameObject.h"
+
 // コンポーネント
 #include "../Engine/ECSCompoent/Transform.h"
 #include "../Engine/ECSCompoent/MeshRenderer.h"

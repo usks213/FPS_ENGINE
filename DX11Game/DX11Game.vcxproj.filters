@@ -181,6 +181,9 @@
     <ClCompile Include="Source\Scripts\ScriptBaseLayout.cpp">
       <Filter>ソース\スクリプト</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scripts\PlayerScript.cpp">
+      <Filter>ソース\スクリプト</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\main.h">
@@ -286,6 +289,9 @@
       <Filter>ソース\エンジン\ECSEntity</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scripts\ScriptBaseLayout.h">
+      <Filter>ソース\スクリプト</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\PlayerScript.h">
       <Filter>ソース\スクリプト</Filter>
     </ClInclude>
   </ItemGroup>

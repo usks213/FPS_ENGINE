@@ -46,7 +46,8 @@ Bounds::Bounds(Vector3 center, Vector3 size)
 //
 //========================================
 Collider::Collider()
-	:m_bound(Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f))
+	:m_bound(Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f)),
+	m_bCurState(false), m_bOldState(false), m_bTriggr(false)
 {
 
 
@@ -135,9 +136,9 @@ bool Collider::AABBtoAABB(Collider* collider, Collider* other)
 	//if (max1->z < min2->z) return false;
 
 	// 衝突判定
-	if (min1->x <= max2->x && min2->x <= max1->x &&
-		min1->y <= max2->y && min2->y <= max1->y &&
-		min1->z <= max2->z && min2->z <= max1->z)
+	if (min1->x < max2->x && min2->x < max1->x &&
+		min1->y < max2->y && min2->y < max1->y &&
+		min1->z < max2->z && min2->z < max1->z)
 	{
 		return true;
 	}
@@ -165,7 +166,7 @@ bool Collider::BoxToBox(Collider* collider, Collider* other)
 	Vector3 boxMin2 = boxPos2 + Vector3(other->m_bound.GetMin() * other->m_trans.lock()->m_scale);
 
 	// ハーフサイズ
-	Vector3 boxSize2 = other->m_bound.GetHalfSize() * other->m_trans.lock()->m_scale;
+	Vector3 boxSize1 = collider->m_bound.GetHalfSize() * collider->m_trans.lock()->m_scale;
 
 	// 判定
 	bool bCol = true;
@@ -187,34 +188,34 @@ bool Collider::BoxToBox(Collider* collider, Collider* other)
 	if (maxLen->x < minLen->x)
 	{
 		len->x = maxLen->x;
-		pos->x = boxMax1->x + boxSize2->x;
+		pos->x = boxMax2->x + boxSize1->x;
 	}
 	else
 	{
 		len->x = minLen->x;
-		pos->x = boxMin1->x - boxSize2->x;
+		pos->x = boxMin2->x - boxSize1->x;
 	}
 	// Y軸
 	if (maxLen->y < minLen->y)
 	{
 		len->y = maxLen->y;
-		pos->y = boxMax1->y + boxSize2->y;
+		pos->y = boxMax2->y + boxSize1->y;
 	}
 	else
 	{
 		len->y = minLen->y;
-		pos->y = boxMin1->y - boxSize2->y;
+		pos->y = boxMin2->y - boxSize1->y;
 	}
 	// Z軸
 	if (maxLen->z < minLen->z)
 	{
 		len->z = maxLen->z;
-		pos->z = boxMax1->z + boxSize2->y;
+		pos->z = boxMax2->z + boxSize1->y;
 	}
 	else
 	{
 		len->z = minLen->z;
-		pos->z = boxMin1->z - boxSize2->y;
+		pos->z = boxMin2->z - boxSize1->y;
 	}
 
 	//--- 最短距離軸を出す
@@ -222,19 +223,19 @@ bool Collider::BoxToBox(Collider* collider, Collider* other)
 	if (len->x <= len->y && len->x <= len->z)
 	{
 		// 押し出し
-		other->m_trans.lock()->m_pos->x = pos->x;
+		collider->m_trans.lock()->m_pos->x = pos->x;
 	}
 	// Y軸
 	else if (len->y <= len->x && len->y <= len->z)
 	{
 		// 押し出し
-		other->m_trans.lock()->m_pos->y = pos->y;
+		collider->m_trans.lock()->m_pos->y = pos->y;
 	}
 	// Z軸
 	else if (len->z <= len->x && len->z <= len->y)
 	{
 		// 押し出し
-		other->m_trans.lock()->m_pos->z = pos->z;
+		collider->m_trans.lock()->m_pos->z = pos->z;
 	}
 
 	//--- 物理
@@ -248,6 +249,9 @@ bool Collider::BoxToBox(Collider* collider, Collider* other)
 //========================================
 bool Collider::BoxToSphere(Collider* collider, Collider* other)
 {
+	// デバック
+	return BoxToBox(collider, other);
+
 	//--- 詳細判定
 	// 中心座標
 	Vector3 boxPos = collider->m_trans.lock()->m_pos + collider->m_bound.GetCenter();
@@ -257,6 +261,8 @@ bool Collider::BoxToSphere(Collider* collider, Collider* other)
 	Vector3 boxMin = boxPos + Vector3(collider->m_bound.GetMin() * collider->m_trans.lock()->m_scale);
 	// 半径
 	float radius = other->m_bound.GetRadius() * other->m_trans.lock()->m_scale->x;
+	// ハーフサイズ
+	Vector3 boxSize = collider->m_bound.GetHalfSize() * collider->m_trans.lock()->m_scale;
 
 	// 判定
 	bool bCol = false;
@@ -266,13 +272,16 @@ bool Collider::BoxToSphere(Collider* collider, Collider* other)
 	Vector3	minLen = boxMin - spherePos;
 
 	//--- 判定
-	if (maxLen->x <= radius && minLen->x <= radius &&
-		maxLen->y <= radius && minLen->y <= radius &&
-		maxLen->z <= radius && minLen->z <= radius)
+	if (maxLen->x < radius && minLen->x < radius &&
+		maxLen->y < radius && minLen->y < radius &&
+		maxLen->z < radius && minLen->z < radius)
 	{
 		bCol = true;
 	}
-
+	else
+	{
+		return false;
+	}
 
 	//--- 押し出し
 	// トリガーON
@@ -286,34 +295,34 @@ bool Collider::BoxToSphere(Collider* collider, Collider* other)
 	if (maxLen->x < minLen->x)
 	{
 		len->x = maxLen->x;
-		pos->x = boxMax->x + radius;
+		pos->x = spherePos->x + radius + boxSize->x;
 	}
 	else
 	{
 		len->x = minLen->x;
-		pos->x = boxMin->x - radius;
+		pos->x = spherePos->x - radius - boxSize->x;
 	}
 	// Y軸
 	if (maxLen->y < minLen->y)
 	{
 		len->y = maxLen->y;
-		pos->y = boxMax->y + radius;
+		pos->y = spherePos->y + radius + boxSize->y;
 	}
 	else
 	{
 		len->y = minLen->y;
-		pos->y = boxMin->y - radius;
+		pos->y = spherePos->y - radius - boxSize->y;
 	}
 	// Z軸
 	if (maxLen->z < minLen->z)
 	{
 		len->z = maxLen->z;
-		pos->z = boxMax->z + radius;
+		pos->z = spherePos->z + radius + boxSize->z;
 	}
 	else
 	{
 		len->z = minLen->z;
-		pos->z = boxMin->z - radius;
+		pos->z = spherePos->z - radius - boxSize->z;
 	}
 
 	//--- 最短距離軸を出す
@@ -321,19 +330,19 @@ bool Collider::BoxToSphere(Collider* collider, Collider* other)
 	if (len->x <= len->y && len->x <= len->z)
 	{
 		// 押し出し
-		other->m_trans.lock()->m_pos->x = pos->x;
+		collider->m_trans.lock()->m_pos->x = pos->x;
 	}
 	// Y軸
 	else if (len->y <= len->x && len->y <= len->z)
 	{
 		// 押し出し
-		other->m_trans.lock()->m_pos->y = pos->y;
+		collider->m_trans.lock()->m_pos->y = pos->y;
 	}
 	// Z軸
 	else if (len->z <= len->x && len->z <= len->y)
 	{
 		// 押し出し
-		other->m_trans.lock()->m_pos->z = pos->z;
+		collider->m_trans.lock()->m_pos->z = pos->z;
 	}
 
 	//--- 物理
@@ -348,6 +357,9 @@ bool Collider::BoxToSphere(Collider* collider, Collider* other)
 //========================================
 bool Collider::SphereToBox(Collider* collider, Collider* other)
 {
+	// デバック
+	return BoxToBox(collider, other);
+
 	//--- 詳細判定
 	// 中心座標
 	Vector3 boxPos = other->m_trans.lock()->m_pos + other->m_bound.GetCenter();
@@ -366,13 +378,16 @@ bool Collider::SphereToBox(Collider* collider, Collider* other)
 	Vector3	minLen = boxMin - spherePos;
 
 	//--- 判定
-	if (maxLen->x <= radius && minLen->x <= radius &&
-		maxLen->y <= radius && minLen->y <= radius &&
-		maxLen->z <= radius && minLen->z <= radius)
+	if (maxLen->x < radius && minLen->x < radius &&
+		maxLen->y < radius && minLen->y < radius &&
+		maxLen->z < radius && minLen->z < radius)
 	{
 		bCol = true;
 	}
-
+	else
+	{
+		return false;
+	}
 
 	//--- 押し出し
 	// トリガーON
@@ -438,6 +453,8 @@ bool Collider::SphereToBox(Collider* collider, Collider* other)
 
 	//--- 物理
 	return bCol;
+
+	return false;
 }
 
 //========================================
@@ -461,9 +478,13 @@ bool Collider::SphereToSphere(Collider* collider, Collider* other)
 	Vector3 distance = pos1 - pos2;
 
 	//--- 衝突判定
-	if (distance.magnitudeNoSqrt() < (radius1 + radius2) + (radius1 + radius2))
+	if (distance.magnitudeNoSqrt() < (radius1 + radius2) * (radius1 + radius2))
 	{
 		bCol = true;
+	}
+	else
+	{
+		return false;
 	}
 
 	//---  押し出し
