@@ -27,6 +27,7 @@ namespace ECS
 	{
 	private:
 		// ----- メンバ -----
+		std::weak_ptr<Rigidbody> m_rb;
 
 	protected:
 		// ----- メソッド -----

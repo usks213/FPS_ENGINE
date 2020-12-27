@@ -30,6 +30,7 @@
 // コンポーネント
 #include "../Engine/ECSCompoent/Transform.h"
 #include "../Engine/ECSCompoent/MeshRenderer.h"
+#include "../Engine/ECSCompoent/Rigidbody.h"
 #include "../Engine/ECSCompoent/BoxCollider.h"
 #include "../Engine/ECSCompoent/SphereCollider.h"
 

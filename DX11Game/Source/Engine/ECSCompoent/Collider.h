@@ -16,7 +16,7 @@
 //====== インクルード部 ======
 #include "../System/Math.h"
 #include "../ECS/Component/IComponent.h"
-#include "Transform.h"
+
 
 //===== マクロ定義 =====
 
@@ -48,6 +48,9 @@ namespace ECS
 
 	// 前定義
 	class CollisionSystem;
+	class GameObject;
+	class Transform;
+	class Rigidbody;
 
 	class Collider : public IComponent
 	{
@@ -83,16 +86,28 @@ namespace ECS
 		// 中心座標
 		void SetCenter(Vector3 center) { m_bound.SetCenter(center); }
 
+		// ゲームオブジェクト取得
+		const std::weak_ptr<GameObject>& gameObject() { return m_gameObject; }
+		// トランスフォーム取得
+		const std::weak_ptr<Transform>& transform() { return m_transform; }
+		// リジッドボディ取得
+		const std::weak_ptr<Rigidbody>& rigidbody() { return m_rigidbody; }
+
 	protected:
 		// バウンドボリューム
 		Bounds m_bound;
 		// トリガー
 		bool m_bTriggr;
-		// トランスフォーム
-		std::weak_ptr<Transform> m_trans;
 		// 状態
 		bool m_bOldState;
 		bool m_bCurState;
+
+		// ゲームオブジェクト
+		std::weak_ptr<GameObject> m_gameObject;
+		// トランスフォーム
+		std::weak_ptr<Transform> m_transform;
+		// リジッドボディ
+		std::weak_ptr<Rigidbody> m_rigidbody;
 		
 	//=== 各当たり判定 ===
 	public:

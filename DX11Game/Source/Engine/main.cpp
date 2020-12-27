@@ -41,11 +41,13 @@
 #include "ECSSystem/TransformSystem.h"
 #include "ECSSystem/RendererSystem.h"
 #include "ECSSystem/CollisionSystem.h"
+#include "ECSSystem/RigidbodySystem.h"
 #include "ECSSystem/ScriptSystem.h"
 
 // コンポーネント
 #include "ECSCompoent/Transform.h"
 #include "ECSCompoent/MeshRenderer.h"
+#include "ECSCompoent/Rigidbody.h"
 #include "ECSCompoent/SphereCollider.h"
 #include "ECSCompoent/BoxCollider.h"
 
@@ -476,6 +478,7 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	g_world.AddSystem<TransformSystem>();
 	g_world.AddSystem<RendererSystem>();
 	g_world.AddSystem<CollisionSystem>();
+	g_world.AddSystem<RigidbodySystem>();
 	g_world.AddSystem<ScriptSystem>();
 
 
@@ -483,30 +486,41 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	const auto& player = g_world.GetEntityManager()->CreateEntity<GameObject>();
 	player->AddComponent<PlayerScript>();
 	
-	Vector3 pos = { -200, 0,0 };
-	for (int i = 0; i < 3; i++)
-	{
-		const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-		/*test->AddComponent<MeshRenderer>()->MakeSphere("test", 100, 100);
-		test->AddComponent<SphereCollider>()->SetRadius(100);*/
-		test->AddComponent<MeshRenderer>()->MakeCube("test");
-		test->AddComponent<BoxCollider>();
+	// 床
+	const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
+	test->AddComponent<MeshRenderer>()->MakeCube("plane");
+	test->AddComponent<Rigidbody>();
+	test->AddComponent<BoxCollider>();
+	test->transform().lock()->m_scale = Vector3{ 1000, 100, 1000 };
+	test->transform().lock()->m_pos = Vector3{ 500, 0, 500 };
 
-		pos->x += 200;
-		test->transform().lock()->m_pos = pos;
-		test->transform().lock()->m_scale = Vector3{ 100, 100, 100 };
-	}
 
-	pos = Vector3{ -200, 0,200 };
-	for (int i = 0; i < 3; i++)
-	{
-		const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-		test->AddComponent<MeshRenderer>()->MakeSphere("test2", 100, 100);
-		test->AddComponent<SphereCollider>()->SetRadius(100);
+	//Vector3 pos = { -200, 400,0 };
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
+	//	/*test->AddComponent<MeshRenderer>()->MakeSphere("test", 100, 100);
+	//	test->AddComponent<SphereCollider>()->SetRadius(100);*/
+	//	test->AddComponent<MeshRenderer>()->MakeCube("test");
+	//	test->AddComponent<Rigidbody>();
+	//	test->AddComponent<BoxCollider>();
 
-		pos->x += 200;
-		test->transform().lock()->m_pos = pos;
-	}
+	//	pos->x += 200;
+	//	test->transform().lock()->m_pos = pos;
+	//	test->transform().lock()->m_scale = Vector3{ 100, 100, 100 };
+	//}
+
+	//pos = Vector3{ -200, 400,200 };
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
+	//	test->AddComponent<MeshRenderer>()->MakeSphere("test2", 100, 100);
+	//	test->AddComponent<Rigidbody>();
+	//	test->AddComponent<SphereCollider>()->SetRadius(100);
+
+	//	pos->x += 200;
+	//	test->transform().lock()->m_pos = pos;
+	//}
 
 	return hr;
 }
@@ -608,6 +622,9 @@ void Update(void)
 
 	// サウンド更新処理
 	CSound::Update();
+
+	// オブジェクト
+	ECS::ObjectManager::GetInstance()->ClearnUpObject();
 }
 
 //=============================================================================

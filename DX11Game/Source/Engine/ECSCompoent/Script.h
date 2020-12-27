@@ -29,6 +29,7 @@ namespace ECS
 	class GameObject;
 	class Transform;
 	class Collider;
+	class Rigidbody;
 
 
 	class Script : public IComponent
