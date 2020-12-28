@@ -177,6 +177,7 @@ bool Collider::BoxToBox(Collider* collider, Collider* other)
 
 	// ハーフサイズ
 	Vector3 boxSize1 = collider->m_bound.GetHalfSize() * collider->m_transform.lock()->m_scale;
+	Vector3 boxSize2 = other->m_bound.GetHalfSize() * other->m_transform.lock()->m_scale;
 
 	// 判定
 	bool bCol = true;
@@ -189,6 +190,11 @@ bool Collider::BoxToBox(Collider* collider, Collider* other)
 	//--- 押し出し
 	// トリガーON
 	if (collider->m_bTriggr || other->m_bTriggr) return bCol;
+	// リジッドボディ取得
+	const auto& rb1 = collider->rigidbody().lock();
+	const auto& rb2 = other->rigidbody().lock();
+	if (!rb1 || !rb2) return bCol;
+
 
 	// 各軸距離
 	Vector3 len;
@@ -244,8 +250,17 @@ bool Collider::BoxToBox(Collider* collider, Collider* other)
 	// X軸
 	if (len->x <= len->y && len->x <= len->z)
 	{
-		// 押し出し
-		collider->m_transform.lock()->m_pos->x = pos->x;
+		if (rb1->m_bUsePhysics)
+		{
+			// 押し出し
+			collider->m_transform.lock()->m_pos->x = pos->x;
+		}
+		if (rb2->m_bUsePhysics)
+		{
+			// 相手も
+			other->m_transform.lock()->m_pos->x =
+				pos->x - (boxSize1->x + boxSize2->x) * normal->x * 1.002f;
+		}
 		// 法線
 		normal->y = 0.0f;
 		normal->z = 0.0f;
@@ -253,8 +268,17 @@ bool Collider::BoxToBox(Collider* collider, Collider* other)
 	// Y軸
 	else if (len->y <= len->x && len->y <= len->z)
 	{
-		// 押し出し
-		collider->m_transform.lock()->m_pos->y = pos->y;
+		if (rb1->m_bUsePhysics)
+		{
+			// 押し出し
+			collider->m_transform.lock()->m_pos->y = pos->y;
+		}
+		if (rb2->m_bUsePhysics)
+		{
+			// 相手も
+			other->m_transform.lock()->m_pos->y =
+				pos->y - (boxSize1->y + boxSize2->y) * normal->y * 1.002f;
+		}
 		// 法線
 		normal->x = 0.0f;
 		normal->z = 0.0f;
@@ -262,8 +286,17 @@ bool Collider::BoxToBox(Collider* collider, Collider* other)
 	// Z軸
 	else if (len->z <= len->x && len->z <= len->y)
 	{
-		// 押し出し
-		collider->m_transform.lock()->m_pos->z = pos->z;
+		if (rb1->m_bUsePhysics)
+		{
+			// 押し出し
+			collider->m_transform.lock()->m_pos->z = pos->z;
+		}
+		if (rb2->m_bUsePhysics)
+		{
+			// 相手も
+			other->m_transform.lock()->m_pos->z =
+				pos->z - (boxSize1->z + boxSize2->z) * normal->z * 1.002f;
+		}
 		// 法線
 		normal->x = 0.0f;
 		normal->y = 0.0f;
@@ -271,55 +304,10 @@ bool Collider::BoxToBox(Collider* collider, Collider* other)
 
 	//--- 物理
 
-	// リジッドボディ取得
-	const auto& rb1 = collider->rigidbody().lock();
-	const auto& rb2 = other->rigidbody().lock();
-	if (!rb1 || !rb2) return bCol;
-	// 物理をするか
-	if (!rb1->m_bUsePhysics) return bCol;
+	// 当たり判定物理計算
+	rb1->CollisionPhysics(rb2, normal);
+	//rb2->CollisionPhysics(rb1, normal);
 
-
-	// ベクトルの大きさ
-	float magnitude = rb1->m_velocity.magnitude();
-	// 壁ずりベクトル
-	Vector3 scratch = Vector3::WallScratchVector(rb1->m_velocity, normal) * magnitude;
-	// 垂直ベクトル
-	Vector3 vertical = Vector3::WallVerticalVector(rb1->m_velocity, normal) * magnitude;
-	// 座標12ベクトル
-	//Vector3 c = rb1->transform().lock()->m_pos - rb2->transform().lock()->m_pos;
-	//c = Vector3::WallVerticalVector(c, normal) * c.magnitude();
-
-
-	//--- 垂直方向(反発)
-	float m = -rb2->m_fMass / (rb1->m_fMass + rb2->m_fMass);
-	float e = (rb1->m_e * rb2->m_e);
-	//float d = Vector3::Dot(rb2->m_velocity - vertical, c);
-	Vector3 verticalVector = vertical * m * e;
-
-
-	//--- 水平方向(摩擦)
-	// 水平方向の力
-	Vector3 horizontalVector;
-	// 垂直抗力
-	Vector3 N = vertical;
-	// 静止摩擦
-	float myu_s = rb1->m_fStaticFriction * rb2->m_fStaticFriction;
-	// 最大静止摩擦力より大きいか
-	if (scratch.magnitude() > myu_s * N.magnitude())
-	{
-		// 動摩擦で計算
-		float myu_d = rb1->m_fDynamicFriction * rb2->m_fDynamicFriction;
-		float F_d = myu_d * N.magnitude();
-		if (F_d > 1.0f) F_d = 1.0f;
-		// 水平方向の力
-		horizontalVector = scratch - scratch * F_d;
-	}
-
-
-	//--- ベクトルの合成
-	Vector3 force = horizontalVector + verticalVector;
-	// 最終的な力
-	rb1->m_force = force;
 
 	return bCol;
 }

@@ -78,6 +78,20 @@ void RigidbodySystem::OnUpdate()
 
 //===================================
 //
+//	後更新時コールバック
+//
+//===================================
+void RigidbodySystem::OnLateUpdate()
+{
+	std::for_each(m_ComponentList.begin(), m_ComponentList.end(),
+		[](Rigidbody* rb)
+		{
+			rb->LateUpdate();
+		});
+}
+
+//===================================
+//
 //	削除時コールバック
 //
 //===================================

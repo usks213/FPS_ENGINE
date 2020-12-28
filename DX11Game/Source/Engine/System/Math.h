@@ -197,21 +197,21 @@ public:
 	static Vector3 WallScratchVector(Vector3 front, Vector3 normal)
 	{
 		normal = normal.normalized();
-		return Normalize((front - normal * Dot(front, normal)));
+		return (front - normal * Dot(front, normal));
 	}
 
 	// 反射ベクトル
 	static Vector3 WallReflectVector(Vector3 front, Vector3 normal)
 	{
 		normal = normal.normalized();
-		return Normalize((front - normal * Dot(front, normal) * 2.0f));
+		return (front - normal * Dot(front, normal) * 2.0f);
 	}
 
 	// 垂直ベクトル
 	static Vector3 WallVerticalVector(Vector3 front, Vector3 normal)
 	{
 		normal = normal.normalized();
-		return Normalize(normal * Dot(front, normal));
+		return normal * Dot(front, normal);
 	}
 
 	// 内部取得

@@ -489,28 +489,31 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	// °
 	const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
 	test->AddComponent<MeshRenderer>()->MakeCube("plane");
-	test->AddComponent<Rigidbody>();
+	const auto& rb1 = test->AddComponent<Rigidbody>();
 	test->AddComponent<BoxCollider>();
 	test->transform().lock()->m_scale = Vector3{ 1000, 100, 1000 };
 	test->transform().lock()->m_pos = Vector3{ 500, 0, 500 };
+	rb1->SetUsePhysics(false);
+	rb1->SetMass(10);
 
+	Vector3 pos = { -200, 400, 200 };
+	for (int i = 0; i < 3; i++)
+	{
+		const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
+		/*test->AddComponent<MeshRenderer>()->MakeSphere("test", 100, 100);
+		test->AddComponent<SphereCollider>()->SetRadius(100);*/
+		test->AddComponent<MeshRenderer>()->MakeCube("test");
+		const auto& rb = test->AddComponent<Rigidbody>();
+		test->AddComponent<BoxCollider>();
 
-	//Vector3 pos = { -200, 400,0 };
-	//for (int i = 0; i < 3; i++)
-	//{
-	//	const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-	//	/*test->AddComponent<MeshRenderer>()->MakeSphere("test", 100, 100);
-	//	test->AddComponent<SphereCollider>()->SetRadius(100);*/
-	//	test->AddComponent<MeshRenderer>()->MakeCube("test");
-	//	test->AddComponent<Rigidbody>();
-	//	test->AddComponent<BoxCollider>();
+		pos->x += 300;
+		test->transform().lock()->m_pos = pos;
+		test->transform().lock()->m_scale = Vector3{ 100, 100, 100 };
 
-	//	pos->x += 200;
-	//	test->transform().lock()->m_pos = pos;
-	//	test->transform().lock()->m_scale = Vector3{ 100, 100, 100 };
-	//}
+		//rb->SetMass(5);
+	}
 
-	//pos = Vector3{ -200, 400,200 };
+	//pos = Vector3{ -200, 400,400 };
 	//for (int i = 0; i < 3; i++)
 	//{
 	//	const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
@@ -518,7 +521,7 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	//	test->AddComponent<Rigidbody>();
 	//	test->AddComponent<SphereCollider>()->SetRadius(100);
 
-	//	pos->x += 200;
+	//	pos->x += 300;
 	//	test->transform().lock()->m_pos = pos;
 	//}
 

@@ -53,7 +53,7 @@ using namespace ECS;
 //========================================
 void PlayerScript::Start()
 {
-	transform().lock()->m_pos = Vector3(0, 400, 400);
+	transform().lock()->m_pos = Vector3(100, 200, 200);
 	transform().lock()->m_scale = Vector3(100, 100, 100);
 
 	// コンポーネントの追加
@@ -61,6 +61,7 @@ void PlayerScript::Start()
 	// リジッドボディ
 	const auto& rb = gameObject().lock()->AddComponent<Rigidbody>();
 	m_rb = rb;
+	rb->SetMass(1);
 
 	// レンダラー
 	const auto& renderer = gameObject().lock()->AddComponent<MeshRenderer>();
@@ -105,7 +106,7 @@ void PlayerScript::Update()
 
 	if (GetKeyTrigger(VK_SPACE))
 	{
-		m_rb.lock()->AddForceY(8.0f);
+		m_rb.lock()->SetForceY(8.0f);
 	}
 }
 

@@ -38,6 +38,8 @@ namespace ECS
 		void OnCreate() override;
 		// 更新
 		void OnUpdate() override;
+		// 後更新
+		void OnLateUpdate() override;
 		// 削除時
 		void OnDestroy() override;
 	};

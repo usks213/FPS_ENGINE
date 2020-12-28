@@ -48,6 +48,7 @@ namespace ECS
 
 		// 更新処理
 		void Update();
+		void LateUpdate();
 
 		// ゲームオブジェクト取得
 		const std::weak_ptr<GameObject>& gameObject() { return m_gameObject; }
@@ -55,6 +56,9 @@ namespace ECS
 		const std::weak_ptr<Transform>& transform() { return m_transform; }
 
 	private:
+		// 物理計算
+		void CollisionPhysics(const std::shared_ptr<Rigidbody>& other, Vector3 normal);
+
 		// ゲームオブジェクト
 		std::weak_ptr<GameObject> m_gameObject;
 		// トランスフォーム
@@ -115,6 +119,7 @@ namespace ECS
 		// 移動
 		Vector3 m_velocity;
 		Vector3 m_force;
+		Vector3 m_forceBackUp;
 		Vector3 m_drag;
 		// 回転
 		Vector3 m_angularVelocity;
