@@ -16,6 +16,7 @@
 //====== インクルード部 ======
 #include "../System/Math.h"
 #include "../ECS/Component/IComponent.h"
+#include <vector>
 
 
 //===== マクロ定義 =====
@@ -80,8 +81,7 @@ namespace ECS
 
 		// 各コライダーの当たり判定
 		virtual bool Judgment(Collider* other) = 0;
-		// コライダータイプ
-		virtual EColliderType GetColliderType() = 0;
+		const EColliderType& GetColliderType() { return m_eType; }
 
 		// 中心座標
 		void SetCenter(Vector3 center) { m_bound.SetCenter(center); }
@@ -101,6 +101,8 @@ namespace ECS
 		// 状態
 		bool m_bOldState;
 		bool m_bCurState;
+		// 形状
+		EColliderType m_eType;
 
 		// ゲームオブジェクト
 		std::weak_ptr<GameObject> m_gameObject;
@@ -108,6 +110,9 @@ namespace ECS
 		std::weak_ptr<Transform> m_transform;
 		// リジッドボディ
 		std::weak_ptr<Rigidbody> m_rigidbody;
+
+		// 既に当たったリスト
+		std::vector<Collider*> m_aIsHit;
 		
 	//=== 各当たり判定 ===
 	public:

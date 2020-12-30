@@ -1,6 +1,6 @@
 //======================================================================
 //											main.cpp
-//	メイン
+//	ECS設計フレームワーク(データ指向じゃない．．．)
 //
 //======================================================================
 //	author :	AT12A 05 宇佐美晃之
@@ -21,6 +21,12 @@
 //
 //	2020/12/27	GameObject,Script,ScriptSystem の作成
 //				ScriptBaseLayout の作成
+//
+//	2020/12/28	Rigidbody,RigidbodySystem の作成
+//				物理計算実装(上手くいかない)
+//
+//	2020/12/30	当たり判定修正 物理計算上手くいった！！
+//
 //
 //======================================================================
 #include "main.h"
@@ -470,9 +476,9 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	g_camera.Init();
 	CCamera::SetMainCamera(&g_camera);
 
+
 	// オブジェクト
 	ECS::ObjectManager::Create();
-
 	
 	// システムを追加
 	g_world.AddSystem<TransformSystem>();
@@ -494,36 +500,46 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	test->transform().lock()->m_scale = Vector3{ 1000, 100, 1000 };
 	test->transform().lock()->m_pos = Vector3{ 500, 0, 500 };
 	rb1->SetUsePhysics(false);
+	rb1->SetUseGravity(false);
 	rb1->SetMass(10);
+	rb1->SetE(0.8f);
+	//rb1->SetDynamicFriction(0.0f);
 
-	Vector3 pos = { -200, 400, 200 };
-	for (int i = 0; i < 3; i++)
+	Vector3 pos = { 400, 2000, 200 };
+	for (int i = 0; i < 10; i++)
 	{
 		const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-		/*test->AddComponent<MeshRenderer>()->MakeSphere("test", 100, 100);
-		test->AddComponent<SphereCollider>()->SetRadius(100);*/
-		test->AddComponent<MeshRenderer>()->MakeCube("test");
 		const auto& rb = test->AddComponent<Rigidbody>();
+		//test->AddComponent<PlayerScript>();
+		//test->AddComponent<MeshRenderer>()->MakeSphere("test", 100, 100);
+		//test->AddComponent<SphereCollider>()->SetRadius(100);
+		test->AddComponent<MeshRenderer>()->MakeCube("test");
 		test->AddComponent<BoxCollider>();
 
-		pos->x += 300;
+		pos->y -= 300;
 		test->transform().lock()->m_pos = pos;
 		test->transform().lock()->m_scale = Vector3{ 100, 100, 100 };
 
-		//rb->SetMass(5);
+		rb->SetMass(2);
+		//rb->SetUsePhysics(false);
 	}
 
-	//pos = Vector3{ -200, 400,400 };
-	//for (int i = 0; i < 3; i++)
-	//{
-	//	const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-	//	test->AddComponent<MeshRenderer>()->MakeSphere("test2", 100, 100);
-	//	test->AddComponent<Rigidbody>();
-	//	test->AddComponent<SphereCollider>()->SetRadius(100);
+	pos = Vector3{ 400, 200,400 };
+	for (int z = 0; z < 33; z++)
+	{
+		for (int i = 0; i < 33; i++)
+		{
+			const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
+			test->AddComponent<MeshRenderer>()->MakeSphere("test2", 10, 50);
+			test->AddComponent<Rigidbody>();
+			test->AddComponent<SphereCollider>()->SetRadius(50);
 
-	//	pos->x += 300;
-	//	test->transform().lock()->m_pos = pos;
-	//}
+			test->transform().lock()->m_pos = pos;
+			pos->x += 1;
+		}
+		//pos->x = -200;
+		pos->z += 1;
+	}
 
 	return hr;
 }

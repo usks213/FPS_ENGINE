@@ -53,10 +53,10 @@ Rigidbody::Rigidbody()
 	// 質量
 	m_fMass				= 1.0f;
 	// 摩擦
-	m_fStaticFriction	= 0.4f;	// 静止
-	m_fDynamicFriction	= 1.0f;	// 動
+	m_fStaticFriction	= 0.0f;	// 静止
+	m_fDynamicFriction	= 0.0f;	// 動
 	// 反発係数
-	m_e					= 0.5f;
+	m_e					= 1.0f;
 }
 
 //========================================
@@ -197,17 +197,8 @@ void Rigidbody::Update()
 		pos->z = 0.0f;
 		m_force->z = 0.0f;
 	}
+	// 更新
 	pTrans->m_pos = pos;
-
-	//// 抵抗で加速度を減らす	fDrag(0.0f ～ 1.0f)
-	//m_force->x *= (1.0f - m_drag->x);
-	//if (fabsf(m_force->x) < 0.01f) m_force->x = 0.0f;
-	//m_force->y *= (1.0f - m_drag->y);
-	//if (fabsf(m_force->y) < 0.01f) m_force->y = 0.0f;
-	//m_force->z *= (1.0f - m_drag->z);
-	//if (fabsf(m_force->z) < 0.01f) m_force->z = 0.0f;
-	
-	m_forceBackUp = Vector3{ 0,0,0 };
 }
 
 //========================================
@@ -217,50 +208,8 @@ void Rigidbody::Update()
 //========================================
 void Rigidbody::LateUpdate()
 {
-	//// トランスフォーム
-	//const auto& pTrans = transform().lock();
-	//// 座標・回転
-	//Vector3 pos = pTrans->m_pos;
-
-	//// 移動量
-	//m_velocity->x = 0;
-	//m_velocity->y = 0;
-	//m_velocity->z = 0;
-
-	//// 外力
-	//m_velocity->x += m_force->x;
-	//m_velocity->y += m_force->y;
-	//m_velocity->z += m_force->z;
-
-	//// 速度限界
-	//if (m_velocity->x > MAX_VELOCITY) m_velocity->x = MAX_VELOCITY;
-	//if (m_velocity->y > MAX_VELOCITY) m_velocity->y = MAX_VELOCITY;
-	//if (m_velocity->z > MAX_VELOCITY) m_velocity->z = MAX_VELOCITY;
-	//if (m_velocity->x < -MAX_VELOCITY) m_velocity->x = -MAX_VELOCITY;
-	//if (m_velocity->y < -MAX_VELOCITY) m_velocity->y = -MAX_VELOCITY;
-	//if (m_velocity->z < -MAX_VELOCITY) m_velocity->z = -MAX_VELOCITY;
-
-	//// 位置の更新
-	//pos->x += m_velocity->x;
-	//pos->y += m_velocity->y;
-	//pos->z += m_velocity->z;
-	//// 移動限界
-	//if (pos->x < 0.0f)
-	//{
-	//	pos->x = 0.0f;
-	//	m_force->x = 0.0f;
-	//}
-	//if (pos->y < 0.0f)
-	//{
-	//	pos->y = 0.0f;
-	//	m_force->y = 0.0f;
-	//}
-	//if (pos->z < 0.0f)
-	//{
-	//	pos->z = 0.0f;
-	//	m_force->z = 0.0f;
-	//}
-	//pTrans->m_pos = pos;
+	// 初期化
+	m_forceBackUp = Vector3{ 0,0,0 };
 
 	// 抵抗で加速度を減らす	fDrag(0.0f ～ 1.0f)
 	m_force->x *= (1.0f - m_drag->x);
@@ -274,14 +223,11 @@ void Rigidbody::LateUpdate()
 // 物理計算
 void Rigidbody::CollisionPhysics(const std::shared_ptr<Rigidbody>& other, Vector3 normal)
 {
-	//--- 物理
-
 	// リジッドボディ取得
 	const auto& rb1 = this;
 	const auto& rb2 = other;
 	if (!rb1 || !rb2) return;
 	
-
 	// ベクトルの大きさ
 	float magnitude = rb1->m_velocity.magnitude();
 	// 壁ずりベクトル
@@ -289,30 +235,25 @@ void Rigidbody::CollisionPhysics(const std::shared_ptr<Rigidbody>& other, Vector
 	// 垂直ベクトル
 	Vector3 vertical = Vector3::WallVerticalVector(rb1->m_velocity, normal);
 	Vector3 vertical2 = Vector3::WallVerticalVector(rb2->m_velocity, normal);
-	// 座標12ベクトル
-	//Vector3 c = rb1->transform().lock()->m_pos - rb2->transform().lock()->m_pos;
-	//c = Vector3::WallVerticalVector(c, normal) * c.magnitude();
 
 
 	//--- 垂直方向(反発)
-	float m1 = -rb2->m_fMass / (rb1->m_fMass + rb2->m_fMass);
-	float m2 = rb1->m_fMass / (rb1->m_fMass + rb2->m_fMass);
+	//float m1 = -rb2->m_fMass / (rb1->m_fMass + rb2->m_fMass);
+	//float m2 =  rb1->m_fMass / (rb1->m_fMass + rb2->m_fMass);
+	//Vector3 c = rb2->transform().lock()->m_pos - rb1->transform().lock()->m_pos;
+	//float dot = Vector3::Dot((vertical - vertical2), c);
 	float e = (rb1->m_e * rb2->m_e);
-	//float d = Vector3::Dot(rb2->m_velocity - vertical, c);
-	//Vector3 verticalVector = vertical2 * m1 * e;
-	//Vector3 verticalVector2 = vertical * m2 * e;
 
-	// 自分
-	Vector3 verticalVector = (vertical * (rb1->m_fMass - rb2->m_fMass) +
-		vertical2 * rb2->m_fMass)
-		/ (rb1->m_fMass + rb2->m_fMass);
-	verticalVector *= e;
+	//// 反発後の垂直速度
+	//Vector3 verticalVector = vertical + c * dot * e * m1;
+	//Vector3 verticalVector2 = vertical2 + c * dot * e * m2;
 
-	// 相手の垂直
-	Vector3 verticalVector2 = (vertical2 * (rb2->m_fMass - rb1->m_fMass) +
-		vertical * rb1->m_fMass)
-		/ (rb2->m_fMass + rb1->m_fMass);
-	verticalVector2 *= e;
+	// 反発後の垂直速度
+	Vector3 verticalVector = 
+		(vertical2 - vertical) * (1 + e) / (rb1->m_fMass / rb2->m_fMass + 1) + vertical;
+	// 反発後の垂直速度(相手側)
+	Vector3 verticalVector2 =
+		(vertical - vertical2) * (1 + e) / (rb2->m_fMass / rb1->m_fMass + 1) + vertical2;
 
 
 	//--- 水平方向(摩擦)
@@ -323,26 +264,27 @@ void Rigidbody::CollisionPhysics(const std::shared_ptr<Rigidbody>& other, Vector
 	Vector3 N = vertical;
 	// 静止摩擦
 	float myu_s = rb1->m_fStaticFriction * rb2->m_fStaticFriction;
+	// 動摩擦
+	float myu_d = rb1->m_fDynamicFriction * rb2->m_fDynamicFriction;
+	// 動摩擦力
+	float F_d = myu_d * N.magnitude();
+	if (F_d > 1.0f) F_d = 1.0f;
+
 	// 最大静止摩擦力より大きいか
 	if (scratch.magnitude() > myu_s * N.magnitude())
 	{
-		// 動摩擦で計算
-		float myu_d = rb1->m_fDynamicFriction * rb2->m_fDynamicFriction;
-		float F_d = myu_d * N.magnitude();
-		if (F_d > 1.0f) F_d = 1.0f;
 		// 水平方向の力
 		horizontalVector = scratch - scratch * F_d;
 	}
-	// 相手に摩擦力を
-	float myu_d = rb1->m_fDynamicFriction * rb2->m_fDynamicFriction;
-	float F_d = myu_d * N.magnitude();
-	if (F_d > 1.0f) F_d = 1.0f;
+	// 最大静止摩擦力より大きいか(相手側)
 	if (F_d > myu_s * vertical2.magnitude())
 	{
+		// 水平方向の力
 		horizontalVector2 = scratch * F_d;
 	}
 
 
+	//--- 力の合成
 	// 物理をするか
 	if (rb1->m_bUsePhysics)
 	{
@@ -350,33 +292,25 @@ void Rigidbody::CollisionPhysics(const std::shared_ptr<Rigidbody>& other, Vector
 		Vector3 force = horizontalVector + verticalVector;
 
 		// 最終的な力
-		if (force.magnitude() > rb1->m_forceBackUp.magnitude())
+		//if (force.magnitude() > rb1->m_forceBackUp.magnitude())
 		{
 			rb1->m_force = force;
 			rb1->m_forceBackUp = force;
+			rb1->m_velocity = force;
 		}
 	}
-
-	// 物理をするか
+	// 物理をするか(相手側)
 	if (rb2->m_bUsePhysics)
 	{
 		//--- ベクトルの合成
 		Vector3 force = horizontalVector2 + verticalVector2;
 
 		// 最終的な力
-		if (force.magnitude() > rb2->m_forceBackUp.magnitude())
+		//if (force.magnitude() > rb2->m_forceBackUp.magnitude())
 		{
 			rb2->m_force = force;
 			rb2->m_forceBackUp = force;
+			rb2->m_velocity = force;
 		}
 	}
-
-	//// 抵抗で加速度を減らす	fDrag(0.0f ～ 1.0f)
-	//m_force->x *= (1.0f - m_drag->x);
-	//if (fabsf(m_force->x) < 0.01f) m_force->x = 0.0f;
-	//m_force->y *= (1.0f - m_drag->y);
-	//if (fabsf(m_force->y) < 0.01f) m_force->y = 0.0f;
-	//m_force->z *= (1.0f - m_drag->z);
-	//if (fabsf(m_force->z) < 0.01f) m_force->z = 0.0f;
-
 }

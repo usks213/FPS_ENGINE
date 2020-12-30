@@ -30,6 +30,7 @@ using namespace ECS;
 //========================================
 BoxCollider::BoxCollider()
 {
+	m_eType = EColliderType::eBox;
 }
 
 //========================================

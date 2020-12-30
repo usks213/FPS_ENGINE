@@ -30,6 +30,7 @@ using namespace ECS;
 //========================================
 SphereCollider::SphereCollider()
 {
+	m_eType = EColliderType::eSphere;
 }
 
 //========================================

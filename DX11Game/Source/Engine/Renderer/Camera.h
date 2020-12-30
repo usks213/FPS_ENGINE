@@ -1,6 +1,6 @@
 #pragma once
 #include "../main.h"
-//#include "transform.h"
+#include "../ECSCompoent/Transform.h"
 
 #define	VIEW_NEAR_Z			(50.0f)					// ビュー平面のNearZ値
 #define	VIEW_FAR_Z			(10000.0f)				// ビュー平面のFarZ値
@@ -35,7 +35,7 @@ private:
 
 	//XMFLOAT3* m_pTargetPos;
 
-	//std::weak_ptr<CTransform> m_targetTrans;
+	std::weak_ptr<ECS::Transform> m_targetTrans;
 
 	static CCamera* m_mainCamera;
 public:
@@ -66,7 +66,7 @@ public:
 	static CCamera* GetMainCamera() { return m_mainCamera; }
 
 	//void SetCameraTarget(XMFLOAT3* pTargetPos) { m_pTargetPos = pTargetPos; }
-	//void SetCameraTarget(std::weak_ptr<CTransform> trans) { m_targetTrans = trans; }
+	void SetCameraTarget(std::weak_ptr<ECS::Transform> trans) { m_targetTrans = trans; }
 	void UpdateCameraPos(int nNum) { for (int i = 0; i < nNum; i++) Update(); }
 
 };

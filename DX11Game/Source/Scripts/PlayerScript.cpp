@@ -34,6 +34,7 @@
 #include "../Engine/ECSCompoent/BoxCollider.h"
 #include "../Engine/ECSCompoent/SphereCollider.h"
 
+#include "../Engine/Renderer/Camera.h"
 
 // ネームスペース
 using namespace ECS;
@@ -53,7 +54,7 @@ using namespace ECS;
 //========================================
 void PlayerScript::Start()
 {
-	transform().lock()->m_pos = Vector3(100, 200, 200);
+	transform().lock()->m_pos = Vector3(100, 400, 200);
 	transform().lock()->m_scale = Vector3(100, 100, 100);
 
 	// コンポーネントの追加
@@ -61,7 +62,7 @@ void PlayerScript::Start()
 	// リジッドボディ
 	const auto& rb = gameObject().lock()->AddComponent<Rigidbody>();
 	m_rb = rb;
-	rb->SetMass(1);
+	rb->SetMass(2);
 
 	// レンダラー
 	const auto& renderer = gameObject().lock()->AddComponent<MeshRenderer>();
@@ -74,6 +75,8 @@ void PlayerScript::Start()
 	//collider->SetRadius(50);
 	const auto& collider = gameObject().lock()->AddComponent<BoxCollider>();
 
+	// カメラ
+	CCamera::GetMainCamera()->SetCameraTarget(gameObject().lock()->transform().lock());
 }
 
 //========================================

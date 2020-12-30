@@ -37,10 +37,5 @@ namespace ECS
 	protected:
 		// 各コライダーの当たり判定
 		bool Judgment(Collider* other) override;
-		// コライダータイプ
-		EColliderType GetColliderType() override
-		{
-			return EColliderType::eSphere;
-		};
 	};
 }

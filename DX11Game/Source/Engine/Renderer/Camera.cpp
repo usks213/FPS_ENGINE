@@ -12,8 +12,8 @@
 // マクロ定義
 //*****************************************************************************
 #define	CAM_POS_P_X			(0.0f)					// カメラの視点初期位置(X座標)
-#define	CAM_POS_P_Y			( 200.0f)				// カメラの視点初期位置(Y座標)
-#define	CAM_POS_P_Z			(-500.0f * 1.5f)				// カメラの視点初期位置(Z座標)
+#define	CAM_POS_P_Y			( 500.0f)				// カメラの視点初期位置(Y座標)
+#define	CAM_POS_P_Z			(-500.0f * 3.0f)				// カメラの視点初期位置(Z座標)
 #define	CAM_POS_R_X			(0.0f)					// カメラの注視点初期位置(X座標)
 #define	CAM_POS_R_Y			(0.0f)					// カメラの注視点初期位置(Y座標)
 #define	CAM_POS_R_Z			(0.0f)					// カメラの注視点初期位置(Z座標)
@@ -182,11 +182,10 @@ void CCamera::Update()
 
 // ターゲット座標取得
 	//if (m_pTargetPos == nullptr) return;
-	//const auto& trans = m_targetTrans.lock();
-	//if (!trans) return;
+	const auto& trans = m_targetTrans.lock();
+	if (!trans) return;
 
-	//XMFLOAT3 pos = *trans->m_pos.GetFloat3();
-	XMFLOAT3 pos = { 0, 0, 0 };
+	XMFLOAT3 pos = *trans->m_pos.GetFloat3();
 
 	// オフセット
 	//pos.y += 100;

@@ -19,7 +19,7 @@
 #include <algorithm>
 
 #include "../main.h"
-
+#include "../ECSCompoent/Transform.h"
 
 using namespace ECS;
 
@@ -131,7 +131,7 @@ CollisionSystem::~CollisionSystem()
 void CollisionSystem::OnCreate()
 {
 	// マップサイズ // 何故か二倍になってる？　現状9600x9600
-	CCell::SetMapSize(100.0f * 8 * 6, 100.0f * 8 * 6);
+	CCell::SetMapSize(100.0f * 2 * 10, 100.0f * 2 * 10);
 }
 
 //===================================
@@ -161,12 +161,16 @@ void CollisionSystem::OnUpdate()
 			// 実態がない
 			if (!collider) return;
 
+			// 中心座標
+			Vector3 boxPos1 = collider->m_transform.lock()->m_pos + collider->m_bound.GetCenter();
+			// ボックスの最大最小
+			Vector3 boxMax1 = boxPos1 + Vector3(collider->m_bound.GetMax() * collider->m_transform.lock()->m_scale);
+			Vector3 boxMin1 = boxPos1 + Vector3(collider->m_bound.GetMin() * collider->m_transform.lock()->m_scale);
+
 			// ここで空間の登録をする
 			// 左上と右下を出す
-			wLeftTop = GetPointElem(collider->m_bound.GetMin()->x,
-				collider->m_bound.GetMin()->z);
-			wRightDown = GetPointElem(collider->m_bound.GetMax()->x,
-				collider->m_bound.GetMax()->z);
+			wLeftTop = GetPointElem(boxMin1->x, boxMin1->z);
+			wRightDown = GetPointElem(boxMax1->x, boxMax1->z);
 			// XORをとる	
 			Def = wLeftTop ^ wRightDown;
 			unsigned int HiLevel = 0;
@@ -203,6 +207,8 @@ void CollisionSystem::OnUpdate()
 			collider->m_bOldState = collider->m_bCurState;
 			// 現在の状態を更新
 			collider->m_bCurState = false;
+
+			//collider->m_aIsHit.clear();
 		});
 
 
@@ -251,14 +257,19 @@ void CollisionSystem::Collision(Collider* main, const std::list<Collider*>& m_pS
 		// 同じだった
 		if (main == sub) continue;
 
+		//// 既に格納済み
+		//auto itr = std::find(main->m_aIsHit.begin(),
+		//	main->m_aIsHit.end(), sub);
+		//if (itr != main->m_aIsHit.end()) continue;
+
 		//--- 当たり判定処理 ---
 		if (Collider::AABBtoAABB(main, sub))
 		{
 			// 詳細判定
 			if (main->Judgment(sub))
 			{
-				// 物理？
-
+				/*main->m_aIsHit.push_back(sub);
+				sub->m_aIsHit.push_back(main);*/
 
 
 				// 状態を更新
