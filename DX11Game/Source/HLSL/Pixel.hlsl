@@ -75,10 +75,38 @@ float4 main(VS_OUTPUT input) : SV_Target0
 		
 		//===== シャドウマップ =====
 		
+   //     // シャドウマップの深度値と比較する.
+   //     float3 shadowCoord = input.lightPosition.xyz / input.lightPosition.w;
+
+   //     // 最大深度傾斜を求める.
+   //     float maxDepthSlope = max(abs(ddx(shadowCoord.z)), abs(ddy(shadowCoord.z)));
+   //     // シャドウマップカラー
+   //     float3 sc = float3(0.25f, 0.25f, 0.25f);
+        
+   //     // シャドウマップ判定
+   //     if ((saturate(shadowCoord.x) == shadowCoord.x) &&
+			//(saturate(shadowCoord.y) == shadowCoord.y) &&
+			//(maxDepthSlope > 0))
+   //     {
+   //         float shadowThreshold = 1.0f; // シャドウにするかどうかの閾値です.
+   //         float bias = 0.01f; // 固定バイアスです.
+   //         float slopeScaledBias = 0.01f; // 深度傾斜.
+   //         float depthBiasClamp = 0.1f; // バイアスクランプ値.
+
+   //         float shadowBias = bias + slopeScaledBias * maxDepthSlope;
+   //         shadowBias = min(shadowBias, depthBiasClamp);
+
+   //         float3 shadowColor = float3(0.25f, 0.25f, 0.25f);
+   //         shadowThreshold = g_shadowTexture.SampleCmpLevelZero(g_shadowSampler, shadowCoord.xy, shadowCoord.z - shadowBias);
+   //         shadowColor = lerp(shadowColor, float3(1.0f, 1.0f, 1.0f), shadowThreshold);
+   //         sc = shadowColor;
+
+   //     }
+        
 			// 追加
         float3 lightPos = input.lightPosition.xyz / input.lightPosition.w;
-        float2 shadowTexCoords;
-        shadowTexCoords = (lightPos + float2(1, -1)) * float2(0.5, -0.5);
+        float2 shadowTexCoords = lightPos.xy;
+       // shadowTexCoords = (lightPos.xy + float2(1, -1)) * float2(0.5, -0.5);
 			//shadowTexCoords.x = 0.5f + (input.lightPosition.x / input.lightPosition.w * 0.5f);
 			//shadowTexCoords.y = 0.5f - (input.lightPosition.y / input.lightPosition.w * 0.5f);
         float pixelDepth = input.lightPosition.z / input.lightPosition.w;

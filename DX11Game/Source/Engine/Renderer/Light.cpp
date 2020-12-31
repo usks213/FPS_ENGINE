@@ -1,5 +1,6 @@
 #include "Light.h"
 #include "../System/input.h"
+#include "Camera.h"
 
 using namespace DirectX;
 
@@ -51,6 +52,12 @@ void CLight::Init()
 
 	XMStoreFloat4x4(&m_mtxView, m);
 
+
+	// プロジェクションマトリックス
+	XMStoreFloat4x4(&m_mtxProj, XMMatrixOrthographicOffCenterLH(-SCREEN_CENTER_X, SCREEN_CENTER_X, -SCREEN_CENTER_Y, SCREEN_CENTER_Y, 
+		VIEW_NEAR_Z, VIEW_FAR_Z));
+
+
 	vDir = m_vTarget;
 	vDir.x -= m_vPos.x;
 	vDir.y -= m_vPos.y;
@@ -84,11 +91,13 @@ void CLight::Update()
 
 	if (m_pTargetPos)
 	{
-		//m_vPos.x = m_pTargetPos->x;
-		//m_vPos.y = m_pTargetPos->y;
+		m_vTarget.x = m_pTargetPos->x;
+		m_vTarget.y = m_pTargetPos->y;
+		m_vTarget.z = m_pTargetPos->z;
 
-		//m_vTarget.x = m_vPos.x - LIT_POS_P_X;
-		//m_vTarget.y = m_vPos.y - LIT_POS_P_Y;
+		m_vPos.x = m_vTarget.x + LIT_POS_P_X;
+		m_vPos.y = m_vTarget.y + LIT_POS_P_Y;
+		m_vPos.z = m_vTarget.z + LIT_POS_P_Z;
 	}
 
 	// ライトマトリックスの更新

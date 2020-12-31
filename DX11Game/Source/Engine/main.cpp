@@ -27,6 +27,8 @@
 //
 //	2020/12/30	当たり判定修正 物理計算上手くいった！！
 //
+//	2020/12/31	FPS視点作成、操作や弾生成など
+//
 //
 //======================================================================
 #include "main.h"
@@ -489,56 +491,106 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 
 
 	// ゲームオブジェクトを追加
+
+	// プレイヤー
 	const auto& player = g_world.GetEntityManager()->CreateEntity<GameObject>();
 	player->AddComponent<PlayerScript>();
 	
-	// 床
-	const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-	test->AddComponent<MeshRenderer>()->MakeCube("plane");
-	const auto& rb1 = test->AddComponent<Rigidbody>();
-	test->AddComponent<BoxCollider>();
-	test->transform().lock()->m_scale = Vector3{ 1000, 100, 1000 };
-	test->transform().lock()->m_pos = Vector3{ 500, 0, 500 };
-	rb1->SetUsePhysics(false);
-	rb1->SetUseGravity(false);
-	rb1->SetMass(10);
-	rb1->SetE(0.8f);
-	//rb1->SetDynamicFriction(0.0f);
 
-	Vector3 pos = { 400, 2000, 200 };
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 6; i++)
 	{
+		Vector3 pos;
+		Vector3 scale;
+
+		// 床
+		if (i == 0)
+		{
+			pos = Vector3{ 5000, 0, 5000 };
+			scale = Vector3{ 10000, 1000, 10000 };
+		}
+		// 天井
+		else if (i == 1)
+		{
+			pos = Vector3{ 5000, 10000, 5000 };
+			scale = Vector3{ 10000, 1000, 10000 };
+		}
+		// 右
+		else if (i == 2)
+		{
+			pos = Vector3{ 10000, 5000, 5000 };
+			scale = Vector3{ 1000, 10000, 10000 };
+		}
+		// 左
+		else if (i == 3)
+		{
+			pos = Vector3{ 0, 5000, 5000 };
+			scale = Vector3{ 1000, 10000, 10000 };
+		}
+		// 奥
+		else if (i == 4)
+		{
+			pos = Vector3{ 5000, 5000, 10000 };
+			scale = Vector3{ 10000, 10000, 1000 };
+		}
+		// 手前
+		else if (i == 5)
+		{
+			pos = Vector3{ 5000, 5000, 0 };
+			scale = Vector3{ 10000, 10000, 1000 };
+		}
+
 		const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-		const auto& rb = test->AddComponent<Rigidbody>();
-		//test->AddComponent<PlayerScript>();
-		//test->AddComponent<MeshRenderer>()->MakeSphere("test", 100, 100);
-		//test->AddComponent<SphereCollider>()->SetRadius(100);
-		test->AddComponent<MeshRenderer>()->MakeCube("test");
+		const auto renderer = test->AddComponent<MeshRenderer>();
+		renderer->MakeCube("plane");
+		renderer->SetDiffuseTexture("data/texture/grid.png");
+		renderer->SetTexSize({ 100, 100, 0 });
+		renderer->UpdateTexMatrix();
+		const auto& rb1 = test->AddComponent<Rigidbody>();
 		test->AddComponent<BoxCollider>();
-
-		pos->y -= 300;
+		test->transform().lock()->m_scale = scale;
 		test->transform().lock()->m_pos = pos;
-		test->transform().lock()->m_scale = Vector3{ 100, 100, 100 };
-
-		rb->SetMass(2);
-		//rb->SetUsePhysics(false);
+		rb1->SetUsePhysics(false);
+		rb1->SetUseGravity(false);
+		rb1->SetMass(100);
+		rb1->SetE(0.8f);
+		//rb1->SetDynamicFriction(0.0f);
 	}
 
-	pos = Vector3{ 400, 200,400 };
-	for (int z = 0; z < 33; z++)
+	Vector3 pos = { 400, 2000, 200 };
+	//for (int i = 0; i < 10; i++)
+	//{
+	//	const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
+	//	const auto& rb = test->AddComponent<Rigidbody>();
+	//	//test->AddComponent<PlayerScript>();
+	//	//test->AddComponent<MeshRenderer>()->MakeSphere("test", 100, 100);
+	//	//test->AddComponent<SphereCollider>()->SetRadius(100);
+	//	test->AddComponent<MeshRenderer>()->MakeCube("test");
+	//	test->AddComponent<BoxCollider>();
+
+	//	pos->y -= 300;
+	//	test->transform().lock()->m_pos = pos;
+	//	test->transform().lock()->m_scale = Vector3{ 100, 100, 100 };
+
+	//	rb->SetMass(2);
+	//	//rb->SetUsePhysics(false);
+	//}
+
+	pos = Vector3{ 2000, 2000,2000 };
+	for (int z = 0; z < 3; z++)
 	{
-		for (int i = 0; i < 33; i++)
+		for (int i = 0; i < 3; i++)
 		{
 			const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-			test->AddComponent<MeshRenderer>()->MakeSphere("test2", 10, 50);
+			test->AddComponent<MeshRenderer>()->MakeSphere("test2");
 			test->AddComponent<Rigidbody>();
-			test->AddComponent<SphereCollider>()->SetRadius(50);
+			test->AddComponent<SphereCollider>();
 
 			test->transform().lock()->m_pos = pos;
-			pos->x += 1;
+			test->transform().lock()->m_scale = Vector3{ 400, 400, 400 };
+			pos->x += 2000;
 		}
-		//pos->x = -200;
-		pos->z += 1;
+		pos->x = 1000;
+		pos->z += 2000;
 	}
 
 	return hr;

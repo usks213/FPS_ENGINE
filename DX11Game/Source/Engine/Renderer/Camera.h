@@ -3,7 +3,7 @@
 #include "../ECSCompoent/Transform.h"
 
 #define	VIEW_NEAR_Z			(50.0f)					// ビュー平面のNearZ値
-#define	VIEW_FAR_Z			(10000.0f)				// ビュー平面のFarZ値
+#define	VIEW_FAR_Z			(15000.0f)				// ビュー平面のFarZ値
 
 class CCamera
 {
@@ -34,6 +34,14 @@ private:
 	XMFLOAT3 m_vRelTarget;			// モデル相対注視点位置
 
 	//XMFLOAT3* m_pTargetPos;
+
+	// カメラの正面向き
+	Vector3 m_vForward;
+
+
+	// マウス座標
+	Vector3 m_vOldPos;
+	Vector3 m_vCurPos;
 
 	std::weak_ptr<ECS::Transform> m_targetTrans;
 
@@ -69,4 +77,5 @@ public:
 	void SetCameraTarget(std::weak_ptr<ECS::Transform> trans) { m_targetTrans = trans; }
 	void UpdateCameraPos(int nNum) { for (int i = 0; i < nNum; i++) Update(); }
 
+	Vector3 GetForward() { return m_vForward; }
 };

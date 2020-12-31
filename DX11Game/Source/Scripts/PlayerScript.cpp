@@ -35,6 +35,7 @@
 #include "../Engine/ECSCompoent/SphereCollider.h"
 
 #include "../Engine/Renderer/Camera.h"
+#include "../Engine/Renderer/Light.h"
 
 // ネームスペース
 using namespace ECS;
@@ -54,8 +55,8 @@ using namespace ECS;
 //========================================
 void PlayerScript::Start()
 {
-	transform().lock()->m_pos = Vector3(100, 400, 200);
-	transform().lock()->m_scale = Vector3(100, 100, 100);
+	transform().lock()->m_pos = Vector3(1000, 1000, 1000);
+	transform().lock()->m_scale = Vector3(100, 200, 100);
 
 	// コンポーネントの追加
 
@@ -77,6 +78,8 @@ void PlayerScript::Start()
 
 	// カメラ
 	CCamera::GetMainCamera()->SetCameraTarget(gameObject().lock()->transform().lock());
+	// ライト
+	CLight::GetMainLight()->SetTargetPos(gameObject().lock()->transform().lock()->m_pos.GetFloat3());
 }
 
 //========================================
@@ -86,30 +89,62 @@ void PlayerScript::Start()
 //========================================
 void PlayerScript::Update()
 {
-	if (GetKeyPress(VK_UP))
+	const float speed = 2.0f;
+	const float jump = 14.0f;
+
+	Vector3 forward = CCamera::GetMainCamera()->GetForward() * speed;
+	forward->y = 0.0f;
+	Vector3 right = forward.RotationY(-90);
+
+	// 移動
+	if (GetKeyPress(VK_W))
 	{
 		//transform().lock()->m_pos->z += 1.0f;
-		m_rb.lock()->AddForceZ(2.0f);
+		m_rb.lock()->AddForce(forward);
 	}
-	if (GetKeyPress(VK_DOWN))
+	if (GetKeyPress(VK_S))
 	{
 		//transform().lock()->m_pos->z -= 1.0f;
-		m_rb.lock()->AddForceZ(-2.0f);
+		m_rb.lock()->AddForce(forward * -1.0f);
 	}
-	if (GetKeyPress(VK_RIGHT))
+	if (GetKeyPress(VK_D))
 	{
 		//transform().lock()->m_pos->x += 1.0f;
-		m_rb.lock()->AddForceX(2.0f);
+		m_rb.lock()->AddForce(right);
 	}
-	if (GetKeyPress(VK_LEFT))
+	if (GetKeyPress(VK_A))
 	{
 		//transform().lock()->m_pos->x -= 1.0f;
-		m_rb.lock()->AddForceX(-2.0f);
+		m_rb.lock()->AddForce(right * -1.0f);
 	}
 
+	// ジャンプ
 	if (GetKeyTrigger(VK_SPACE))
 	{
-		m_rb.lock()->SetForceY(8.0f);
+		m_rb.lock()->SetForceY(jump);
+	}
+
+
+	// ショット
+	if (GetMouseTrigger(MOUSEBUTTON_L))
+	{
+		const auto& test = GetEntityManager()->CreateEntity<GameObject>();
+		test->AddComponent<MeshRenderer>()->MakeSphere("Bullet");
+		const auto& rb = test->AddComponent<Rigidbody>();
+		test->AddComponent<SphereCollider>();
+
+
+		Vector3 dir = CCamera::GetMainCamera()->GetForward().normalized();
+
+		test->transform().lock()->m_pos = transform().lock()->m_pos + dir * 100;
+		test->transform().lock()->m_scale = Vector3{ 200, 200, 200 };
+
+		rb->AddForce(dir * 150 + Vector3::WallVerticalVector(m_rb.lock()->GetForce(), dir));
+		rb->SetDrag({ 0,0,0 });
+		rb->SetGravityForce({ 0,0,0 });
+		rb->SetStaticFriction(0);
+		rb->SetDynamicFriction(0);
+		rb->SetMass(10);
 	}
 }
 

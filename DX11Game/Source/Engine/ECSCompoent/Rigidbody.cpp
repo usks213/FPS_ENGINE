@@ -27,7 +27,7 @@ using namespace ECS;
 #define GRAVITY (9.8f / 60.0f)
 #define DRAG (1.0f)
 
-#define MAX_VELOCITY (50.0f)
+//#define MAX_VELOCITY (50.0f)
 
 
 //========================================
@@ -170,12 +170,12 @@ void Rigidbody::Update()
 	m_velocity->z += m_force->z;
 
 	// 速度限界
-	if (m_velocity->x > MAX_VELOCITY) m_velocity->x = MAX_VELOCITY;
-	if (m_velocity->y > MAX_VELOCITY) m_velocity->y = MAX_VELOCITY;
-	if (m_velocity->z > MAX_VELOCITY) m_velocity->z = MAX_VELOCITY;
-	if (m_velocity->x < -MAX_VELOCITY) m_velocity->x = -MAX_VELOCITY;
-	if (m_velocity->y < -MAX_VELOCITY) m_velocity->y = -MAX_VELOCITY;
-	if (m_velocity->z < -MAX_VELOCITY) m_velocity->z = -MAX_VELOCITY;
+	//if (m_velocity->x > MAX_VELOCITY) m_velocity->x = MAX_VELOCITY;
+	//if (m_velocity->y > MAX_VELOCITY) m_velocity->y = MAX_VELOCITY;
+	//if (m_velocity->z > MAX_VELOCITY) m_velocity->z = MAX_VELOCITY;
+	//if (m_velocity->x < -MAX_VELOCITY) m_velocity->x = -MAX_VELOCITY;
+	//if (m_velocity->y < -MAX_VELOCITY) m_velocity->y = -MAX_VELOCITY;
+	//if (m_velocity->z < -MAX_VELOCITY) m_velocity->z = -MAX_VELOCITY;
 
 	// 位置の更新
 	pos->x += m_velocity->x;

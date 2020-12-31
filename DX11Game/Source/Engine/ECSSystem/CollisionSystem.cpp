@@ -131,7 +131,7 @@ CollisionSystem::~CollisionSystem()
 void CollisionSystem::OnCreate()
 {
 	// マップサイズ // 何故か二倍になってる？　現状9600x9600
-	CCell::SetMapSize(100.0f * 2 * 10, 100.0f * 2 * 10);
+	CCell::SetMapSize(100.0f * 8 * 10, 100.0f * 8 * 10);
 }
 
 //===================================

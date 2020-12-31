@@ -69,7 +69,11 @@ ID3D11SamplerState*			g_pShadowSamplerState;		// テクスチャ サンプラ
 ID3D11Texture2D*			g_pShadowMap;				// シャドウマップテクスチャ
 ID3D11ShaderResourceView*	g_pShadowResourceView;		// シャドウマップリソース
 
-
+static const XMMATRIX SHADOW_BIAS = XMMATRIX(
+	0.5f, 0.0f, 0.0f, 0.0f,
+	0.0f, -0.5f, 0.0f, 0.0f,
+	0.0f, 0.0f, 1.0f, 0.0f,
+	0.5f, 0.5f, 0.0f, 1.0f);
 
 //struct SSHADOW_MAP_RESOURCE
 //{
@@ -273,7 +277,7 @@ void DrawMeshShadow(ID3D11DeviceContext* pDeviceContext, MESH* pMesh, int nTrans
 		SHADER_GLOBAL cb;
 		XMMATRIX mtxWorld = XMLoadFloat4x4(&pMesh->mtxWorld);
 		cb.mWVP = XMMatrixTranspose(mtxWorld * XMLoadFloat4x4(&g_pLight->GetViewMatrix()) * XMLoadFloat4x4(&g_pCamera->GetProjMatrix()));
-		cb.mLightWVP = XMMatrixTranspose(mtxWorld * XMLoadFloat4x4(&g_pLight->GetViewMatrix()) * XMLoadFloat4x4(&g_pCamera->GetProjMatrix()));
+		cb.mLightWVP = XMMatrixTranspose(mtxWorld * XMLoadFloat4x4(&g_pLight->GetViewMatrix()) * XMLoadFloat4x4(&g_pLight->GetProjMatrix()));
 		cb.mW = XMMatrixTranspose(mtxWorld);
 		cb.mTex = XMMatrixTranspose(XMLoadFloat4x4(&pMesh->mtxTexture));
 		pDeviceContext->UpdateSubresource(g_pConstantBuffer[0], 0, nullptr, &cb, 0, 0);
@@ -342,7 +346,7 @@ void DrawMesh(ID3D11DeviceContext* pDeviceContext, MESH* pMesh, int nTranslucntT
 	SHADER_GLOBAL cb;
 	XMMATRIX mtxWorld = XMLoadFloat4x4(&pMesh->mtxWorld);
 	cb.mWVP = XMMatrixTranspose(mtxWorld * XMLoadFloat4x4(&g_pCamera->GetViewMatrix()) * XMLoadFloat4x4(&g_pCamera->GetProjMatrix()));
-	cb.mLightWVP = XMMatrixTranspose(mtxWorld * XMLoadFloat4x4(&g_pLight->GetViewMatrix()) * XMLoadFloat4x4(&g_pCamera->GetProjMatrix()));
+	cb.mLightWVP = XMMatrixTranspose(mtxWorld * XMLoadFloat4x4(&g_pLight->GetViewMatrix()) * XMLoadFloat4x4(&g_pCamera->GetProjMatrix()) * SHADOW_BIAS);
 	cb.mW = XMMatrixTranspose(mtxWorld);
 	cb.mTex = XMMatrixTranspose(XMLoadFloat4x4(&pMesh->mtxTexture));
 	pDeviceContext->UpdateSubresource(g_pConstantBuffer[0], 0, nullptr, &cb, 0, 0);
@@ -379,12 +383,12 @@ void DrawMesh(ID3D11DeviceContext* pDeviceContext, MESH* pMesh, int nTranslucntT
 	pDeviceContext->DrawIndexed(pMesh->nNumIndex, 0, 0);
 
 
-	//SetPolygonSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-	//SetPolygonPos(0, 0);
-	//SetPolygonColor(1, 1, 1);
-	//SetPolygonTexture(g_pShadowResourceView);
-	//if(GetKeyPress(VK_O))
-	//	DrawPolygon(pDeviceContext);
+	SetPolygonSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	SetPolygonPos(0, 0);
+	SetPolygonColor(1, 1, 1);
+	SetPolygonTexture(g_pShadowResourceView);
+	if(GetKeyPress(VK_O))
+		DrawPolygon(pDeviceContext);
 }
 
 //=============================================================================

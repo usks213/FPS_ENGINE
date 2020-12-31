@@ -211,7 +211,7 @@ HRESULT UpdateMouse()
 {
 	POINT pt;
 	GetCursorPos(&pt);
-	ScreenToClient(GetMainWnd(), &pt);
+	//ScreenToClient(GetMainWnd(), &pt);
 	g_ptMouse = pt;
 	return S_OK;
 }
@@ -360,4 +360,12 @@ bool GetMouseRelease(DWORD dwBtn)
 {
 	if (dwBtn >= _countof(g_nMouseBtn)) return false;
 	return GetKeyRelease(g_nMouseBtn[dwBtn]);
+}
+
+//=============================================================================
+// マウスカーソルの表示
+//=============================================================================
+void SetShowCursor(bool bShow)
+{
+	ShowCursor(bShow);
 }

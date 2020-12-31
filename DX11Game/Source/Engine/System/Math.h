@@ -214,6 +214,43 @@ public:
 		return normal * Dot(front, normal);
 	}
 
+	// XŽ²‰ñ“]
+	Vector3 RotationX(float angle)
+	{
+		float rad = XMConvertToRadians(angle);
+		XMFLOAT3 v = m_vec;
+
+		v.y = m_vec.y * cosf(rad) + m_vec.z * sinf(rad);
+		v.z= -m_vec.y * sinf(rad) + m_vec.z * cosf(rad);
+
+		return v;
+	}
+
+	// YŽ²‰ñ“]
+	Vector3 RotationY(float angle)
+	{
+		float rad = XMConvertToRadians(angle);
+		XMFLOAT3 v = m_vec;
+
+		v.x =  m_vec.x * cosf(rad) - m_vec.z * sinf(rad);
+		v.z =  m_vec.x * sinf(rad) + m_vec.z * cosf(rad);
+
+		return v;
+	}
+
+	// ZŽ²‰ñ“]
+	Vector3 RotationZ(float angle)
+	{
+		float rad = XMConvertToRadians(angle);
+		XMFLOAT3 v = m_vec;
+
+		v.x =  m_vec.x * cosf(rad) + m_vec.y * sinf(rad);
+		v.y = -m_vec.x * sinf(rad) + m_vec.y * cosf(rad);
+
+		return v;
+	}
+
+
 	// “à•”Žæ“¾
 	XMFLOAT3* GetFloat3() { return &m_vec; }
 

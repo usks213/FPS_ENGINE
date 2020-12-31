@@ -12,7 +12,10 @@ private:
 	XMFLOAT3 m_vPos;				// 視点
 	XMFLOAT3 m_vTarget;				// 注視点
 	XMFLOAT3 m_vUp;					// 上方ベクトル
+
+
 	XMFLOAT4X4 m_mtxView;			// ビュー マトリックス
+	XMFLOAT4X4 m_mtxProj;			// プロジェクション マトリックス
 
 	float m_angle;
 
@@ -29,6 +32,7 @@ public:
 	DirectX::XMFLOAT4& GetSpecular() { return m_specular; }
 	DirectX::XMFLOAT3& GetDir()		{ return m_direction; }
 	DirectX::XMFLOAT4X4& GetViewMatrix() { return m_mtxView; }
+	XMFLOAT4X4& GetProjMatrix() { return m_mtxProj; }
 
 	void SetTargetPos(XMFLOAT3 *pPos) { m_pTargetPos = pPos; }
 

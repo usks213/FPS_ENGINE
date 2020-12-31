@@ -94,3 +94,4 @@ POINT *GetMousePosition();
 bool GetMouseButton(DWORD dwBtn);
 bool GetMouseTrigger(DWORD dwBtn);
 bool GetMouseRelease(DWORD dwBtn);
+void SetShowCursor(bool bShow);

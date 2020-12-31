@@ -315,8 +315,7 @@ HRESULT MeshRenderer::MakeCube(const std::string tag)
 // スフィアメッシュの生成
 //
 //========================================
-HRESULT MeshRenderer::MakeSphere(std::string tag,
-	int nSegment, float fScale, float fTexSplit, XMFLOAT3 pos)
+HRESULT MeshRenderer::MakeSphere(std::string tag, int nSegment, float fTexSplit, XMFLOAT3 pos)
 {
 	// メッシュの検索
 	const auto& itr = m_meshPool.find(tag);
@@ -335,6 +334,7 @@ HRESULT MeshRenderer::MakeSphere(std::string tag,
 
 	// プリミティブ種別設定
 	m_mesh->primitiveType = PT_TRIANGLESTRIP;
+	float fScale = 0.5f;
 
 	//頂点バッファ作成
 	m_mesh->nNumVertex = (nSegment + 1) * (nSegment / 2 + 1);

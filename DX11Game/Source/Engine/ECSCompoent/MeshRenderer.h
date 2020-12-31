@@ -46,7 +46,7 @@ namespace ECS
 		HRESULT MakeCube(const std::string tag);
 		// スフィア
 		HRESULT MakeSphere(std::string tag,
-			int nSegment, float fScale, float fTexSplit = 1.0f, XMFLOAT3 pos = { 0,0,0 });
+			int nSegment = 36, float fTexSplit = 1.0f, XMFLOAT3 pos = { 0,0,0 });
 
 		//--- マテリアル
 		// カラー変更
