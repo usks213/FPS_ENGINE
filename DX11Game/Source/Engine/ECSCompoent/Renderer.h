@@ -24,6 +24,8 @@
 //===== クラス定義 =====
 namespace ECS
 {
+	class Transform;
+
 	class Renderer : public IComponent
 	{
 	public:
@@ -49,8 +51,6 @@ namespace ECS
 
 		// テクスチャマトリックスの更新
 		void UpdateTexMatrix();
-		// マトリックスのセット
-		void SetWorldMatrix(XMFLOAT4X4* pWorld) { m_mtxWorld = pWorld; }
 
 		// UV
 		Vector3 GetTexPos() { return m_texPos; }
@@ -66,8 +66,7 @@ namespace ECS
 		float GetLayer() { return m_fLayer; }
 
 	protected:
-		Vector3* m_pos;
-		XMFLOAT4X4* m_mtxWorld;					// ワールドマトリックス
+		std::weak_ptr<Transform> m_transform;
 		XMFLOAT4X4 m_mtxTexture;				// テクスチャ マトリックス
 
 		Vector3 m_texPos;

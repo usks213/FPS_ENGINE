@@ -76,7 +76,8 @@ namespace ECS
 		enum EUpdateOrder
 		{
 			eScript = 0,
-			eAnimator,
+			eAnimation2D,
+			eAnimation3D,
 			eRigidbody,
 			eCollision,
 			eTransform,

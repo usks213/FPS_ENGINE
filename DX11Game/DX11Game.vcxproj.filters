@@ -190,6 +190,24 @@
     <ClCompile Include="Source\Engine\ECSSystem\RigidbodySystem.cpp">
       <Filter>ソース\エンジン\ECSSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\ECSCompoent\SpriteRenderer.cpp">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSCompoent\Animation2D.cpp">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSSystem\Animation2DSystem.cpp">
+      <Filter>ソース\エンジン\ECSSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSCompoent\Animator2D.cpp">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSCompoent\AssimpRenderer.cpp">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSCompoent\BillboardRenderer.cpp">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\main.h">
@@ -305,6 +323,24 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\ECSSystem\RigidbodySystem.h">
       <Filter>ソース\エンジン\ECSSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSCompoent\SpriteRenderer.h">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSCompoent\Animation2D.h">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSSystem\Animation2DSystem.h">
+      <Filter>ソース\エンジン\ECSSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSCompoent\Animator2D.h">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSCompoent\AssimpRenderer.h">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSCompoent\BillboardRenderer.h">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -43,6 +43,7 @@ MeshRenderer::MeshRenderer()
 	m_material.Specular = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_material.Emissive = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 	m_material.Power = 50.0f;
+	m_eTranslucentType = eTranslucentType::TT_NOAFFECT;
 }
 
 //========================================
@@ -66,7 +67,7 @@ void MeshRenderer::EarlyDraw(ID3D11DeviceContext* pDC)
 
 	if (mesh)
 	{
-		m_mesh->mtxWorld = *m_mtxWorld;
+		m_mesh->mtxWorld = *m_transform.lock()->GetWorldMatrix();
 		m_mesh->mtxTexture = m_mtxTexture;
 		m_mesh->pMaterial = &m_material;
 
@@ -85,7 +86,7 @@ void MeshRenderer::LateDraw(ID3D11DeviceContext* pDC)
 
 	if (mesh)
 	{
-		m_mesh->mtxWorld = *m_mtxWorld;
+		m_mesh->mtxWorld = *m_transform.lock()->GetWorldMatrix();
 		m_mesh->mtxTexture = m_mtxTexture;
 		m_mesh->pMaterial = &m_material;
 

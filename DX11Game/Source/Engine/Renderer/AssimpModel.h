@@ -86,7 +86,6 @@ struct TAssimpVertex {
 };
 
 class SceneAnimator;
-class CAssimpRenderer;
 
 // アニメ評価クラス
 class AnimEvaluator {

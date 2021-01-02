@@ -29,6 +29,11 @@
 //
 //	2020/12/31	FPS視点作成、操作や弾生成など
 //
+//	2021/01/01	あけましておめでとうございます！！
+//
+//	2021/01/02	Animator2D,Animation2D,Animation2DSystem の作成
+//				SpriteRenderer,BillboardRenderer,AssimpRenderer の作成
+//
 //
 //======================================================================
 #include "main.h"

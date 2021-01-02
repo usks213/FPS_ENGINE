@@ -88,6 +88,21 @@ bool AnimEvaluator::Evaluate(double pTime)
 {
 	// アニメーション終了フラグ
 	bool bExitFlg = false;
+	// キーフレームの最大値
+	unsigned int nMaxKey = 0;
+	for (unsigned int a = 0; a < mAnim->mNumChannels; ++a) 
+	{
+		const aiNodeAnim* channel = mAnim->mChannels[a];
+		// 座標
+		if (nMaxKey < channel->mNumPositionKeys)
+			nMaxKey = channel->mNumPositionKeys;
+		// 回転
+		if (nMaxKey < channel->mNumRotationKeys)
+			nMaxKey = channel->mNumRotationKeys;
+		// 拡縮
+		if (nMaxKey < channel->mNumScalingKeys)
+			nMaxKey = channel->mNumScalingKeys;
+	}
 
 	// 1秒あたりのティックを抽出する。指定されていない場合は既定値を想定。
 	double ticksPerSecond = mAnim->mTicksPerSecond != 0.0 ? mAnim->mTicksPerSecond : 25.0;
@@ -121,6 +136,12 @@ bool AnimEvaluator::Evaluate(double pTime)
 				++frame;
 			}
 
+			// 最終フレーム
+			if (frame >= nMaxKey - 2)
+			{
+				bExitFlg = true;
+			}
+
 			// このフレームの値と次のフレームの値の間を補間
 			unsigned int nextFrame = (frame + 1) % channel->mNumPositionKeys;
 			const aiVectorKey& key = channel->mPositionKeys[frame];
@@ -151,7 +172,7 @@ bool AnimEvaluator::Evaluate(double pTime)
 			}
 
 			// 最終フレーム
-			if (frame >= channel->mNumRotationKeys - 2)
+			if (frame >= nMaxKey - 2)
 			{
 				bExitFlg = true;
 			}
@@ -183,6 +204,12 @@ bool AnimEvaluator::Evaluate(double pTime)
 					break;
 				}
 				++frame;
+			}
+
+			// 最終フレーム
+			if (frame >= nMaxKey - 2)
+			{
+				bExitFlg = true;
 			}
 
 			// TODO: 補間が必要では? ここでは線形補間でなく対数かも。
@@ -1462,7 +1489,7 @@ UINT CAssimpModel::GetAnimCount()
 {
 	if (m_pScene)
 		return m_pScene->mNumAnimations;
-	m_pScene->mAnimations[0]->mDuration;
+	//m_pScene->mAnimations[0]->mDuration;
 	return 0;
 }
 

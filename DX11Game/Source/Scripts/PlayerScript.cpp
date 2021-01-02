@@ -136,10 +136,10 @@ void PlayerScript::Update()
 
 		Vector3 dir = CCamera::GetMainCamera()->GetForward().normalized();
 
-		test->transform().lock()->m_pos = transform().lock()->m_pos + dir * 100;
-		test->transform().lock()->m_scale = Vector3{ 200, 200, 200 };
+		test->transform().lock()->m_pos = transform().lock()->m_pos + dir * 200;
+		test->transform().lock()->m_scale = Vector3{ 100, 100, 100 };
 
-		rb->AddForce(dir * 150 + Vector3::WallVerticalVector(m_rb.lock()->GetForce(), dir));
+		rb->AddForce(dir * 100 + Vector3::WallVerticalVector(m_rb.lock()->GetForce(), dir));
 		rb->SetDrag({ 0,0,0 });
 		rb->SetGravityForce({ 0,0,0 });
 		rb->SetStaticFriction(0);

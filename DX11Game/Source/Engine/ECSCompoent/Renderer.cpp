@@ -34,9 +34,6 @@ using namespace ECS;
 //========================================
 Renderer::Renderer()
 {
-	// ワールドマトリックス
-	m_mtxWorld = nullptr;
-
 	// テクスチャ座標
 	m_texPos = Vector3(0.0f, 0.0f, 0.0f);
 	m_texSize = Vector3(1.0f, 1.0f, 1.0f);
@@ -71,9 +68,7 @@ void Renderer::OnCreate()
 	if (sys) sys->AddList(this);
 
 	// トランスフォームから取得
-	const auto& trans = m_Parent.lock()->GetComponent<Transform>();
-	m_pos = &trans->m_pos;
-	m_mtxWorld = trans->GetWorldMatrix();
+	m_transform = m_Parent.lock()->GetComponent<Transform>();
 }
 
 //========================================
@@ -99,7 +94,7 @@ void Renderer::LayerUpdate()
 	// カメラ座標
 	Vector3 cameraPos = CCamera::GetMainCamera()->GetPos();
 	// 距離を格納
-	m_fLayer = Vector3::Length(*m_pos - cameraPos);
+	m_fLayer = Vector3::Length(m_transform.lock()->m_pos - cameraPos);
 }
 
 //========================================

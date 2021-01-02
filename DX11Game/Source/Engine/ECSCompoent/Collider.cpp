@@ -60,7 +60,8 @@ Bounds::Bounds(Vector3 center, Vector3 size)
 //========================================
 Collider::Collider()
 	:m_bound(Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 1.0f, 1.0f)),
-	m_bCurState(false), m_bOldState(false), m_bTriggr(false)
+	m_bCurState(false), m_bOldState(false), m_bTriggr(false),
+	m_eType(EColliderType::eBox)
 {
 
 
@@ -194,49 +195,6 @@ bool Collider::BoxToBox(Collider* collider, Collider* other)
 	// ハーフサイズ
 	Vector3 boxSize1 = collider->m_bound.GetHalfSize() * collider->m_transform.lock()->m_scale;
 	Vector3 boxSize2 = other->m_bound.GetHalfSize() * other->m_transform.lock()->m_scale;
-
-	//// 最短距離計算
-	//Vector3 minLen = LenAABBToPoint(boxMin2, boxMax2, boxMin1);
-	//Vector3 maxLen = LenAABBToPoint(boxMin2, boxMax2, boxMax1);
-	//Vector3 vLen = minLen.magnitude() > maxLen.magnitude() ? minLen : maxLen;
-
-	//// 向き・法線
-	//Vector3 dir = vLen.normalized();
-	//Vector3 normal;
-	//// 絶対値に
-	//vLen->x = fabsf(vLen->x);
-	//vLen->y = fabsf(vLen->y);
-	//vLen->z = fabsf(vLen->z);
-	//// X軸
-	//if (vLen->x >= vLen->y && vLen->x >= vLen->z)
-	//{
-	//	if (dir->x >= 0.0f) normal->x = 1.0f;
-	//	else				normal->x = -1.0f;
-	//}
-	//// Y軸
-	//else if (vLen->y >= vLen->x && vLen->y >= vLen->z)
-	//{
-	//	if (dir->y >= 0.0f) normal->y = 1.0f;
-	//	else				normal->y = -1.0f;
-	//}
-	//// Z軸
-	//else if (vLen->z >= vLen->x && vLen->z >= vLen->y)
-	//{
-	//	if (dir->z >= 0.0f) normal->z = 1.0f;
-	//	else				normal->z = -1.0f;
-	//}
-
-
-	////--- 物理
-	//// 物理をしない
-	//if (!rb1->GetUsePhysics()) return true;
-	//// 物理計算
-	//rb1->CollisionPhysics(rb2, normal);
-
-
-	////--- 押し出し
-	//vLen = boxSize1 * 2 - vLen;
-	//collider->transform().lock()->m_pos += vLen * normal;
 
 
 	//====================================================================
