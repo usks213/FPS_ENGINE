@@ -81,7 +81,7 @@ float4 main(VS_OUTPUT input) : SV_Target0
     // ’Ç‰Á
     float3 lightPos = input.LitPos.xyz / input.LitPos.w;
     float2 shadowTexCoords;
-    shadowTexCoords = (lightPos + float2(1, -1)) * float2(0.5, -0.5);
+    shadowTexCoords = (lightPos.xy + float2(1, -1)) * float2(0.5, -0.5);
 	//shadowTexCoords.x = 0.5f + (input.LitPos.x / input.LitPos.w * 0.5f);
 	//shadowTexCoords.y = 0.5f - (input.LitPos.y / input.LitPos.w * 0.5f);
     float pixelDepth = input.LitPos.z / input.LitPos.w;

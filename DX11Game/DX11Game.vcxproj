@@ -201,6 +201,18 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Source\HLSL\InstancingPixel.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Source\HLSL\InstancingVertex.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="source\HLSL\Pixel.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
@@ -249,6 +261,7 @@
     <ClCompile Include="Source\Engine\ECSCompoent\BillboardRenderer.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\BoxCollider.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\Collider.cpp" />
+    <ClCompile Include="Source\Engine\ECSCompoent\InstancingMeshRenderer.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\MeshRenderer.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\Renderer.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\Rigidbody.cpp" />
@@ -274,6 +287,7 @@
     <ClCompile Include="Source\Engine\main.cpp" />
     <ClCompile Include="Source\Engine\Renderer\AssimpModel.cpp" />
     <ClCompile Include="Source\Engine\Renderer\Camera.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\instancingMesh .cpp" />
     <ClCompile Include="Source\Engine\Renderer\Light.cpp" />
     <ClCompile Include="Source\Engine\Renderer\mesh.cpp" />
     <ClCompile Include="Source\Engine\System\debugproc.cpp" />
@@ -292,6 +306,7 @@
     <ClInclude Include="Source\Engine\ECSCompoent\BillboardRenderer.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\BoxCollider.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\Collider.h" />
+    <ClInclude Include="Source\Engine\ECSCompoent\InstancingMeshRenderer.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\MeshRenderer.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\Renderer.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\Rigidbody.h" />
@@ -319,6 +334,7 @@
     <ClInclude Include="Source\Engine\main.h" />
     <ClInclude Include="Source\Engine\Renderer\AssimpModel.h" />
     <ClInclude Include="Source\Engine\Renderer\Camera.h" />
+    <ClInclude Include="Source\Engine\Renderer\instancingMesh.h" />
     <ClInclude Include="Source\Engine\Renderer\Light.h" />
     <ClInclude Include="Source\Engine\Renderer\mesh.h" />
     <ClInclude Include="Source\Engine\System\debugproc.h" />

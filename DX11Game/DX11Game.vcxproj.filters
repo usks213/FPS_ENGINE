@@ -83,6 +83,12 @@
     <FxCompile Include="source\HLSL\Vertex2D.hlsl">
       <Filter>シェーダー</Filter>
     </FxCompile>
+    <FxCompile Include="Source\HLSL\InstancingPixel.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="Source\HLSL\InstancingVertex.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\main.cpp">
@@ -206,6 +212,12 @@
       <Filter>ソース\エンジン\ECSComponent</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\ECSCompoent\BillboardRenderer.cpp">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\Renderer\instancingMesh .cpp">
+      <Filter>ソース\エンジン\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSCompoent\InstancingMeshRenderer.cpp">
       <Filter>ソース\エンジン\ECSComponent</Filter>
     </ClCompile>
   </ItemGroup>
@@ -340,6 +352,12 @@
       <Filter>ソース\エンジン\ECSComponent</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\ECSCompoent\BillboardRenderer.h">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Renderer\instancingMesh.h">
+      <Filter>ソース\エンジン\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSCompoent\InstancingMeshRenderer.h">
       <Filter>ソース\エンジン\ECSComponent</Filter>
     </ClInclude>
   </ItemGroup>

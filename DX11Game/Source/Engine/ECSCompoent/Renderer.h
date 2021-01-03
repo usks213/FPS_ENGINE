@@ -33,9 +33,9 @@ namespace ECS
 		virtual ~Renderer();
 
 		// オブジェクト生成時
-		void OnCreate() override;
+		virtual void OnCreate() override;
 		// オブジェクト破棄時
-		void OnDestroy() override;
+		virtual void OnDestroy() override;
 
 		// 各レンダラーの描画処理
 		virtual void EarlyDraw(ID3D11DeviceContext* pDC) = 0;

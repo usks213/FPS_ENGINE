@@ -34,6 +34,8 @@
 //	2021/01/02	Animator2D,Animation2D,Animation2DSystem の作成
 //				SpriteRenderer,BillboardRenderer,AssimpRenderer の作成
 //
+//	2021/01/03	InstancingMesh の作成 インスタンシング実装 すごい！！
+//
 //
 //======================================================================
 #include "main.h"
@@ -60,6 +62,7 @@
 // コンポーネント
 #include "ECSCompoent/Transform.h"
 #include "ECSCompoent/MeshRenderer.h"
+#include "ECSCompoent/InstancingMeshRenderer.h"
 #include "ECSCompoent/Rigidbody.h"
 #include "ECSCompoent/SphereCollider.h"
 #include "ECSCompoent/BoxCollider.h"
@@ -68,6 +71,7 @@
 #include "Renderer/Camera.h"
 #include "Renderer/Light.h"
 #include "Renderer/mesh.h"
+#include "Renderer/instancingMesh.h"
 #include "Renderer/AssimpModel.h"
 
 // スクリプト
@@ -108,7 +112,7 @@ IDXGISwapChain*				g_pSwapChain;			// スワップチェーン
 ID3D11RenderTargetView*		g_pRenderTargetView;	// フレームバッファ
 ID3D11Texture2D*			g_pDepthStencilTexture;	// Zバッファ用メモリ
 ID3D11DepthStencilView*		g_pDepthStencilView;	// Zバッファ
-UINT						g_uSyncInterval = 1;	// 垂直同期 (0:無, 1:有)
+UINT						g_uSyncInterval = 0;	// 垂直同期 (0:無, 1:有)
 ID3D11RasterizerState*		g_pRs[MAX_CULLMODE];	// ラスタライザ ステート
 ID3D11BlendState*			g_pBlendState[MAX_BLENDSTATE];// ブレンド ステート
 ID3D11DepthStencilState*	g_pDSS[2];				// Z/ステンシル ステート
@@ -475,6 +479,13 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	SetMeshCamera(&g_camera);
 	SetMeshLight(&g_light);
 
+	// インスタンシングメッシュ初期化
+	hr = InitInstancingMesh();
+	if (FAILED(hr))
+		return hr;
+	SetInstancingMeshCamera(&g_camera);
+	SetInstancingMeshLight(&g_light);
+
 	// ライト
 	g_light.Init();
 	CLight::SetMainLight(&g_light);
@@ -502,64 +513,64 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	player->AddComponent<PlayerScript>();
 	
 
-	for (int i = 0; i < 6; i++)
-	{
-		Vector3 pos;
-		Vector3 scale;
+	//for (int i = 0; i < 6; i++)
+	//{
+	//	Vector3 pos;
+	//	Vector3 scale;
 
-		// 床
-		if (i == 0)
-		{
-			pos = Vector3{ 5000, 0, 5000 };
-			scale = Vector3{ 10000, 1000, 10000 };
-		}
-		// 天井
-		else if (i == 1)
-		{
-			pos = Vector3{ 5000, 10000, 5000 };
-			scale = Vector3{ 10000, 1000, 10000 };
-		}
-		// 右
-		else if (i == 2)
-		{
-			pos = Vector3{ 10000, 5000, 5000 };
-			scale = Vector3{ 1000, 10000, 10000 };
-		}
-		// 左
-		else if (i == 3)
-		{
-			pos = Vector3{ 0, 5000, 5000 };
-			scale = Vector3{ 1000, 10000, 10000 };
-		}
-		// 奥
-		else if (i == 4)
-		{
-			pos = Vector3{ 5000, 5000, 10000 };
-			scale = Vector3{ 10000, 10000, 1000 };
-		}
-		// 手前
-		else if (i == 5)
-		{
-			pos = Vector3{ 5000, 5000, 0 };
-			scale = Vector3{ 10000, 10000, 1000 };
-		}
+	//	// 床
+	//	if (i == 0)
+	//	{
+	//		pos = Vector3{ 5000, 0, 5000 };
+	//		scale = Vector3{ 10000, 1000, 10000 };
+	//	}
+	//	// 天井
+	//	else if (i == 1)
+	//	{
+	//		pos = Vector3{ 5000, 10000, 5000 };
+	//		scale = Vector3{ 10000, 1000, 10000 };
+	//	}
+	//	// 右
+	//	else if (i == 2)
+	//	{
+	//		pos = Vector3{ 10000, 5000, 5000 };
+	//		scale = Vector3{ 1000, 10000, 10000 };
+	//	}
+	//	// 左
+	//	else if (i == 3)
+	//	{
+	//		pos = Vector3{ 0, 5000, 5000 };
+	//		scale = Vector3{ 1000, 10000, 10000 };
+	//	}
+	//	// 奥
+	//	else if (i == 4)
+	//	{
+	//		pos = Vector3{ 5000, 5000, 10000 };
+	//		scale = Vector3{ 10000, 10000, 1000 };
+	//	}
+	//	// 手前
+	//	else if (i == 5)
+	//	{
+	//		pos = Vector3{ 5000, 5000, 0 };
+	//		scale = Vector3{ 10000, 10000, 1000 };
+	//	}
 
-		const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-		const auto renderer = test->AddComponent<MeshRenderer>();
-		renderer->MakeCube("plane");
-		renderer->SetDiffuseTexture("data/texture/grid.png");
-		renderer->SetTexSize({ 100, 100, 0 });
-		renderer->UpdateTexMatrix();
-		const auto& rb1 = test->AddComponent<Rigidbody>();
-		test->AddComponent<BoxCollider>();
-		test->transform().lock()->m_scale = scale;
-		test->transform().lock()->m_pos = pos;
-		rb1->SetUsePhysics(false);
-		rb1->SetUseGravity(false);
-		rb1->SetMass(100);
-		rb1->SetE(0.8f);
-		//rb1->SetDynamicFriction(0.0f);
-	}
+	//	const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
+	//	const auto renderer = test->AddComponent<MeshRenderer>();
+	//	renderer->MakeCube("plane");
+	//	renderer->SetDiffuseTexture("data/texture/grid.png");
+	//	renderer->SetTexSize({ 100, 100, 0 });
+	//	renderer->UpdateTexMatrix();
+	//	const auto& rb1 = test->AddComponent<Rigidbody>();
+	//	test->AddComponent<BoxCollider>();
+	//	test->transform().lock()->m_scale = scale;
+	//	test->transform().lock()->m_pos = pos;
+	//	rb1->SetUsePhysics(false);
+	//	rb1->SetUseGravity(false);
+	//	rb1->SetMass(100);
+	//	rb1->SetE(0.8f);
+	//	//rb1->SetDynamicFriction(0.0f);
+	//}
 
 	Vector3 pos = { 400, 2000, 200 };
 	//for (int i = 0; i < 10; i++)
@@ -580,22 +591,38 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	//	//rb->SetUsePhysics(false);
 	//}
 
-	pos = Vector3{ 2000, 2000,2000 };
-	for (int z = 0; z < 3; z++)
+	pos = Vector3{ 2000, 500,2000 };
+	for (int z = 0; z < 10; z++)
 	{
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 10; i++)
 		{
 			const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-			test->AddComponent<MeshRenderer>()->MakeSphere("test2");
+			test->AddComponent<InstancingMeshRenderer>()->MakeCube("test2");
 			test->AddComponent<Rigidbody>();
-			test->AddComponent<SphereCollider>();
+			//test->AddComponent<SphereCollider>();
 
 			test->transform().lock()->m_pos = pos;
-			test->transform().lock()->m_scale = Vector3{ 400, 400, 400 };
-			pos->x += 2000;
+			test->transform().lock()->m_scale = Vector3{ 200, 200, 200 };
+			pos->x += 200;
 		}
-		pos->x = 1000;
-		pos->z += 2000;
+		pos->x = 100;
+		pos->z += 200;
+	}
+	for (int z = 0; z < 200; z++)
+	{
+		for (int i = 0; i < 200; i++)
+		{
+			const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
+			test->AddComponent<InstancingMeshRenderer>()->MakeCube("test3");
+			//test->AddComponent<Rigidbody>();
+			//test->AddComponent<SphereCollider>();
+
+			test->transform().lock()->m_pos = pos;
+			test->transform().lock()->m_scale = Vector3{ 200, 200, 200 };
+			pos->x += 200;
+		}
+		pos->x = 100;
+		pos->z += 200;
 	}
 
 	return hr;
