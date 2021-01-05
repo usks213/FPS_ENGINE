@@ -265,6 +265,7 @@
     <ClCompile Include="Source\Engine\ECSCompoent\MeshRenderer.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\Renderer.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\Rigidbody.cpp" />
+    <ClCompile Include="Source\Engine\ECSCompoent\ECSRigidbody.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\Script.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\SphereCollider.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\SpriteRenderer.cpp" />
@@ -274,9 +275,11 @@
     <ClCompile Include="Source\Engine\ECSSystem\CollisionSystem.cpp" />
     <ClCompile Include="Source\Engine\ECSSystem\RendererSystem.cpp" />
     <ClCompile Include="Source\Engine\ECSSystem\RigidbodySystem.cpp" />
+    <ClCompile Include="Source\Engine\ECSSystem\ECSRigidbodySystem.cpp" />
     <ClCompile Include="Source\Engine\ECSSystem\ScriptSystem.cpp" />
     <ClCompile Include="Source\Engine\ECSSystem\TransformSystem.cpp" />
     <ClCompile Include="Source\Engine\ECS\Component\IComponent.cpp" />
+    <ClCompile Include="Source\Engine\ECS\Component\IComponentData.cpp" />
     <ClCompile Include="Source\Engine\ECS\Entity\EntityManager.cpp" />
     <ClCompile Include="Source\Engine\ECS\Entity\IEntity.cpp" />
     <ClCompile Include="Source\Engine\ECS\Object\IObject.cpp" />
@@ -310,6 +313,7 @@
     <ClInclude Include="Source\Engine\ECSCompoent\MeshRenderer.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\Renderer.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\Rigidbody.h" />
+    <ClInclude Include="Source\Engine\ECSCompoent\ECSRigidbody.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\Script.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\SphereCollider.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\SpriteRenderer.h" />
@@ -319,9 +323,12 @@
     <ClInclude Include="Source\Engine\ECSSystem\CollisionSystem.h" />
     <ClInclude Include="Source\Engine\ECSSystem\RendererSystem.h" />
     <ClInclude Include="Source\Engine\ECSSystem\RigidbodySystem.h" />
+    <ClInclude Include="Source\Engine\ECSSystem\ECSRigidbodySystem.h" />
     <ClInclude Include="Source\Engine\ECSSystem\ScriptSystem.h" />
     <ClInclude Include="Source\Engine\ECSSystem\TransformSystem.h" />
     <ClInclude Include="Source\Engine\ECS\Component\IComponent.h" />
+    <ClInclude Include="Source\Engine\ECS\Component\IComponentData.h" />
+    <ClInclude Include="Source\Engine\ECS\Component\IECSComponent.h" />
     <ClInclude Include="Source\Engine\ECS\Entity\EntityManager.h" />
     <ClInclude Include="Source\Engine\ECS\Entity\IEntity.h" />
     <ClInclude Include="Source\Engine\ECS\Object\IObject.h" />
@@ -329,6 +336,7 @@
     <ClInclude Include="Source\Engine\ECS\Object\ObjectManager.h" />
     <ClInclude Include="Source\Engine\ECS\System\ISystem.h" />
     <ClInclude Include="Source\Engine\ECS\System\System.h" />
+    <ClInclude Include="Source\Engine\ECS\System\ECSSystem.h" />
     <ClInclude Include="Source\Engine\ECS\uniqueTypeID.h" />
     <ClInclude Include="Source\Engine\ECS\World\World.h" />
     <ClInclude Include="Source\Engine\main.h" />

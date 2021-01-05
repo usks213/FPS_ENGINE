@@ -44,6 +44,9 @@ namespace ECS
 		void EarlyDraw(ID3D11DeviceContext* pDC) override;
 		void LateDraw(ID3D11DeviceContext* pDC) override;
 
+		// ƒJƒƒ‰‚©‚ç‚Ì‹——£
+		void LayerUpdate() override {}
+
 		// •½–ÊƒƒbƒVƒ…‚Ì¶¬
 		HRESULT MakePlane(const std::string tag, int nNumBlockX, int nNumBlockZ, float fSizeBlockX, float fSizeBlockZ,
 			float fTexSizeX = 1.0f, float fTexSizeZ = 1.0f);

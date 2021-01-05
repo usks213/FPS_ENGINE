@@ -43,6 +43,8 @@ InstancingMeshRenderer::InstancingMeshRenderer()
 	m_data.material.Specular = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_data.material.Emissive = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
 	m_data.material.Power = 50.0f;
+
+	//m_fLayer = 100;
 }
 
 //========================================
@@ -79,6 +81,21 @@ void InstancingMeshRenderer::OnDestroy()
 	//// システムから除外
 	//RendererSystem* sys = GetEntityManager()->GetWorld()->GetSystem<RendererSystem>();
 	//if (sys) sys->RemoveList(this);
+
+	// データリストから削除
+	auto itr = m_meshList.find(m_tag);
+	if (itr != m_meshList.end())
+	{
+		auto itr2 = std::find_if(itr->second.begin(), itr->second.end(),
+			[this, &itr](InstancingMeshData* p)
+			{
+				return p == &this->m_data;
+			});
+		if (itr->second.end() != itr2)
+		{
+			itr->second.erase(itr2);
+		}
+	}
 }
 
 //========================================
@@ -163,7 +180,13 @@ HRESULT InstancingMeshRenderer::MakePlane(const std::string tag, int nNumBlockX,
 
 	// システムに格納
 	RendererSystem* sys = GetEntityManager()->GetWorld()->GetSystem<RendererSystem>();
-	if (sys) sys->AddList(this);
+	if (sys)
+	{
+		InstancingMeshRenderer* p = new InstancingMeshRenderer();
+		p->m_tag = tag;
+		p->m_mesh = m_mesh;
+		sys->AddList(p);
+	}
 
 
 	// プリミティブ種別設定
@@ -265,7 +288,13 @@ HRESULT InstancingMeshRenderer::MakeCube(const std::string tag)
 
 	// システムに格納
 	RendererSystem* sys = GetEntityManager()->GetWorld()->GetSystem<RendererSystem>();
-	if (sys) sys->AddList(this);
+	if (sys)
+	{
+		InstancingMeshRenderer* p = new InstancingMeshRenderer();
+		p->m_tag = tag;
+		p->m_mesh = m_mesh;
+		sys->AddList(p);
+	}
 
 
 #define	SIZE_X			(0.5f)											// 立方体のサイズ(X方向)
@@ -428,7 +457,13 @@ HRESULT InstancingMeshRenderer::MakeSphere(std::string tag, int nSegment, float 
 
 	// システムに格納
 	RendererSystem* sys = GetEntityManager()->GetWorld()->GetSystem<RendererSystem>();
-	if (sys) sys->AddList(this);
+	if (sys)
+	{
+		InstancingMeshRenderer* p = new InstancingMeshRenderer();
+		p->m_tag = tag;
+		p->m_mesh = m_mesh;
+		sys->AddList(p);
+	}
 
 
 	// プリミティブ種別設定

@@ -36,6 +36,8 @@
 //
 //	2021/01/03	InstancingMesh の作成 インスタンシング実装 すごい！！
 //
+//	2021/01/05	データ指向化失敗...
+//
 //
 //======================================================================
 #include "main.h"
@@ -77,8 +79,6 @@
 // スクリプト
 #include "../Scripts/PlayerScript.h"
 
-
-
 //-------- ライブラリのリンク
 #pragma comment(lib, "winmm")
 #pragma comment(lib, "imm32")
@@ -112,7 +112,7 @@ IDXGISwapChain*				g_pSwapChain;			// スワップチェーン
 ID3D11RenderTargetView*		g_pRenderTargetView;	// フレームバッファ
 ID3D11Texture2D*			g_pDepthStencilTexture;	// Zバッファ用メモリ
 ID3D11DepthStencilView*		g_pDepthStencilView;	// Zバッファ
-UINT						g_uSyncInterval = 0;	// 垂直同期 (0:無, 1:有)
+UINT						g_uSyncInterval = 1;	// 垂直同期 (0:無, 1:有)
 ID3D11RasterizerState*		g_pRs[MAX_CULLMODE];	// ラスタライザ ステート
 ID3D11BlendState*			g_pBlendState[MAX_BLENDSTATE];// ブレンド ステート
 ID3D11DepthStencilState*	g_pDSS[2];				// Z/ステンシル ステート
@@ -591,35 +591,36 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	//	//rb->SetUsePhysics(false);
 	//}
 
-	pos = Vector3{ 2000, 500,2000 };
-	for (int z = 0; z < 10; z++)
+	pos = Vector3{ 2000, 1000,2000 };
+	//for (int z = 0; z < 10; z++)
+	//{
+	//	for (int i = 0; i < 10; i++)
+	//	{
+	//		const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
+	//		test->AddComponent<InstancingMeshRenderer>()->MakeCube("test2");
+	//		test->AddComponent<Rigidbody>();
+	//		//test->AddComponent<SphereCollider>();
+
+	//		test->transform().lock()->m_pos = pos;
+	//		test->transform().lock()->m_scale = Vector3{ 200, 200, 200 };
+	//		pos->x += 200;
+	//	}
+	//	pos->x = 100;
+	//	pos->z += 200;
+	//}
+	for (int z = 0; z < 2; z++)
 	{
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 20; i++)
 		{
 			const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-			test->AddComponent<InstancingMeshRenderer>()->MakeCube("test2");
-			test->AddComponent<Rigidbody>();
-			//test->AddComponent<SphereCollider>();
+			test->AddComponent<InstancingMeshRenderer>()->MakeSphere("test3", 10);
+			const auto& rb = test->AddComponent<Rigidbody>();
+			test->AddComponent<SphereCollider>();
 
 			test->transform().lock()->m_pos = pos;
 			test->transform().lock()->m_scale = Vector3{ 200, 200, 200 };
 			pos->x += 200;
-		}
-		pos->x = 100;
-		pos->z += 200;
-	}
-	for (int z = 0; z < 200; z++)
-	{
-		for (int i = 0; i < 200; i++)
-		{
-			const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-			test->AddComponent<InstancingMeshRenderer>()->MakeCube("test3");
-			//test->AddComponent<Rigidbody>();
-			//test->AddComponent<SphereCollider>();
 
-			test->transform().lock()->m_pos = pos;
-			test->transform().lock()->m_scale = Vector3{ 200, 200, 200 };
-			pos->x += 200;
 		}
 		pos->x = 100;
 		pos->z += 200;

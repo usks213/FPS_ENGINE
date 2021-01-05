@@ -220,6 +220,15 @@
     <ClCompile Include="Source\Engine\ECSCompoent\InstancingMeshRenderer.cpp">
       <Filter>ソース\エンジン\ECSComponent</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\ECSSystem\ECSRigidbodySystem.cpp">
+      <Filter>ソース\エンジン\ECSSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSCompoent\ECSRigidbody.cpp">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECS\Component\IComponentData.cpp">
+      <Filter>ソース\エンジン\ECS\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\main.h">
@@ -359,6 +368,21 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\ECSCompoent\InstancingMeshRenderer.h">
       <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECS\System\ECSSystem.h">
+      <Filter>ソース\エンジン\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSSystem\ECSRigidbodySystem.h">
+      <Filter>ソース\エンジン\ECSSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSCompoent\ECSRigidbody.h">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECS\Component\IComponentData.h">
+      <Filter>ソース\エンジン\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECS\Component\IECSComponent.h">
+      <Filter>ソース\エンジン\ECS\Component</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

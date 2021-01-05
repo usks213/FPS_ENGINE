@@ -178,7 +178,7 @@ void PlayerScript::End()
 void PlayerScript::OnCollisionEnter(Collider* collider)
 {
 	// 削除
-	//GetEntityManager()->DestroyEntity(collider->gameObject().lock());
+	GetEntityManager()->DestroyEntity(collider->gameObject().lock());
 }
 
 //========================================
@@ -188,9 +188,7 @@ void PlayerScript::OnCollisionEnter(Collider* collider)
 //========================================
 void PlayerScript::OnCollisionStay(Collider* collider)
 {
-	// 色変更
-	collider->gameObject().lock()->GetComponent<MeshRenderer>()
-		->SetDiffuseColor({ 1,0,0,1 });
+
 }
 
 //========================================
@@ -200,8 +198,6 @@ void PlayerScript::OnCollisionStay(Collider* collider)
 //========================================
 void PlayerScript::OnCollisionExit(Collider* collider)
 {
-	// 色変更
-	collider->gameObject().lock()->GetComponent<MeshRenderer>()
-		->SetDiffuseColor({ 1,1,1,1 });
+	
 }
 
