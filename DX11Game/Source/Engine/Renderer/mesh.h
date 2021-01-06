@@ -35,11 +35,11 @@ enum eTranslucentType {
 // ç\ë¢ëÃíËã`
 //**************************************
 struct MATERIAL {
-	XMFLOAT4	Diffuse		= XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);		// Diffuse color RGBA
-	XMFLOAT4	Ambient		= XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);		// Ambient color RGB
-	XMFLOAT4	Specular	= XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);		// Specular 'shininess'
-	XMFLOAT4	Emissive	= XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);		// Emissive color RGB
-	float		Power		= 50.0f;								// Sharpness if specular highlight
+	XMFLOAT4	Diffuse;		// Diffuse color RGBA
+	XMFLOAT4	Ambient;		// Ambient color RGB
+	XMFLOAT4	Specular;		// Specular 'shininess'
+	XMFLOAT4	Emissive;		// Emissive color RGB
+	float		Power;			// Sharpness if specular highlight
 } ;
 
 struct MESH {
