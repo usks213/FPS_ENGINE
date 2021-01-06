@@ -12,7 +12,6 @@
 #include "mesh.h"
 #include <vector>
 
-
 struct InstancingMesh {
 	ID3D11Buffer* pVertexBuffer = nullptr;			// 頂点バッファインターフェースへのポインタ
 	ID3D11Buffer* pIndexBuffer = nullptr;				// インデックスバッファインターフェースへのポインタ
@@ -24,11 +23,16 @@ struct InstancingMesh {
 	float fAlpha;							// 頂点カラーα最小値
 } ;
 
+namespace ECS
+{
+	class InstancingMeshRenderer;
+}
 struct InstancingMeshData {
 	XMFLOAT4X4* mtxWorld = nullptr;					// ワールドマトリックス
 	XMFLOAT4X4* mtxTexture = nullptr;					// テクスチャ マトリックス
 	MATERIAL material;					// マテリアル
 	bool bBump;
+	ECS::InstancingMeshRenderer* m_pHost;
 };
 
 //*****************************************************************************
@@ -38,7 +42,7 @@ HRESULT InitInstancingMesh(void);
 void UninitInstancingMesh(void);
 void UpdateInstancingMesh(InstancingMesh* pInstancingMesh);
 void DrawInstancingMesh(ID3D11DeviceContext* pDeviceContext, InstancingMesh* pInstancingMesh,
-	std::vector<InstancingMeshData*>& InstancingList, int nTranslucntType = TT_NOAFFECT);
+	std::vector<InstancingMeshData>& InstancingList, int nTranslucntType = TT_NOAFFECT);
 HRESULT MakeInstancingMeshVertex(ID3D11Device* pDevice, InstancingMesh* pInstancingMesh, VERTEX_3D vertexWk[], int indexWk[]);
 void ReleaseInstancingMesh(InstancingMesh* pInstancingMesh);
 void SetInstancingMeshCamera(CCamera* pCamera);

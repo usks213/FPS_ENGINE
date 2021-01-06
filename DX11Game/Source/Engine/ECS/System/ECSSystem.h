@@ -58,9 +58,9 @@ namespace ECS
 				if (&m_ComponentList[i] == com)
 				{
 					m_ComponentList[i] = m_ComponentList.back();
-					m_ComponentList.pop_back();
 					// ポインタ付け替え
 					m_ComponentList[i].m_pHost->m_data = &m_ComponentList[i];
+					m_ComponentList.pop_back();
 					break;
 				}
 			}

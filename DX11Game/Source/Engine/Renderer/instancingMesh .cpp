@@ -193,7 +193,7 @@ void UninitInstancingMesh(void)
 
 
 void DrawInstancingMeshShadow(ID3D11DeviceContext* pDeviceContext, InstancingMesh* pInstancingMesh,
-	std::vector<InstancingMeshData*>& InstancingList, int nTranslucntType)
+	std::vector<InstancingMeshData>& InstancingList, int nTranslucntType)
 {
 	{
 		// シャドウマップ
@@ -237,7 +237,7 @@ void DrawInstancingMeshShadow(ID3D11DeviceContext* pDeviceContext, InstancingMes
 			int m = (i < n - 1 ? MAX_INSTANCE : count - i * MAX_INSTANCE);
 			for (int j = 0; j < m; ++j)
 			{
-				InstancingMeshData* pData = InstancingList[i * MAX_INSTANCE + j];
+				InstancingMeshData* pData = &InstancingList[i * MAX_INSTANCE + j];
 
 				icb.aInstancing[j].mWorld = XMLoadFloat4x4(pData->mtxWorld);
 				icb.aInstancing[j].mTexture = XMLoadFloat4x4(pData->mtxTexture);
@@ -254,7 +254,7 @@ void DrawInstancingMeshShadow(ID3D11DeviceContext* pDeviceContext, InstancingMes
 // 描画処理
 //=============================================================================
 void DrawInstancingMesh(ID3D11DeviceContext* pDeviceContext, InstancingMesh* pInstancingMesh,
-	std::vector<InstancingMeshData*>& InstancingList, int nTranslucntType)
+	std::vector<InstancingMeshData>& InstancingList, int nTranslucntType)
 {
 	//=============================================================================================
 	// 各ターゲットビューをレンダーターゲットに設定
@@ -317,7 +317,7 @@ void DrawInstancingMesh(ID3D11DeviceContext* pDeviceContext, InstancingMesh* pIn
 		int m = (i < n - 1 ? MAX_INSTANCE : count - i * MAX_INSTANCE);
 		for (int j = 0; j < m; ++j)
 		{
-			InstancingMeshData* pData = InstancingList[i * MAX_INSTANCE + j];
+			InstancingMeshData* pData = &InstancingList[i * MAX_INSTANCE + j];
 
 			icb.aInstancing[j].mWorld = XMMatrixTranspose(XMLoadFloat4x4(pData->mtxWorld));
 			icb.aInstancing[j].mTexture = XMMatrixTranspose(XMLoadFloat4x4(pData->mtxTexture));

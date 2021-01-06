@@ -27,7 +27,8 @@ using namespace ECS;
 
 //===== グローバル変数 =====
 std::map<const std::string, InstancingMesh*, std::less<>> InstancingMeshRenderer::m_meshPool;
-std::map<const std::string, std::vector<InstancingMeshData*>, std::less<>> InstancingMeshRenderer::m_meshList;
+std::map<const std::string, std::vector<InstancingMeshData>, std::less<>> InstancingMeshRenderer::m_meshList;
+bool InstancingMeshRenderer::m_bReLoad = true;
 
 //========================================
 //
@@ -37,14 +38,9 @@ std::map<const std::string, std::vector<InstancingMeshData*>, std::less<>> Insta
 InstancingMeshRenderer::InstancingMeshRenderer()
 {
 	m_mesh = nullptr;
+	m_pData = nullptr;
 
-	m_data.material.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	m_data.material.Ambient = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	m_data.material.Specular = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	m_data.material.Emissive = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	m_data.material.Power = 50.0f;
-
-	//m_fLayer = 100;
+	m_fLayer = 100;
 }
 
 //========================================
@@ -66,9 +62,6 @@ void InstancingMeshRenderer::OnCreate()
 {
 	// トランスフォームから取得
 	m_transform = m_Parent.lock()->GetComponent<Transform>();
-
-	m_data.mtxWorld = m_transform.lock()->GetWorldMatrix();
-	m_data.mtxTexture = &m_mtxTexture;
 }
 
 //========================================
@@ -87,13 +80,14 @@ void InstancingMeshRenderer::OnDestroy()
 	if (itr != m_meshList.end())
 	{
 		auto itr2 = std::find_if(itr->second.begin(), itr->second.end(),
-			[this, &itr](InstancingMeshData* p)
+			[this, &itr](InstancingMeshData& p)
 			{
-				return p == &this->m_data;
+				return &p == this->m_pData;
 			});
 		if (itr->second.end() != itr2)
 		{
 			*itr2 = itr->second.back();
+			itr2->m_pHost->m_pData = &*itr2;
 			itr->second.pop_back();
 			//itr->second.erase(itr2);
 		}
@@ -133,18 +127,21 @@ void InstancingMeshRenderer::LateDraw(ID3D11DeviceContext* pDC)
 
 	if (mesh)
 	{
+		ReLoadData();
 		DrawInstancingMesh(pDC, mesh, itr->second);
 	}
 }
 
 //========================================
 //
-// 平面メッシュの生成
+// メッシュデータの生成
 //
 //========================================
-HRESULT InstancingMeshRenderer::MakePlane(const std::string tag, int nNumBlockX, int nNumBlockZ, float fSizeBlockX, float fSizeBlockZ,
-	float fTexSizeX, float fTexSizeZ)
+bool InstancingMeshRenderer::CreateMeshData(const std::string tag)
 {
+	// リロードフラグ
+	m_bReLoad = true;
+
 	// タグ
 	m_tag = tag;
 
@@ -157,17 +154,28 @@ HRESULT InstancingMeshRenderer::MakePlane(const std::string tag, int nNumBlockX,
 		auto itr2 = m_meshList.find(tag);
 		if (itr2 != m_meshList.end())
 		{
-			itr2->second.push_back(&this->m_data);
+			InstancingMeshData temp;
+			itr2->second.push_back(temp);
+			m_pData = &itr2->second.back();
+			m_pData->m_pHost = this;
+			m_pData->mtxWorld = m_transform.lock()->GetWorldMatrix();
+			m_pData->mtxTexture = &m_mtxTexture;
 		}
 		else
 		{
 			// リスト作成
-			std::vector<InstancingMeshData*> list;
-			list.push_back(&this->m_data);
+			std::vector<InstancingMeshData> list;
 			m_meshList.emplace(tag, list);
+
+			InstancingMeshData temp;
+			m_meshList[tag].push_back(temp);
+			m_pData = &m_meshList[tag].back();
+			m_pData->m_pHost = this;
+			m_pData->mtxWorld = m_transform.lock()->GetWorldMatrix();
+			m_pData->mtxTexture = &m_mtxTexture;
 		}
 
-		return S_OK;
+		return false;
 	}
 
 	// 新規作成
@@ -176,9 +184,15 @@ HRESULT InstancingMeshRenderer::MakePlane(const std::string tag, int nNumBlockX,
 	// プールに格納
 	m_meshPool.emplace(tag, m_mesh);
 	// リスト作成
-	std::vector<InstancingMeshData*> list;
-	list.push_back(&this->m_data);
+	std::vector<InstancingMeshData> list;
 	m_meshList.emplace(tag, list);
+
+	InstancingMeshData temp;
+	m_meshList[tag].push_back(temp);
+	m_pData = &m_meshList[tag].back();
+	m_pData->m_pHost = this;
+	m_pData->mtxWorld = m_transform.lock()->GetWorldMatrix();
+	m_pData->mtxTexture = &m_mtxTexture;
 
 	// システムに格納
 	RendererSystem* sys = GetEntityManager()->GetWorld()->GetSystem<RendererSystem>();
@@ -189,6 +203,39 @@ HRESULT InstancingMeshRenderer::MakePlane(const std::string tag, int nNumBlockX,
 		p->m_mesh = m_mesh;
 		sys->AddList(p);
 	}
+
+	return true;
+}
+
+//========================================
+//
+// データのリロード
+//
+//========================================
+void InstancingMeshRenderer::ReLoadData()
+{
+	if (!m_bReLoad) return;
+
+	for (auto& vec : m_meshList)
+	{
+		for (auto& com : vec.second)
+		{
+			com.m_pHost->m_pData = &com;
+		}
+	}
+	m_bReLoad = false;
+}
+
+//========================================
+//
+// 平面メッシュの生成
+//
+//========================================
+HRESULT InstancingMeshRenderer::MakePlane(const std::string tag, int nNumBlockX, int nNumBlockZ, float fSizeBlockX, float fSizeBlockZ,
+	float fTexSizeX, float fTexSizeZ)
+{
+	// データの作成
+	if (!CreateMeshData(tag)) return S_OK;
 
 
 	// プリミティブ種別設定
@@ -253,50 +300,8 @@ HRESULT InstancingMeshRenderer::MakePlane(const std::string tag, int nNumBlockX,
 //========================================
 HRESULT InstancingMeshRenderer::MakeCube(const std::string tag)
 {
-	// タグ
-	m_tag = tag;
-
-	// メッシュの検索
-	const auto& itr = m_meshPool.find(tag);
-	if (m_meshPool.end() != itr)
-	{
-		m_mesh = itr->second;
-		// リストに格納
-		auto itr2 = m_meshList.find(tag);
-		if (itr2 != m_meshList.end())
-		{
-			itr2->second.push_back(&this->m_data);
-		}
-		else
-		{
-			// リスト作成
-			std::vector<InstancingMeshData*> list;
-			list.push_back(&this->m_data);
-			m_meshList.emplace(tag, list);
-		}
-
-		return S_OK;
-	}
-
-	// 新規作成
-	m_mesh = new InstancingMesh();
-
-	// プールに格納
-	m_meshPool.emplace(tag, m_mesh);
-	// リスト作成
-	std::vector<InstancingMeshData*> list;
-	list.push_back(&this->m_data);
-	m_meshList.emplace(tag, list);
-
-	// システムに格納
-	RendererSystem* sys = GetEntityManager()->GetWorld()->GetSystem<RendererSystem>();
-	if (sys)
-	{
-		InstancingMeshRenderer* p = new InstancingMeshRenderer();
-		p->m_tag = tag;
-		p->m_mesh = m_mesh;
-		sys->AddList(p);
-	}
+	// データの作成
+	if (!CreateMeshData(tag)) return S_OK;
 
 
 #define	SIZE_X			(0.5f)											// 立方体のサイズ(X方向)
@@ -422,50 +427,8 @@ HRESULT InstancingMeshRenderer::MakeCube(const std::string tag)
 //========================================
 HRESULT InstancingMeshRenderer::MakeSphere(std::string tag, int nSegment, float fTexSplit, XMFLOAT3 pos)
 {
-	// タグ
-	m_tag = tag;
-
-	// メッシュの検索
-	const auto& itr = m_meshPool.find(tag);
-	if (m_meshPool.end() != itr)
-	{
-		m_mesh = itr->second;
-		// リストに格納
-		auto itr2 = m_meshList.find(tag);
-		if (itr2 != m_meshList.end())
-		{
-			itr2->second.push_back(&this->m_data);
-		}
-		else
-		{
-			// リスト作成
-			std::vector<InstancingMeshData*> list;
-			list.push_back(&this->m_data);
-			m_meshList.emplace(tag, list);
-		}
-
-		return S_OK;
-	}
-
-	// 新規作成
-	m_mesh = new InstancingMesh();
-
-	// プールに格納
-	m_meshPool.emplace(tag, m_mesh);
-	// リスト作成
-	std::vector<InstancingMeshData*> list;
-	list.push_back(&this->m_data);
-	m_meshList.emplace(tag, list);
-
-	// システムに格納
-	RendererSystem* sys = GetEntityManager()->GetWorld()->GetSystem<RendererSystem>();
-	if (sys)
-	{
-		InstancingMeshRenderer* p = new InstancingMeshRenderer();
-		p->m_tag = tag;
-		p->m_mesh = m_mesh;
-		sys->AddList(p);
-	}
+	// データの作成
+	if (!CreateMeshData(tag)) return S_OK;
 
 
 	// プリミティブ種別設定

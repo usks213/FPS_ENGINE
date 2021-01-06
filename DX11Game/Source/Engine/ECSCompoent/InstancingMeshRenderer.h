@@ -58,7 +58,8 @@ namespace ECS
 
 		//--- マテリアル
 		// カラー変更
-		void SetDiffuseColor(XMFLOAT4 color) { m_data.material.Diffuse = color; }
+		void SetDiffuseColor(XMFLOAT4 color) { 
+			if(m_pData) m_pData->material.Diffuse = color; }
 
 		// ベースカラーテクスチャのセット
 		void SetDiffuseTexture(const char* filename);
@@ -67,18 +68,22 @@ namespace ECS
 
 		// プリミティブ
 		void SetPrimitiveType(ePrimitiveType eType) { if (m_mesh) m_mesh->primitiveType = eType; }
-
+	private:
+		// メッシュデータ生成
+		bool CreateMeshData(const std::string tag);
+		static void ReLoadData();
 	private:
 		// メッシュデータ
 		InstancingMesh* m_mesh;
 		// インスタンシングデータ
-		InstancingMeshData m_data;
+		InstancingMeshData* m_pData;
+		// メッシュタグ
+		std::string m_tag;
 
 		// メッシュのプール
 		static std::map<const std::string, InstancingMesh*, std::less<>> m_meshPool;
-		static std::map<const std::string, std::vector<InstancingMeshData*>, std::less<>> m_meshList;
-
-		// メッシュタグ
-		std::string m_tag;
+		static std::map<const std::string, std::vector<InstancingMeshData>, std::less<>> m_meshList;
+		// リロードフラグ
+		static bool m_bReLoad;
 	};
 }
