@@ -30,9 +30,21 @@
 // コンポーネント
 #include "../Engine/ECSCompoent/Transform.h"
 #include "../Engine/ECSCompoent/MeshRenderer.h"
+#include "../Engine/ECSCompoent/BillboardRenderer.h"
+#include "../Engine/ECSCompoent/AssimpRenderer.h"
+#include "../Engine/ECSCompoent/SpriteRenderer.h"
+#include "../Engine/ECSCompoent/InstancingMeshRenderer.h"
 #include "../Engine/ECSCompoent/Rigidbody.h"
 #include "../Engine/ECSCompoent/BoxCollider.h"
 #include "../Engine/ECSCompoent/SphereCollider.h"
+
+// ECSコンポーネント
+#include "../Engine/ECSCompoent/ECSRigidbody.h"
+#include "../Engine/ECSCompoent/ECSSphereCollider.h"
+
+// ECSシステム
+#include "../Engine/ECSSystem/ECSRigidbodySystem.h"
+#include "../Engine/ECSSystem/ECSSphereCollisionSystem.h"
 
 
 // ネームスペース
@@ -114,5 +126,35 @@ void ScriptBaseLayout::OnCollisionStay(Collider* collider)
 void ScriptBaseLayout::OnCollisionExit(Collider* collider)
 {
 
+}
+
+
+//===== ECS =====
+
+//========================================
+//
+// 当たった時
+//
+//========================================
+void ScriptBaseLayout::OnECSCollisionEnter(SphereColliderData* collider)
+{
+}
+
+//========================================
+//
+// 当たっている間
+//
+//========================================
+void ScriptBaseLayout::OnECSCollisionStay(SphereColliderData* collider)
+{
+}
+
+//========================================
+//
+// 離れた時
+//
+//========================================
+void ScriptBaseLayout::OnECSCollisionExit(SphereColliderData* collider)
+{
 }
 

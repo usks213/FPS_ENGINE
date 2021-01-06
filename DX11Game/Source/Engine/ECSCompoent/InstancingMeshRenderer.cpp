@@ -93,7 +93,9 @@ void InstancingMeshRenderer::OnDestroy()
 			});
 		if (itr->second.end() != itr2)
 		{
-			itr->second.erase(itr2);
+			*itr2 = itr->second.back();
+			itr->second.pop_back();
+			//itr->second.erase(itr2);
 		}
 	}
 }

@@ -29,6 +29,7 @@ namespace ECS
 	class GameObject;
 	class Transform;
 	class Collider;
+	class SphereColliderData;
 	class Rigidbody;
 
 
@@ -67,6 +68,11 @@ namespace ECS
 		virtual void OnCollisionEnter(Collider* collider) {};
 		virtual void OnCollisionStay(Collider* collider)  {};
 		virtual void OnCollisionExit(Collider* collider)  {};
+
+		// ECS当たり判定
+		virtual void OnECSCollisionEnter(SphereColliderData* collider) {};
+		virtual void OnECSCollisionStay(SphereColliderData* collider) {};
+		virtual void OnECSCollisionExit(SphereColliderData* collider) {};
 
 		// アニメーション
 

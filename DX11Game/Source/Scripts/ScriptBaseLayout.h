@@ -49,5 +49,13 @@ namespace ECS
 		void OnCollisionStay (Collider* collider) override;
 		// —£‚ê‚½Žž
 		void OnCollisionExit (Collider* collider) override;
+
+		// ECS
+		// “–‚½‚Á‚½Žž
+		void OnECSCollisionEnter(SphereColliderData* collider) override;
+		// “–‚½‚Á‚Ä‚¢‚éŠÔ
+		void OnECSCollisionStay(SphereColliderData* collider) override;
+		// —£‚ê‚½Žž
+		void OnECSCollisionExit(SphereColliderData* collider) override;
 	};
 }

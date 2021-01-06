@@ -108,6 +108,20 @@ void Script::SendComponentMessage(const std::string& message, void* value)
 		this->OnCollisionExit(static_cast<Collider*>(value));
 	}
 
+	// ECS当たり判定コールバック
+	else if ("OnECSCollisionEnter" == message)
+	{
+		this->OnECSCollisionEnter(static_cast<SphereColliderData*>(value));
+	}
+	else if ("OnECSCollisionStay" == message)
+	{
+		this->OnECSCollisionStay(static_cast<SphereColliderData*>(value));
+	}
+	else if ("OnECSCollisionExit" == message)
+	{
+		this->OnECSCollisionExit(static_cast<SphereColliderData*>(value));
+	}
+
 	// アニメーションコールバック
 
 

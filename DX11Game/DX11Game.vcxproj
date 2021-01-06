@@ -261,6 +261,7 @@
     <ClCompile Include="Source\Engine\ECSCompoent\BillboardRenderer.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\BoxCollider.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\Collider.cpp" />
+    <ClCompile Include="Source\Engine\ECSCompoent\ECSSphereCollider.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\InstancingMeshRenderer.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\MeshRenderer.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\Renderer.cpp" />
@@ -273,6 +274,7 @@
     <ClCompile Include="Source\Engine\ECSEntity\GameObject.cpp" />
     <ClCompile Include="Source\Engine\ECSSystem\Animation2DSystem.cpp" />
     <ClCompile Include="Source\Engine\ECSSystem\CollisionSystem.cpp" />
+    <ClCompile Include="Source\Engine\ECSSystem\ECSSphereCollisionSystem.cpp" />
     <ClCompile Include="Source\Engine\ECSSystem\RendererSystem.cpp" />
     <ClCompile Include="Source\Engine\ECSSystem\RigidbodySystem.cpp" />
     <ClCompile Include="Source\Engine\ECSSystem\ECSRigidbodySystem.cpp" />
@@ -299,6 +301,7 @@
     <ClCompile Include="Source\Engine\System\Shader.cpp" />
     <ClCompile Include="Source\Engine\System\Sound.cpp" />
     <ClCompile Include="Source\Engine\System\Texture.cpp" />
+    <ClCompile Include="Source\Scripts\BulletScript.cpp" />
     <ClCompile Include="Source\Scripts\PlayerScript.cpp" />
     <ClCompile Include="Source\Scripts\ScriptBaseLayout.cpp" />
   </ItemGroup>
@@ -309,6 +312,7 @@
     <ClInclude Include="Source\Engine\ECSCompoent\BillboardRenderer.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\BoxCollider.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\Collider.h" />
+    <ClInclude Include="Source\Engine\ECSCompoent\ECSSphereCollider.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\InstancingMeshRenderer.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\MeshRenderer.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\Renderer.h" />
@@ -321,6 +325,7 @@
     <ClInclude Include="Source\Engine\ECSEntity\GameObject.h" />
     <ClInclude Include="Source\Engine\ECSSystem\Animation2DSystem.h" />
     <ClInclude Include="Source\Engine\ECSSystem\CollisionSystem.h" />
+    <ClInclude Include="Source\Engine\ECSSystem\ECSSphereCollisionSystem.h" />
     <ClInclude Include="Source\Engine\ECSSystem\RendererSystem.h" />
     <ClInclude Include="Source\Engine\ECSSystem\RigidbodySystem.h" />
     <ClInclude Include="Source\Engine\ECSSystem\ECSRigidbodySystem.h" />
@@ -345,6 +350,7 @@
     <ClInclude Include="Source\Engine\Renderer\instancingMesh.h" />
     <ClInclude Include="Source\Engine\Renderer\Light.h" />
     <ClInclude Include="Source\Engine\Renderer\mesh.h" />
+    <ClInclude Include="Source\Engine\System\CCell.h" />
     <ClInclude Include="Source\Engine\System\debugproc.h" />
     <ClInclude Include="Source\Engine\System\input.h" />
     <ClInclude Include="Source\Engine\System\Math.h" />
@@ -352,6 +358,7 @@
     <ClInclude Include="Source\Engine\System\Shader.h" />
     <ClInclude Include="Source\Engine\System\Sound.h" />
     <ClInclude Include="Source\Engine\System\Texture.h" />
+    <ClInclude Include="Source\Scripts\BulletScript.h" />
     <ClInclude Include="Source\Scripts\PlayerScript.h" />
     <ClInclude Include="Source\Scripts\ScriptBaseLayout.h" />
   </ItemGroup>

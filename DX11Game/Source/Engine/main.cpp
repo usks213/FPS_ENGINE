@@ -38,6 +38,11 @@
 //
 //	2021/01/05	データ指向化失敗...
 //
+//	2021/01/06	データ指向化(ECS)成功！！ インスタンスをvectorの連番で生成
+//				IComponentData,IECSComponent,ECSSystem の作成
+//				ECSRigidbody,ECSRigidbodySystem,
+//				ECSSphereCollider,ECSSphereCollisionSystem の作成
+//
 //
 //======================================================================
 #include "main.h"
@@ -79,8 +84,12 @@
 // スクリプト
 #include "../Scripts/PlayerScript.h"
 
+// ECS
 #include "../Engine/ECSCompoent/ECSRigidbody.h"
 #include "../Engine/ECSSystem/ECSRigidbodySystem.h"
+
+#include "../Engine/ECSCompoent/ECSSphereCollider.h"
+#include "../Engine/ECSSystem/ECSSphereCollisionSystem.h"
 
 
 
@@ -509,6 +518,7 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	g_world.AddSystem<CollisionSystem>();
 	g_world.AddSystem<RigidbodySystem>();
 	g_world.AddSystem<ECSRigidbodySystem>();
+	g_world.AddSystem<ECSSphereCollisionSystem>();
 	g_world.AddSystem<ScriptSystem>();
 
 
@@ -597,7 +607,7 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	//	//rb->SetUsePhysics(false);
 	//}
 
-	pos = Vector3{ 2000, 1000,2000 };
+	pos = Vector3{ 0, 1000, 0 };
 	//for (int z = 0; z < 10; z++)
 	//{
 	//	for (int i = 0; i < 10; i++)
@@ -614,21 +624,20 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	//	pos->x = 100;
 	//	pos->z += 200;
 	//}
-	for (int z = 0; z < 200; z++)
+	for (int z = 0; z < 100; z++)
 	{
 		for (int i = 0; i < 200; i++)
 		{
 			const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-			test->AddComponent<InstancingMeshRenderer>()->MakeSphere("test3", 10);
+			test->AddComponent<InstancingMeshRenderer>()->MakeSphere("test3", 5);
 			const auto& rb = test->AddComponent<ECSRigidbody>();
-			//test->AddComponent<SphereCollider>();
+			test->AddComponent<ECSSphereCollider>()->GetData()->SetMain(false);
 
 			test->transform().lock()->m_pos = pos;
 			test->transform().lock()->m_scale = Vector3{ 200, 200, 200 };
 			pos->x += 200;
-
 		}
-		pos->x = 100;
+		pos->x = 0;
 		pos->z += 200;
 	}
 

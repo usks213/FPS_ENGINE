@@ -44,6 +44,10 @@ namespace ECS
 		// エンド
 		virtual void End() {};
 
+		// 名前の設定
+		void SetName(std::string name) { m_name = name; }
+		// タグの設定
+		void SetTag(std::string tag) { m_tag = tag; }
 		// 名前の取得
 		const std::string& name() { return m_name; }
 		// タグの取得

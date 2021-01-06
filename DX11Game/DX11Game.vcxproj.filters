@@ -229,6 +229,15 @@
     <ClCompile Include="Source\Engine\ECS\Component\IComponentData.cpp">
       <Filter>ソース\エンジン\ECS\Component</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\ECSSystem\ECSSphereCollisionSystem.cpp">
+      <Filter>ソース\エンジン\ECSSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSCompoent\ECSSphereCollider.cpp">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\BulletScript.cpp">
+      <Filter>ソース\スクリプト</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\main.h">
@@ -383,6 +392,18 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\ECS\Component\IECSComponent.h">
       <Filter>ソース\エンジン\ECS\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSSystem\ECSSphereCollisionSystem.h">
+      <Filter>ソース\エンジン\ECSSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSCompoent\ECSSphereCollider.h">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\System\CCell.h">
+      <Filter>ソース\エンジン\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\BulletScript.h">
+      <Filter>ソース\スクリプト</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

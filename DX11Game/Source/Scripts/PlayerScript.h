@@ -28,6 +28,7 @@ namespace ECS
 	private:
 		// ----- メンバ -----
 		std::weak_ptr<Rigidbody> m_rb;
+		int m_nShotCnt;
 
 	protected:
 		// ----- メソッド -----
@@ -50,5 +51,12 @@ namespace ECS
 		void OnCollisionStay (Collider* collider) override;
 		// 離れた時
 		void OnCollisionExit (Collider* collider) override;
+
+		// 当たった時
+		void OnECSCollisionEnter(SphereColliderData* collider) override;
+		// 当たっている間
+		void OnECSCollisionStay(SphereColliderData* collider) override;
+		// 離れた時
+		void OnECSCollisionExit(SphereColliderData* collider) override;
 	};
 }

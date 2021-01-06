@@ -34,12 +34,17 @@
 #include "../Engine/ECSCompoent/ECSRigidbody.h"
 #include "../Engine/ECSCompoent/BoxCollider.h"
 #include "../Engine/ECSCompoent/SphereCollider.h"
+#include "../Engine/ECSCompoent/ECSSphereCollider.h"
 
 #include "../Engine/Renderer/Camera.h"
 #include "../Engine/Renderer/Light.h"
 
 #include "../Engine/ECSSystem/ECSRigidbodySystem.h"
+#include "../Engine/ECSSystem/ECSSphereCollisionSystem.h"
 
+
+// スクリプト
+#include "BulletScript.h"
 
 
 // ネームスペース
@@ -60,6 +65,10 @@ using namespace ECS;
 //========================================
 void PlayerScript::Start()
 {
+	// 名前・タグ
+	gameObject().lock()->SetName("Player");
+	gameObject().lock()->SetTag("Player");
+
 	transform().lock()->m_pos = Vector3(1000, 1000, 1000);
 	transform().lock()->m_scale = Vector3(100, 200, 100);
 
@@ -79,7 +88,7 @@ void PlayerScript::Start()
 	// コライダー
 	//const auto& collider = gameObject().lock()->AddComponent<SphereCollider>();
 	//collider->SetRadius(50);
-	const auto& collider = gameObject().lock()->AddComponent<BoxCollider>();
+	const auto& collider = gameObject().lock()->AddComponent<ECSSphereCollider>();
 
 	// カメラ
 	CCamera::GetMainCamera()->SetCameraTarget(gameObject().lock()->transform().lock());
@@ -131,25 +140,19 @@ void PlayerScript::Update()
 
 
 	// ショット
-	if (GetMouseTrigger(MOUSEBUTTON_L))
+	m_nShotCnt--;
+	if (GetMouseButton(MOUSEBUTTON_L) && m_nShotCnt < 0)
 	{
 		const auto& test = GetEntityManager()->CreateEntity<GameObject>();
-		test->AddComponent<MeshRenderer>()->MakeSphere("Bullet");
-		const auto& rb = test->AddComponent<ECSRigidbody>();
-		test->AddComponent<SphereCollider>();
-
+		test->AddComponent<BulletScript>();
+		const auto& rb = test->GetComponent<ECSRigidbody>();
 
 		Vector3 dir = CCamera::GetMainCamera()->GetForward().normalized();
 
 		test->transform().lock()->m_pos = transform().lock()->m_pos + dir * 200;
-		test->transform().lock()->m_scale = Vector3{ 100, 100, 100 };
-
 		rb->GetData()->AddForce(dir * 100 + Vector3::WallVerticalVector(m_rb.lock()->GetForce(), dir));
-		rb->GetData()->SetDrag({ 0,0,0 });
-		rb->GetData()->SetGravityForce({ 0,0,0 });
-		rb->GetData()->SetStaticFriction(0);
-		rb->GetData()->SetDynamicFriction(0);
-		rb->GetData()->SetMass(10);
+
+		m_nShotCnt = 5;
 	}
 }
 
@@ -193,7 +196,8 @@ void PlayerScript::OnCollisionEnter(Collider* collider)
 //========================================
 void PlayerScript::OnCollisionStay(Collider* collider)
 {
-
+	// 削除
+	GetEntityManager()->DestroyEntity(collider->gameObject().lock());
 }
 
 //========================================
@@ -204,5 +208,41 @@ void PlayerScript::OnCollisionStay(Collider* collider)
 void PlayerScript::OnCollisionExit(Collider* collider)
 {
 	
+}
+
+
+
+
+
+//========================================
+//
+// 当たった時
+//
+//========================================
+void PlayerScript::OnECSCollisionEnter(SphereColliderData* collider)
+{
+	// 削除
+	GetEntityManager()->DestroyEntity(collider->gameObject().lock());
+}
+
+//========================================
+//
+// 当たっている間
+//
+//========================================
+void PlayerScript::OnECSCollisionStay(SphereColliderData* collider)
+{
+	// 削除
+	GetEntityManager()->DestroyEntity(collider->gameObject().lock());
+}
+
+//========================================
+//
+// 離れた時
+//
+//========================================
+void PlayerScript::OnECSCollisionExit(SphereColliderData* collider)
+{
+
 }
 
