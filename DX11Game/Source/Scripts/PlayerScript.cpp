@@ -31,11 +31,16 @@
 #include "../Engine/ECSCompoent/Transform.h"
 #include "../Engine/ECSCompoent/MeshRenderer.h"
 #include "../Engine/ECSCompoent/Rigidbody.h"
+#include "../Engine/ECSCompoent/ECSRigidbody.h"
 #include "../Engine/ECSCompoent/BoxCollider.h"
 #include "../Engine/ECSCompoent/SphereCollider.h"
 
 #include "../Engine/Renderer/Camera.h"
 #include "../Engine/Renderer/Light.h"
+
+#include "../Engine/ECSSystem/ECSRigidbodySystem.h"
+
+
 
 // ネームスペース
 using namespace ECS;
@@ -130,7 +135,7 @@ void PlayerScript::Update()
 	{
 		const auto& test = GetEntityManager()->CreateEntity<GameObject>();
 		test->AddComponent<MeshRenderer>()->MakeSphere("Bullet");
-		const auto& rb = test->AddComponent<Rigidbody>();
+		const auto& rb = test->AddComponent<ECSRigidbody>();
 		test->AddComponent<SphereCollider>();
 
 
@@ -139,12 +144,12 @@ void PlayerScript::Update()
 		test->transform().lock()->m_pos = transform().lock()->m_pos + dir * 200;
 		test->transform().lock()->m_scale = Vector3{ 100, 100, 100 };
 
-		rb->AddForce(dir * 100 + Vector3::WallVerticalVector(m_rb.lock()->GetForce(), dir));
-		rb->SetDrag({ 0,0,0 });
-		rb->SetGravityForce({ 0,0,0 });
-		rb->SetStaticFriction(0);
-		rb->SetDynamicFriction(0);
-		rb->SetMass(10);
+		rb->GetData()->AddForce(dir * 100 + Vector3::WallVerticalVector(m_rb.lock()->GetForce(), dir));
+		rb->GetData()->SetDrag({ 0,0,0 });
+		rb->GetData()->SetGravityForce({ 0,0,0 });
+		rb->GetData()->SetStaticFriction(0);
+		rb->GetData()->SetDynamicFriction(0);
+		rb->GetData()->SetMass(10);
 	}
 }
 

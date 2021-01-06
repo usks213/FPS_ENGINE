@@ -38,6 +38,8 @@ namespace ECS
 			m_data->m_Parent = m_Parent;
 			// 親のエンティティマネージャーを登録
 			m_data->m_pEntityManager = m_pEntityManager;
+			// データの持ち主
+			m_data->m_pHost = this;
 			// 生成後関数
 			m_data->OnCreate();
 		}
@@ -63,11 +65,11 @@ namespace ECS
 		// 演算子
 		DATA* operator -> ()
 		{
-			return GetData();
+			return m_data;
 		}
 
-	private:
+	//private:
 		// コンポーネントデータ
-		DATA* m_data;
+		DATA* m_data = nullptr;
 	};
 }

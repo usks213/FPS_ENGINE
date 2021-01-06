@@ -18,6 +18,8 @@
 #include <memory>
 #include <vector>
 
+#include "../Component/IComponentData.h"
+
 
 //===== マクロ定義 =====
 
@@ -43,26 +45,41 @@ namespace ECS
 		T* CreateComponentData()
 		{
 			T temp;
-			auto itr = m_ComponentList.insert(m_ComponentList.end(), temp);
-			return &*itr;
+			m_ComponentList.push_back(temp);
+			m_bReLoad = true;
+			return &m_ComponentList.back();
 		}
 
 		// コンポーネントデータ削除
 		void DestroyComponentData(T* com)
 		{
-			// 検索
-			auto itr = std::find_if(m_ComponentList.begin(), m_ComponentList.end(), 
-				[&com](T& c)
+			for (int i = 0; i < m_ComponentList.size(); ++i)
+			{
+				if (&m_ComponentList[i] == com)
 				{
-					return &c == com;
-				});
-			// なかった
-			if (m_ComponentList.end() == itr) return;
-			// 削除
-			m_ComponentList.erase(itr);
+					m_ComponentList[i] = m_ComponentList.back();
+					m_ComponentList.pop_back();
+					// ポインタ付け替え
+					m_ComponentList[i].m_pHost->m_data = &m_ComponentList[i];
+					break;
+				}
+			}
+		}
+
+		// コンポーネンデータの再登録処理
+		void ReLoadComponentData()
+		{
+			if (!m_bReLoad) return;
+
+			for (auto& com : m_ComponentList)
+			{
+				com.m_pHost->m_data = &com;
+			}
+			m_bReLoad = false;
 		}
 
 	protected:
 		std::vector<T> m_ComponentList;
+		bool m_bReLoad;
 	};
 }

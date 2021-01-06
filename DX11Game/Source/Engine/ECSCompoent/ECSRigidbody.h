@@ -35,7 +35,7 @@ namespace ECS
 	// Œ^–¼
 	using ECSRigidbody = IECSComponent<RigidbodyData, ECSRigidbodySystem>;
 
-	class RigidbodyData final : public IComponentData
+	class RigidbodyData final : public IComponentData<RigidbodyData, ECSRigidbodySystem>
 	{
 		friend Collider;
 	public:

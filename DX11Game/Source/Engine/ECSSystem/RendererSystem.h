@@ -36,8 +36,8 @@ namespace ECS
 
 		// ¶¬
 		void OnCreate() override;
-		// ŒãXV
-		void OnLateUpdate() override;
+		// •`‰æ
+		void OnDraw() override;
 		// íœ
 		void OnDestroy() override;
 	};

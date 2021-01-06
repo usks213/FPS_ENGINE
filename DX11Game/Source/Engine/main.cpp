@@ -79,6 +79,11 @@
 // スクリプト
 #include "../Scripts/PlayerScript.h"
 
+#include "../Engine/ECSCompoent/ECSRigidbody.h"
+#include "../Engine/ECSSystem/ECSRigidbodySystem.h"
+
+
+
 //-------- ライブラリのリンク
 #pragma comment(lib, "winmm")
 #pragma comment(lib, "imm32")
@@ -112,7 +117,7 @@ IDXGISwapChain*				g_pSwapChain;			// スワップチェーン
 ID3D11RenderTargetView*		g_pRenderTargetView;	// フレームバッファ
 ID3D11Texture2D*			g_pDepthStencilTexture;	// Zバッファ用メモリ
 ID3D11DepthStencilView*		g_pDepthStencilView;	// Zバッファ
-UINT						g_uSyncInterval = 1;	// 垂直同期 (0:無, 1:有)
+UINT						g_uSyncInterval = 0;	// 垂直同期 (0:無, 1:有)
 ID3D11RasterizerState*		g_pRs[MAX_CULLMODE];	// ラスタライザ ステート
 ID3D11BlendState*			g_pBlendState[MAX_BLENDSTATE];// ブレンド ステート
 ID3D11DepthStencilState*	g_pDSS[2];				// Z/ステンシル ステート
@@ -503,6 +508,7 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	g_world.AddSystem<RendererSystem>();
 	g_world.AddSystem<CollisionSystem>();
 	g_world.AddSystem<RigidbodySystem>();
+	g_world.AddSystem<ECSRigidbodySystem>();
 	g_world.AddSystem<ScriptSystem>();
 
 
@@ -608,14 +614,14 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	//	pos->x = 100;
 	//	pos->z += 200;
 	//}
-	for (int z = 0; z < 2; z++)
+	for (int z = 0; z < 200; z++)
 	{
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < 200; i++)
 		{
 			const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
 			test->AddComponent<InstancingMeshRenderer>()->MakeSphere("test3", 10);
-			const auto& rb = test->AddComponent<Rigidbody>();
-			test->AddComponent<SphereCollider>();
+			const auto& rb = test->AddComponent<ECSRigidbody>();
+			//test->AddComponent<SphereCollider>();
 
 			test->transform().lock()->m_pos = pos;
 			test->transform().lock()->m_scale = Vector3{ 200, 200, 200 };
@@ -718,6 +724,9 @@ void Update(void)
 	// ワールドの更新
 	g_world.Update();
 
+	// ワールドの後更新
+	g_world.LateUpdate();
+
 	// カメラ更新
 	g_camera.Update();
 	// ライトの更新
@@ -752,7 +761,7 @@ void Draw(void)
 	SetZBuffer(true);
 
 	// ワールドの描画
-	g_world.LateUpdate();
+	g_world.Draw();
 
 	// Zバッファ無効
 	SetZBuffer(false);

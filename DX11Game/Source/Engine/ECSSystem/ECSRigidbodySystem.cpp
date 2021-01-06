@@ -69,6 +69,8 @@ void ECSRigidbodySystem::OnCreate()
 //===================================
 void ECSRigidbodySystem::OnUpdate()
 {
+	ReLoadComponentData();
+
 	std::for_each(m_ComponentList.begin(), m_ComponentList.end(),
 		[](RigidbodyData& rb)
 		{

@@ -27,7 +27,10 @@ namespace ECS
 	// 前定義
 	class EntityManager;
 	class IEntity;
+	template<class DATA, class SYSTEM>
+	class IECSComponent;
 
+	template<class DATA, class SYSTEM>
 	class IComponentData : public IObject
 	{
 		friend IEntity;
@@ -39,12 +42,12 @@ namespace ECS
 
 	public:
 		// コンストラクタ
-		IComponentData();
+		IComponentData() {}
 		// デストラクタ
-		virtual ~IComponentData();
+		virtual ~IComponentData(){}
 
 		// 自身の破棄
-		void Destroy() override;
+		void Destroy() override {}
 		// メッセージを受信
 		virtual void SendComponentMessage(const std::string& message, void* value = nullptr) {};
 
@@ -52,6 +55,8 @@ namespace ECS
 		std::weak_ptr<IEntity> GetParent() { return m_Parent; }
 		// 親のエンティティマネージャーを取得
 		EntityManager* GetEntityManager() { return m_pEntityManager; }
-	};
 
+		// コンポーネントデータの持ち主のコンポーネント
+		IECSComponent<DATA, SYSTEM>* m_pHost;
+	};
 }

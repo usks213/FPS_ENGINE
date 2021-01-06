@@ -41,6 +41,8 @@ namespace ECS
 		virtual void OnUpdate() {};
 		// ŒãXV
 		virtual void OnLateUpdate() {};
+		// •`‰æ
+		virtual void OnDraw() {};
 		// íœ
 		virtual void OnDestroy();
 

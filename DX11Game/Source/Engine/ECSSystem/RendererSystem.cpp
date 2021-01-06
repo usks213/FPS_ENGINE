@@ -67,10 +67,10 @@ void RendererSystem::OnCreate()
 
 //===================================
 //
-//	後更新時コールバック
+//	描画時コールバック
 //
 //===================================
-void RendererSystem::OnLateUpdate()
+void RendererSystem::OnDraw()
 {
 	// デバイスコンテキスト
 	ID3D11DeviceContext* pDC = GetDeviceContext();
