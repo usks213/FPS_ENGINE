@@ -70,12 +70,12 @@ void BulletScript::Start()
 	gameObject().lock()->SetTag("Bullet");
 
 	// 大きさ
-	transform().lock()->m_scale = Vector3(1000, 1000, 1000);
+	transform().lock()->m_scale = Vector3(300, 300, 300);
 
 	//--- コンポーネンの追加
 
 	// インスタンシングレンダラー
-	gameObject().lock()->AddComponent<InstancingMeshRenderer>()->MakeDodecahedron("Bullet");
+	gameObject().lock()->AddComponent<InstancingMeshRenderer>()->MakeIcosahedron("Bullet");
 
 	// ECSリジッドボディ
 	const auto& rb = gameObject().lock()->AddComponent<ECSRigidbody>();
@@ -171,7 +171,7 @@ void BulletScript::OnCollisionExit(Collider* collider)
 //========================================
 void BulletScript::OnECSCollisionEnter(SphereColliderData* collider)
 {
-	if (collider->gameObject().lock()->tag() != "Player")
+	if (collider->gameObject().lock()->tag() == "Enemy")
 	{
 		// 削除
 		GetEntityManager()->DestroyEntity(collider->gameObject().lock());
@@ -187,7 +187,7 @@ void BulletScript::OnECSCollisionEnter(SphereColliderData* collider)
 //========================================
 void BulletScript::OnECSCollisionStay(SphereColliderData* collider)
 {
-	if (collider->gameObject().lock()->tag() != "Player")
+	if (collider->gameObject().lock()->tag() == "Enemy")
 	{
 		// 削除
 		GetEntityManager()->DestroyEntity(collider->gameObject().lock());

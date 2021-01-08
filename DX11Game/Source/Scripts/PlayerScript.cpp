@@ -143,7 +143,8 @@ void PlayerScript::Update()
 	m_nShotCnt--;
 	if (GetMouseButton(MOUSEBUTTON_L) && m_nShotCnt < 0)
 	{
-		const auto& test = GetEntityManager()->CreateEntity<GameObject>();
+		//const auto& test = GetEntityManager()->CreateEntity<GameObject>();
+		const auto& test = Instantiate<GameObject>();
 		test->AddComponent<BulletScript>();
 		const auto& rb = test->GetComponent<ECSRigidbody>();
 
@@ -186,8 +187,13 @@ void PlayerScript::End()
 //========================================
 void PlayerScript::OnCollisionEnter(Collider* collider)
 {
-	// 削除
-	GetEntityManager()->DestroyEntity(collider->gameObject().lock());
+	if (collider->gameObject().lock()->tag() == "Enemy")
+	{
+		// 削除
+		GetEntityManager()->DestroyEntity(collider->gameObject().lock());
+		// 自身の削除
+		//GetEntityManager()->DestroyEntity(gameObject().lock());
+	}
 }
 
 //========================================
@@ -197,8 +203,13 @@ void PlayerScript::OnCollisionEnter(Collider* collider)
 //========================================
 void PlayerScript::OnCollisionStay(Collider* collider)
 {
-	// 削除
-	GetEntityManager()->DestroyEntity(collider->gameObject().lock());
+	if (collider->gameObject().lock()->tag() == "Enemy")
+	{
+		// 削除
+		GetEntityManager()->DestroyEntity(collider->gameObject().lock());
+		// 自身の削除
+		//GetEntityManager()->DestroyEntity(gameObject().lock());
+	}
 }
 
 //========================================
@@ -222,8 +233,13 @@ void PlayerScript::OnCollisionExit(Collider* collider)
 //========================================
 void PlayerScript::OnECSCollisionEnter(SphereColliderData* collider)
 {
-	// 削除
-	GetEntityManager()->DestroyEntity(collider->gameObject().lock());
+	if (collider->gameObject().lock()->tag() == "Enemy")
+	{
+		// 削除
+		GetEntityManager()->DestroyEntity(collider->gameObject().lock());
+		// 自身の削除
+		//GetEntityManager()->DestroyEntity(gameObject().lock());
+	}
 }
 
 //========================================
@@ -233,8 +249,13 @@ void PlayerScript::OnECSCollisionEnter(SphereColliderData* collider)
 //========================================
 void PlayerScript::OnECSCollisionStay(SphereColliderData* collider)
 {
-	// 削除
-	GetEntityManager()->DestroyEntity(collider->gameObject().lock());
+	if (collider->gameObject().lock()->tag() == "Enemy")
+	{
+		// 削除
+		GetEntityManager()->DestroyEntity(collider->gameObject().lock());
+		// 自身の削除
+		//GetEntityManager()->DestroyEntity(gameObject().lock());
+	}
 }
 
 //========================================

@@ -16,7 +16,7 @@
 //====== インクルード部 ======
 #include "../System/Math.h"
 #include "../ECS/Component/IComponent.h"
-
+#include "../ECS/Entity/EntityManager.h"
 
 //===== マクロ定義 =====
 
@@ -55,6 +55,17 @@ namespace ECS
 		// トランスフォーム取得
 		const std::weak_ptr<Transform>& transform() { return m_transform; }
 
+	public:
+		//--- ゲームオブジェクト関連
+
+		// ゲームオブジェクト生成
+		template<class T> 
+		std::shared_ptr<T> Instantiate(Vector3 pos = { 0,0,0 }, Vector3 rot = { 0,0,0 }, Vector3 scale = { 0,0,0 });
+
+		// ゲームオブジェクトの破棄
+		void Destroy(const std::shared_ptr<IEntity>& obj) { Destroy(obj.get()); }
+		void Destroy(IEntity* obj) { GetEntityManager()->DestroyEntity(obj); }
+
 	protected:
 		// スクリプト関数
 		virtual void Start(){}
@@ -83,4 +94,22 @@ namespace ECS
 		// トランスフォーム
 		std::weak_ptr<Transform> m_transform;
 	};
+
+
+	// ゲームオブジェクト生成
+	template<class T>
+	std::shared_ptr<T> Script::Instantiate(Vector3 pos, Vector3 rot, Vector3 scale)
+	{
+		// ゲームオブジェクト生成
+		const auto& obj = GetEntityManager()->CreateEntity<T>();
+		// トランスフォーム取得
+		const std::shared_ptr<Transform>& trans = obj->GetComponent<Transform>();
+
+		// 値を代入
+		trans->m_pos = pos;
+		trans->m_rot = rot;
+		trans->m_scale = scale;
+
+		return obj;
+	}
 }

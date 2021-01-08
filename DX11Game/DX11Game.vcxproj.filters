@@ -238,6 +238,18 @@
     <ClCompile Include="Source\Scripts\BulletScript.cpp">
       <Filter>ソース\スクリプト</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scripts\StraightMoveEnemyScript.cpp">
+      <Filter>ソース\スクリプト</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\MakeEnemyScript.cpp">
+      <Filter>ソース\スクリプト</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\TrackingMoveEnemyScript.cpp">
+      <Filter>ソース\スクリプト</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\TrackingMoveEnemyHostScript.cpp">
+      <Filter>ソース\スクリプト</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\main.h">
@@ -403,6 +415,18 @@
       <Filter>ソース\エンジン\System</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scripts\BulletScript.h">
+      <Filter>ソース\スクリプト</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\StraightMoveEnemyScript.h">
+      <Filter>ソース\スクリプト</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\MakeEnemyScript.h">
+      <Filter>ソース\スクリプト</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\TrackingMoveEnemyScript.h">
+      <Filter>ソース\スクリプト</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\TrackingMoveEnemyHostScript.h">
       <Filter>ソース\スクリプト</Filter>
     </ClInclude>
   </ItemGroup>

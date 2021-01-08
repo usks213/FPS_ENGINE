@@ -46,6 +46,10 @@
 //	2021/01/07	デルタ多面体、正多面体の作成
 //				ゲームの方向性決定！！ タイトル「 デルタ Δ 」
 //
+//	2021/01/08	エネミー関連作成 MakeEnemyScript
+//				StraightMoveEnemy,TrackingMoveEnemy の作成
+//				TrackingMoveEnemyの生成バグあり...???
+//
 //
 //======================================================================
 #include "main.h"
@@ -86,6 +90,7 @@
 
 // スクリプト
 #include "../Scripts/PlayerScript.h"
+#include "../Scripts/MakeEnemyScript.h"
 
 // ECS
 #include "../Engine/ECSCompoent/ECSRigidbody.h"
@@ -531,65 +536,69 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	const auto& player = g_world.GetEntityManager()->CreateEntity<GameObject>();
 	player->AddComponent<PlayerScript>();
 	
+	// エネミーメイカー
+	const auto& enemyMaker = g_world.GetEntityManager()->CreateEntity<GameObject>();
+	enemyMaker->AddComponent<MakeEnemyScript>()->SetPlayer(player);
 
-	//for (int i = 0; i < 6; i++)
-	//{
-	//	Vector3 pos;
-	//	Vector3 scale;
 
-	//	// 床
-	//	if (i == 0)
-	//	{
-	//		pos = Vector3{ 5000, 0, 5000 };
-	//		scale = Vector3{ 10000, 1000, 10000 };
-	//	}
-	//	// 天井
-	//	else if (i == 1)
-	//	{
-	//		pos = Vector3{ 5000, 10000, 5000 };
-	//		scale = Vector3{ 10000, 1000, 10000 };
-	//	}
-	//	// 右
-	//	else if (i == 2)
-	//	{
-	//		pos = Vector3{ 10000, 5000, 5000 };
-	//		scale = Vector3{ 1000, 10000, 10000 };
-	//	}
-	//	// 左
-	//	else if (i == 3)
-	//	{
-	//		pos = Vector3{ 0, 5000, 5000 };
-	//		scale = Vector3{ 1000, 10000, 10000 };
-	//	}
-	//	// 奥
-	//	else if (i == 4)
-	//	{
-	//		pos = Vector3{ 5000, 5000, 10000 };
-	//		scale = Vector3{ 10000, 10000, 1000 };
-	//	}
-	//	// 手前
-	//	else if (i == 5)
-	//	{
-	//		pos = Vector3{ 5000, 5000, 0 };
-	//		scale = Vector3{ 10000, 10000, 1000 };
-	//	}
+	for (int i = 0; i < 1; i++)
+	{
+		Vector3 pos;
+		Vector3 scale;
 
-	//	const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-	//	const auto renderer = test->AddComponent<MeshRenderer>();
-	//	renderer->MakeCube("plane");
-	//	renderer->SetDiffuseTexture("data/texture/grid.png");
-	//	renderer->SetTexSize({ 100, 100, 0 });
-	//	renderer->UpdateTexMatrix();
-	//	const auto& rb1 = test->AddComponent<Rigidbody>();
-	//	test->AddComponent<BoxCollider>();
-	//	test->transform().lock()->m_scale = scale;
-	//	test->transform().lock()->m_pos = pos;
-	//	rb1->SetUsePhysics(false);
-	//	rb1->SetUseGravity(false);
-	//	rb1->SetMass(100);
-	//	rb1->SetE(0.8f);
-	//	//rb1->SetDynamicFriction(0.0f);
-	//}
+		// 床
+		if (i == 0)
+		{
+			pos = Vector3{ 50000, -100, 50000 };
+			scale = Vector3{ 100000, 10, 100000 };
+		}
+		// 天井
+		else if (i == 1)
+		{
+			pos = Vector3{ 5000, 10000, 5000 };
+			scale = Vector3{ 10000, 1000, 10000 };
+		}
+		// 右
+		else if (i == 2)
+		{
+			pos = Vector3{ 10000, 5000, 5000 };
+			scale = Vector3{ 1000, 10000, 10000 };
+		}
+		// 左
+		else if (i == 3)
+		{
+			pos = Vector3{ 0, 5000, 5000 };
+			scale = Vector3{ 1000, 10000, 10000 };
+		}
+		// 奥
+		else if (i == 4)
+		{
+			pos = Vector3{ 5000, 5000, 10000 };
+			scale = Vector3{ 10000, 10000, 1000 };
+		}
+		// 手前
+		else if (i == 5)
+		{
+			pos = Vector3{ 5000, 5000, 0 };
+			scale = Vector3{ 10000, 10000, 1000 };
+		}
+
+		const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
+		const auto renderer = test->AddComponent<MeshRenderer>();
+		renderer->MakeCube("plane");
+		renderer->SetDiffuseTexture("data/texture/grid.png");
+		renderer->SetTexSize({ 100, 100, 0 });
+		renderer->UpdateTexMatrix();
+		//const auto& rb1 = test->AddComponent<Rigidbody>();
+		//test->AddComponent<BoxCollider>();
+		test->transform().lock()->m_scale = scale;
+		test->transform().lock()->m_pos = pos;
+		//rb1->SetUsePhysics(false);
+		//rb1->SetUseGravity(false);
+		//rb1->SetMass(100);
+		//rb1->SetE(0.8f);
+		//rb1->SetDynamicFriction(0.0f);
+	}
 
 	Vector3 pos = { 400, 2000, 200 };
 	//for (int i = 0; i < 10; i++)
@@ -627,26 +636,26 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	//	pos->x = 100;
 	//	pos->z += 200;
 	//}
-	for (int z = 0; z < 100; z++)
-	{
-		for (int i = 0; i < 200; i++)
-		{
-			const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-			//test->AddComponent<InstancingMeshRenderer>()->MakeSphere("test3", 10);
-			//test->AddComponent<InstancingMeshRenderer>()->MakeTetraheron("a");
-			//test->AddComponent<InstancingMeshRenderer>()->MakeOctahedron("a");
-			test->AddComponent<InstancingMeshRenderer>()->MakeDodecahedron("a");
-			//test->AddComponent<InstancingMeshRenderer>()->MakeIcosahedron("a");
-			const auto& rb = test->AddComponent<ECSRigidbody>();
-			test->AddComponent<ECSSphereCollider>()->GetData()->SetMain(false);
+	//for (int z = 0; z < 100; z++)
+	//{
+	//	for (int i = 0; i < 200; i++)
+	//	{
+	//		const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
+	//		//test->AddComponent<InstancingMeshRenderer>()->MakeSphere("test3", 10);
+	//		//test->AddComponent<InstancingMeshRenderer>()->MakeTetraheron("a");
+	//		//test->AddComponent<InstancingMeshRenderer>()->MakeOctahedron("a");
+	//		test->AddComponent<InstancingMeshRenderer>()->MakeDodecahedron("a");
+	//		//test->AddComponent<InstancingMeshRenderer>()->MakeIcosahedron("a");
+	//		const auto& rb = test->AddComponent<ECSRigidbody>();
+	//		test->AddComponent<ECSSphereCollider>()->GetData()->SetMain(false);
 
-			test->transform().lock()->m_pos = pos;
-			test->transform().lock()->m_scale = Vector3{ 200, 200, 200 };
-			pos->x += 200;
-		}
-		pos->x = 0;
-		pos->z += 200;
-	}
+	//		test->transform().lock()->m_pos = pos;
+	//		test->transform().lock()->m_scale = Vector3{ 200, 200, 200 };
+	//		pos->x += 200;
+	//	}
+	//	pos->x = 0;
+	//	pos->z += 200;
+	//}
 
 	return hr;
 }

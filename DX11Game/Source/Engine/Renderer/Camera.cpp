@@ -227,6 +227,10 @@ void CCamera::Update()
 		m_vRelPos.z = m_vTarget.z + vDir.z * m_fLengthInterval - pos.z;
 	}
 
+	static bool bFlag = false;
+	if (GetKeyTrigger(VK_RETURN)) bFlag ^= 1;
+	if (bFlag) return;
+
 	// ƒ}ƒEƒX
 	m_vOldPos = Vector3{ (float)SCREEN_CENTER_X, (float)SCREEN_CENTER_Y, 0.0f };
 	m_vCurPos = Vector3{ (float)GetMousePosition()->x, (float)GetMousePosition()->y, 0.0f };

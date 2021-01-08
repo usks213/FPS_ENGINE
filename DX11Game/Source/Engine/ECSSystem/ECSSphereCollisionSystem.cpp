@@ -20,8 +20,10 @@
 #include "../ECSCompoent/Transform.h"
 #include "../ECS/Entity/IEntity.h"
 #include "../System/CCell.h"
+#include "../ECS/Entity/EntityManager.h"
 
 #include "../Renderer/Camera.h"
+#include "../ECSEntity/GameObject.h"
 
 using namespace ECS;
 
@@ -105,7 +107,12 @@ void ECSSphereCollisionSystem::OnUpdate()
 			// 左上と右下を出す
 			wLeftTop = CCell<SphereColliderData>::GetPointElem(boxMin1->x, boxMin1->z);
 			wRightDown = CCell<SphereColliderData>::GetPointElem(boxMax1->x, boxMax1->z);
-			if (wLeftTop >= nMaxCell - 1 || wRightDown >= nMaxCell - 1) return;
+			if (wLeftTop >= nMaxCell - 1 || wRightDown >= nMaxCell - 1)
+			{
+				// 削除
+				GetEntityManager()->DestroyEntity(collider.gameObject().lock());
+				return;
+			}
 
 			// XORをとる	
 			Def = wLeftTop ^ wRightDown;
@@ -124,7 +131,12 @@ void ECSSphereCollisionSystem::OnUpdate()
 			SpaceNum += AddNum;	// これが今いる空間
 
 			// 空間外ははじく
-			if (SpaceNum > nMaxCell - 1) return;
+			if (SpaceNum > nMaxCell - 1)
+			{
+				// 削除
+				GetEntityManager()->DestroyEntity(collider.gameObject().lock());
+				return;
+			}
 
 			// メインコライダーか
 			if (collider.m_bMain)

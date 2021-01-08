@@ -97,6 +97,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\..\DirectXTex;..\..\Assimp\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -116,6 +117,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\..\DirectXTex;..\..\Assimp\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -137,6 +139,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\..\DirectXTex;..\..\Assimp\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -302,8 +305,12 @@
     <ClCompile Include="Source\Engine\System\Sound.cpp" />
     <ClCompile Include="Source\Engine\System\Texture.cpp" />
     <ClCompile Include="Source\Scripts\BulletScript.cpp" />
+    <ClCompile Include="Source\Scripts\MakeEnemyScript.cpp" />
     <ClCompile Include="Source\Scripts\PlayerScript.cpp" />
     <ClCompile Include="Source\Scripts\ScriptBaseLayout.cpp" />
+    <ClCompile Include="Source\Scripts\StraightMoveEnemyScript.cpp" />
+    <ClCompile Include="Source\Scripts\TrackingMoveEnemyScript.cpp" />
+    <ClCompile Include="Source\Scripts\TrackingMoveEnemyHostScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\ECSCompoent\Animator2D.h" />
@@ -359,8 +366,12 @@
     <ClInclude Include="Source\Engine\System\Sound.h" />
     <ClInclude Include="Source\Engine\System\Texture.h" />
     <ClInclude Include="Source\Scripts\BulletScript.h" />
+    <ClInclude Include="Source\Scripts\MakeEnemyScript.h" />
     <ClInclude Include="Source\Scripts\PlayerScript.h" />
+    <ClInclude Include="Source\Scripts\StraightMoveEnemyScript.h" />
     <ClInclude Include="Source\Scripts\ScriptBaseLayout.h" />
+    <ClInclude Include="Source\Scripts\TrackingMoveEnemyScript.h" />
+    <ClInclude Include="Source\Scripts\TrackingMoveEnemyHostScript.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
