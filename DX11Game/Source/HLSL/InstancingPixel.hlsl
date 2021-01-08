@@ -34,7 +34,7 @@ struct VS_OUTPUT {
 	float4	Position	: SV_Position;
 	float4	lightPosition	: WORLD_POSITION;
 	float3	Pos4PS		: TEXCOORD0;
-	float3	Normal		: TEXCOORD1;
+    float3 Normal : TEXCOORD1;
 	float2	TexCoord	: TEXCOORD2;
     float3 Target : TEXCOORD3;
     float3 BinNormal : TEXCOORD4;
@@ -209,10 +209,12 @@ float4 main(VS_OUTPUT input) : SV_Target0
         val = val * val; // * (3.0f / (4.0f * PI));
         
         // ハーフランバート
-        Diff = g_vLd.rgb * Diff * val * sc; // 拡散色
+        //Diff = g_vLd.rgb * Diff * val * sc; // 拡散色
+        Diff = g_vLd.rgb * Diff * val * sc * N * 2; // 拡散色
         
         // ランバート
-       // Diff = g_vLd.rgb * Diff * saturate(dot(L, N)) * sc; // 拡散色
+        //Diff = g_vLd.rgb * Diff * saturate(dot(L, N)) * sc; // 拡散色
+        //Diff = g_vLd.rgb * Diff * N; // 拡散色
         
         
         Diff += g_vLa.rgb * g_Material[n].g_vKa.rgb * vTd.rgb * sc; // 環境光

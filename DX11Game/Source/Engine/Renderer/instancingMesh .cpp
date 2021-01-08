@@ -86,6 +86,8 @@ static const XMMATRIX SHADOW_BIAS = XMMATRIX(
 	0.0f, 0.0f, 1.0f, 0.0f,
 	0.5f, 0.5f, 0.0f, 1.0f);
 
+static INSTANCING_GLOBAL icb;
+static INSTANCING_GLOBAL2 icb2;
 
 //=============================================================================
 // 初期化処理
@@ -231,7 +233,6 @@ void DrawInstancingMeshShadow(ID3D11DeviceContext* pDeviceContext, InstancingMes
 
 		int count = (int)InstancingList.size();
 		int n = (count - 1) / MAX_INSTANCE + 1;
-		INSTANCING_GLOBAL icb;
 		for (int i = 0; i < n; i++) 
 		{
 			int m = (i < n - 1 ? MAX_INSTANCE : count - i * MAX_INSTANCE);
@@ -310,8 +311,6 @@ void DrawInstancingMesh(ID3D11DeviceContext* pDeviceContext, InstancingMesh* pIn
 	//================== インスタンシングデータ ==================
 	int count = (int)InstancingList.size();
 	int n = (count - 1) / MAX_INSTANCE + 1;
-	INSTANCING_GLOBAL icb;
-	INSTANCING_GLOBAL2 icb2;
 	for (int i = 0; i < n; i++)
 	{
 		int m = (i < n - 1 ? MAX_INSTANCE : count - i * MAX_INSTANCE);

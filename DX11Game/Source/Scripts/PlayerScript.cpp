@@ -80,10 +80,10 @@ void PlayerScript::Start()
 	rb->SetMass(2);
 
 	// レンダラー
-	const auto& renderer = gameObject().lock()->AddComponent<MeshRenderer>();
+	//const auto& renderer = gameObject().lock()->AddComponent<MeshRenderer>();
 	//renderer->MakeSphere("Player", 100, 50);
-	renderer->MakeCube("Player");
-	renderer->SetDiffuseColor({ 0,1,0,1 });
+	//renderer->MakeCube("Player");
+	//renderer->SetDiffuseColor({ 0,1,0,1 });
 
 	// コライダー
 	//const auto& collider = gameObject().lock()->AddComponent<SphereCollider>();
@@ -151,6 +151,7 @@ void PlayerScript::Update()
 
 		test->transform().lock()->m_pos = transform().lock()->m_pos + dir * 200;
 		rb->GetData()->AddForce(dir * 100 + Vector3::WallVerticalVector(m_rb.lock()->GetForce(), dir));
+		rb->GetData()->AddTorque(dir * 10);
 
 		m_nShotCnt = 5;
 	}

@@ -34,7 +34,7 @@ struct VS_OUTPUT {
 	float4	Position	: SV_Position;
 	float4	lightPosition	: WORLD_POSITION;
 	float3	Pos4PS		: TEXCOORD0;
-	float3	Normal		: TEXCOORD1;
+    float3 Normal : TEXCOORD1;
 	float2	TexCoord	: TEXCOORD2;
     float3  Target      : TEXCOORD3;
     float3  BinNormal   : TEXCOORD4;

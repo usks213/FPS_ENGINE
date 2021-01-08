@@ -43,6 +43,9 @@
 //				ECSRigidbody,ECSRigidbodySystem,
 //				ECSSphereCollider,ECSSphereCollisionSystem の作成
 //
+//	2021/01/07	デルタ多面体、正多面体の作成
+//				ゲームの方向性決定！！ タイトル「 デルタ Δ 」
+//
 //
 //======================================================================
 #include "main.h"
@@ -102,7 +105,7 @@
 // マクロ定義
 //*****************************************************************************
 #define CLASS_NAME		_T("AppClass")					// ウインドウのクラス名
-#define WINDOW_NAME		_T("モータくん")			// ウインドウのキャプション名
+#define WINDOW_NAME		_T("FPS")			// ウインドウのキャプション名
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -629,7 +632,11 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 		for (int i = 0; i < 200; i++)
 		{
 			const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-			test->AddComponent<InstancingMeshRenderer>()->MakeSphere("test3", 5);
+			//test->AddComponent<InstancingMeshRenderer>()->MakeSphere("test3", 10);
+			//test->AddComponent<InstancingMeshRenderer>()->MakeTetraheron("a");
+			//test->AddComponent<InstancingMeshRenderer>()->MakeOctahedron("a");
+			test->AddComponent<InstancingMeshRenderer>()->MakeDodecahedron("a");
+			//test->AddComponent<InstancingMeshRenderer>()->MakeIcosahedron("a");
 			const auto& rb = test->AddComponent<ECSRigidbody>();
 			test->AddComponent<ECSSphereCollider>()->GetData()->SetMain(false);
 

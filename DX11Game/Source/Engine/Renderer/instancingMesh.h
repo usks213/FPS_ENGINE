@@ -28,7 +28,7 @@ struct InstancingMeshData {
 	XMFLOAT4X4* mtxWorld = nullptr;					// ワールドマトリックス
 	XMFLOAT4X4* mtxTexture = nullptr;					// テクスチャ マトリックス
 	MATERIAL material;					// マテリアル
-	bool bBump;
+	bool bBump = false;
 };
 
 //*****************************************************************************

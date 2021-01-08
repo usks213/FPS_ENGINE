@@ -75,7 +75,7 @@ void BulletScript::Start()
 	//--- コンポーネンの追加
 
 	// インスタンシングレンダラー
-	gameObject().lock()->AddComponent<InstancingMeshRenderer>()->MakeSphere("Bullet", 12);
+	gameObject().lock()->AddComponent<InstancingMeshRenderer>()->MakeDodecahedron("Bullet");
 
 	// ECSリジッドボディ
 	const auto& rb = gameObject().lock()->AddComponent<ECSRigidbody>();
@@ -84,6 +84,7 @@ void BulletScript::Start()
 	rb->GetData()->SetStaticFriction(0);
 	rb->GetData()->SetDynamicFriction(0);
 	rb->GetData()->SetMass(10);
+	rb->GetData()->SetTorqueDrag({ 0,0,0 });
 
 	// ECSコライダー
 	gameObject().lock()->AddComponent<ECSSphereCollider>();

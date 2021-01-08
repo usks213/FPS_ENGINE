@@ -136,6 +136,12 @@ public:
 		return vec;
 	}
 
+	// 三点外積
+	static Vector3 Cross(Vector3 center, Vector3 pos1, Vector3 pos2)
+	{
+		return Cross(pos1 - center, pos2 - center);
+	}
+
 	// 外積2D
 	static float Cross2D(Vector3 vec1, Vector3 vec2)
 	{

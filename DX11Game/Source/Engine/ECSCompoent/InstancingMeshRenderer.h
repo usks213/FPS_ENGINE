@@ -55,6 +55,19 @@ namespace ECS
 		// スフィア
 		HRESULT MakeSphere(std::string tag,
 			int nSegment = 36, float fTexSplit = 1.0f, XMFLOAT3 pos = { 0,0,0 });
+		// スフィア
+		HRESULT MakeSphere2(std::string tag,
+			int nNumBlockX, int nNumBlockY, float fSize = 0.5f, 
+			float fTexSizeX = 1.0f, float fTexSizeY = 1.0f, 
+			float fPosX = 0.0f, float fPosY = 0.0f, float fPosZ = 0.0f);
+		// 正四面体
+		HRESULT MakeTetraheron(const std::string tag);
+		// 八面体 Octahedron
+		HRESULT MakeOctahedron(const std::string tag);
+		// 十二面体
+		HRESULT MakeDodecahedron(const std::string tag);
+		// 二十面体 Icosahedron
+		HRESULT MakeIcosahedron(const std::string tag);
 
 		//--- マテリアル
 		// カラー変更
@@ -67,6 +80,10 @@ namespace ECS
 
 		// プリミティブ
 		void SetPrimitiveType(ePrimitiveType eType) { if (m_mesh) m_mesh->primitiveType = eType; }
+
+	private:
+		// メッシュデータの生成
+		bool CreateMeshData(std::string tag);
 
 	private:
 		// メッシュデータ

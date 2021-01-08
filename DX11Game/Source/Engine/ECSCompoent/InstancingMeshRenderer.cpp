@@ -137,13 +137,13 @@ void InstancingMeshRenderer::LateDraw(ID3D11DeviceContext* pDC)
 	}
 }
 
+
 //========================================
 //
-// 平面メッシュの生成
+// メッシュデータの生成
 //
 //========================================
-HRESULT InstancingMeshRenderer::MakePlane(const std::string tag, int nNumBlockX, int nNumBlockZ, float fSizeBlockX, float fSizeBlockZ,
-	float fTexSizeX, float fTexSizeZ)
+bool InstancingMeshRenderer::CreateMeshData(std::string tag)
 {
 	// タグ
 	m_tag = tag;
@@ -167,7 +167,7 @@ HRESULT InstancingMeshRenderer::MakePlane(const std::string tag, int nNumBlockX,
 			m_meshList.emplace(tag, list);
 		}
 
-		return S_OK;
+		return false;
 	}
 
 	// 新規作成
@@ -189,6 +189,20 @@ HRESULT InstancingMeshRenderer::MakePlane(const std::string tag, int nNumBlockX,
 		p->m_mesh = m_mesh;
 		sys->AddList(p);
 	}
+
+	return true;
+}
+
+//========================================
+//
+// 平面メッシュの生成
+//
+//========================================
+HRESULT InstancingMeshRenderer::MakePlane(const std::string tag, int nNumBlockX, int nNumBlockZ, float fSizeBlockX, float fSizeBlockZ,
+	float fTexSizeX, float fTexSizeZ)
+{
+	// メッシュデータの作成
+	if (!CreateMeshData(tag)) return S_OK;
 
 
 	// プリミティブ種別設定
@@ -253,50 +267,8 @@ HRESULT InstancingMeshRenderer::MakePlane(const std::string tag, int nNumBlockX,
 //========================================
 HRESULT InstancingMeshRenderer::MakeCube(const std::string tag)
 {
-	// タグ
-	m_tag = tag;
-
-	// メッシュの検索
-	const auto& itr = m_meshPool.find(tag);
-	if (m_meshPool.end() != itr)
-	{
-		m_mesh = itr->second;
-		// リストに格納
-		auto itr2 = m_meshList.find(tag);
-		if (itr2 != m_meshList.end())
-		{
-			itr2->second.push_back(&this->m_data);
-		}
-		else
-		{
-			// リスト作成
-			std::vector<InstancingMeshData*> list;
-			list.push_back(&this->m_data);
-			m_meshList.emplace(tag, list);
-		}
-
-		return S_OK;
-	}
-
-	// 新規作成
-	m_mesh = new InstancingMesh();
-
-	// プールに格納
-	m_meshPool.emplace(tag, m_mesh);
-	// リスト作成
-	std::vector<InstancingMeshData*> list;
-	list.push_back(&this->m_data);
-	m_meshList.emplace(tag, list);
-
-	// システムに格納
-	RendererSystem* sys = GetEntityManager()->GetWorld()->GetSystem<RendererSystem>();
-	if (sys)
-	{
-		InstancingMeshRenderer* p = new InstancingMeshRenderer();
-		p->m_tag = tag;
-		p->m_mesh = m_mesh;
-		sys->AddList(p);
-	}
+	// メッシュデータの作成
+	if (!CreateMeshData(tag)) return S_OK;
 
 
 #define	SIZE_X			(0.5f)											// 立方体のサイズ(X方向)
@@ -422,54 +394,12 @@ HRESULT InstancingMeshRenderer::MakeCube(const std::string tag)
 //========================================
 HRESULT InstancingMeshRenderer::MakeSphere(std::string tag, int nSegment, float fTexSplit, XMFLOAT3 pos)
 {
-	// タグ
-	m_tag = tag;
-
-	// メッシュの検索
-	const auto& itr = m_meshPool.find(tag);
-	if (m_meshPool.end() != itr)
-	{
-		m_mesh = itr->second;
-		// リストに格納
-		auto itr2 = m_meshList.find(tag);
-		if (itr2 != m_meshList.end())
-		{
-			itr2->second.push_back(&this->m_data);
-		}
-		else
-		{
-			// リスト作成
-			std::vector<InstancingMeshData*> list;
-			list.push_back(&this->m_data);
-			m_meshList.emplace(tag, list);
-		}
-
-		return S_OK;
-	}
-
-	// 新規作成
-	m_mesh = new InstancingMesh();
-
-	// プールに格納
-	m_meshPool.emplace(tag, m_mesh);
-	// リスト作成
-	std::vector<InstancingMeshData*> list;
-	list.push_back(&this->m_data);
-	m_meshList.emplace(tag, list);
-
-	// システムに格納
-	RendererSystem* sys = GetEntityManager()->GetWorld()->GetSystem<RendererSystem>();
-	if (sys)
-	{
-		InstancingMeshRenderer* p = new InstancingMeshRenderer();
-		p->m_tag = tag;
-		p->m_mesh = m_mesh;
-		sys->AddList(p);
-	}
+	// メッシュデータの作成
+	if (!CreateMeshData(tag)) return S_OK;
 
 
 	// プリミティブ種別設定
-	m_mesh->primitiveType = PT_TRIANGLESTRIP;
+	m_mesh->primitiveType = PT_TRIANGLE;
 	float fScale = 0.5f;
 
 	//頂点バッファ作成
@@ -539,6 +469,506 @@ HRESULT InstancingMeshRenderer::MakeSphere(std::string tag, int nSegment, float 
 	delete[] pIndexWk;
 	return hr;
 
+}
+
+
+HRESULT InstancingMeshRenderer::MakeSphere2(std::string tag,
+	int nNumBlockX, int nNumBlockY, float fSize,
+	float fTexSizeX, float fTexSizeY,
+	float fPosX, float fPosY, float fPosZ)
+{
+	// メッシュデータの作成
+	if (!CreateMeshData(tag)) return S_OK;
+
+
+	// プリミティブ種別設定
+	m_mesh->primitiveType = PT_TRIANGLESTRIP;
+	// 頂点数の設定
+	m_mesh->nNumVertex = (nNumBlockX + 1) * (nNumBlockY + 1);
+	// インデックス数の設定(縮退ポリゴン用を考慮する)
+	m_mesh->nNumIndex = (nNumBlockX + 1) * 2 * nNumBlockY + (nNumBlockY - 1) * 2;
+	// 頂点配列の作成
+	VERTEX_3D* pVertexWk = new VERTEX_3D[m_mesh->nNumVertex];
+	// インデックス配列の作成
+	int* pIndexWk = new int[m_mesh->nNumIndex];
+	// 頂点配列の中身を埋める
+	VERTEX_3D* pVtx = pVertexWk;
+
+	for (int y = 0; y < nNumBlockY + 1; ++y) {
+		for (int x = 0; x < nNumBlockX + 1; ++x) {
+
+			// 頂点座標の設定
+			pVtx->vtx.x = 0.0f;
+			pVtx->vtx.y = 1.0f;
+			pVtx->vtx.z = 0.0f;
+			// 角度に対する回転マトリックスを求める
+			XMMATRIX mR = XMMatrixRotationX(XMConvertToRadians(-x * (-180.0f / nNumBlockX)));
+			mR *= XMMatrixRotationY(XMConvertToRadians(-y * (360.0f / nNumBlockY)));
+			// 座標を回転マトリックスで回転させる
+			XMVECTOR v = XMLoadFloat3(&pVtx->vtx);
+			v = XMVector3TransformCoord(v, mR);
+			v = XMVector3Normalize(v);
+			XMStoreFloat3(&pVtx->vtx, v);
+
+			// 法線の設定
+			pVtx->nor = pVtx->vtx;
+
+			// 大きさ
+			pVtx->vtx.x *= fSize;
+			pVtx->vtx.y *= fSize;
+			pVtx->vtx.z *= fSize;
+
+			// 位置
+			pVtx->vtx.x += fPosX;
+			pVtx->vtx.y += fPosY;
+			pVtx->vtx.z += fPosZ;
+
+			// 反射光の設定
+			pVtx->diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+			// テクスチャ座標の設定
+			pVtx->tex.x = fTexSizeX * x;
+			pVtx->tex.y = fTexSizeY * y;
+			++pVtx;
+		}
+	}
+	//インデックス配列の中身を埋める
+	int* pIdx = pIndexWk;
+	for (int z = 0; z < nNumBlockY; ++z) {
+		if (z > 0) {
+			// 縮退ポリゴンのためのダブりの設定
+			*pIdx++ = (z + 1) * (nNumBlockX + 1);
+		}
+		for (int x = 0; x < nNumBlockX + 1; ++x) {
+			*pIdx++ = (z + 1) * (nNumBlockX + 1) + x;
+			*pIdx++ = z * (nNumBlockX + 1) + x;
+		}
+		if (z < nNumBlockY - 1) {
+			// 縮退ポリゴンのためのダブりの設定
+			*pIdx++ = z * (nNumBlockX + 1) + nNumBlockX;
+		}
+	}
+
+	ID3D11Device* pDevice = GetDevice();
+	// 頂点バッファ/インデックス バッファ生成
+	HRESULT hr = MakeInstancingMeshVertex(pDevice, m_mesh, pVertexWk, pIndexWk);
+	// 一時配列の解放
+	delete[] pVertexWk;
+	delete[] pIndexWk;
+	return hr;
+}
+
+//========================================
+//
+// 四面体 Tetraheron
+//
+//========================================
+HRESULT InstancingMeshRenderer::MakeTetraheron(const std::string tag)
+{
+	// メッシュデータの作成
+	if (!CreateMeshData(tag)) return S_OK;
+
+	// プリミティブ設定
+	m_mesh->primitiveType = PT_TRIANGLE;
+
+	// 頂点数
+	const int nVertexNum = 3 * 4;
+	const int nIndexNum = 3 * 4;
+
+	VERTEX_3D	vertexWk[nVertexNum];	// 頂点情報格納ワーク
+	int			indexWk[nIndexNum];	// インデックス格納ワーク
+
+	// 使いまわす頂点座標
+	XMFLOAT3 ver[4] = {
+		XMFLOAT3(-0.81649658, - 0.47140452,   0.33333333),
+		XMFLOAT3( 0.81649658, - 0.47140452,   0.33333333),
+		XMFLOAT3( 0.00000000,   0.00000000, - 1.00000000),
+		XMFLOAT3( 0.00000000,   0.94280904,   0.33333333),
+	};
+
+	// 使いまわすインデックス
+	int index[nIndexNum] = {
+		1, 2, 4,
+		1, 4, 3,
+		1, 3, 2,
+		2, 3, 4,
+	};
+
+	// 頂点数
+	m_mesh->nNumVertex = nVertexNum;
+
+	// 頂点座標の設定
+	for (int i = 0; i < nVertexNum; ++i)
+	{
+		Vector3 halfV = ver[index[i] - 1];
+		halfV /= 2;
+		vertexWk[i].vtx = *halfV.GetFloat3();
+	}
+
+	// 法線ベクトルの設定
+	for (int i = 0; i < nVertexNum; i += 3)
+	{
+		XMFLOAT3 n = *Vector3::Cross(ver[index[i + 0] - 1], ver[index[i + 1] - 1], ver[index[i + 2] - 1]).GetFloat3();
+		vertexWk[i + 0].nor = n;
+		vertexWk[i + 1].nor = n;
+		vertexWk[i + 2].nor = n;
+	}
+
+	// 拡散反射光の設定
+	for (int i = 0; i < nVertexNum; i++)
+	{
+		vertexWk[i].diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	// テクスチャ座標の設定
+	for (int i = 0; i < nVertexNum; i += 4)
+	{
+		vertexWk[0 + i].tex = XMFLOAT2(0.0f, 0.0f);
+		vertexWk[1 + i].tex = XMFLOAT2(1.0f, 0.0f);
+		vertexWk[2 + i].tex = XMFLOAT2(0.0f, 1.0f);
+		vertexWk[3 + i].tex = XMFLOAT2(1.0f, 1.0f);
+	}
+
+	// インデックス数
+	m_mesh->nNumIndex = nIndexNum;
+
+	// インデックス配列の設定
+	for (int i = 0; i < nIndexNum; ++i)
+	{
+		indexWk[i] = i;
+	}
+
+	ID3D11Device* pDevice = GetDevice();
+	return MakeInstancingMeshVertex(pDevice, m_mesh, vertexWk, indexWk);
+}
+
+//========================================
+//
+// 八面体 Octahedron
+//
+//========================================
+HRESULT InstancingMeshRenderer::MakeOctahedron(const std::string tag)
+{
+	// メッシュデータの作成
+	if (!CreateMeshData(tag)) return S_OK;
+
+	// プリミティブ設定
+	m_mesh->primitiveType = PT_TRIANGLE;
+
+	// 頂点数
+	const int nVertexNum = 3 * 8;
+	const int nIndexNum  = 3 * 8;
+
+	VERTEX_3D	vertexWk[nVertexNum];	// 頂点情報格納ワーク
+	int			indexWk[nIndexNum];	// インデックス格納ワーク
+
+	// 使いまわす頂点座標
+	XMFLOAT3 ver[6] = {
+		XMFLOAT3(-0.70710678, - 0.70710678,  0.00000000),
+		XMFLOAT3(-0.70710678,  0.70710678,  0.00000000),
+		XMFLOAT3(0.70710678,  0.70710678,  0.00000000),
+		XMFLOAT3(0.70710678, - 0.70710678,  0.00000000),
+		XMFLOAT3(0.00000000,  0.00000000, - 1.00000000),
+		XMFLOAT3(0.00000000,  0.00000000,  1.00000000),
+	};
+
+	// 使いまわすインデックス
+	int index[nIndexNum] = {
+		1, 2, 5,
+		1, 5, 4,
+		1, 4, 6,
+		1, 6, 2,
+		2, 3, 5,
+		2, 6, 3,
+		3, 4, 5,
+		3, 6, 4,
+	};
+
+	// 頂点数
+	m_mesh->nNumVertex = nVertexNum;
+
+	// 頂点座標の設定
+	for (int i = 0; i < nVertexNum; ++i)
+	{
+		Vector3 halfV = ver[index[i] - 1];
+		halfV /= 2;
+		vertexWk[i].vtx = *halfV.GetFloat3();
+	}
+
+	// 法線ベクトルの設定
+	for (int i = 0; i < nVertexNum; i += 3)
+	{
+		XMFLOAT3 n = *Vector3::Cross(ver[index[i + 0] - 1], ver[index[i + 1] - 1], ver[index[i + 2] - 1]).GetFloat3();
+		vertexWk[i + 0].nor = n;
+		vertexWk[i + 1].nor = n;
+		vertexWk[i + 2].nor = n;
+	}
+
+	// 拡散反射光の設定
+	for (int i = 0; i < nVertexNum; i++)
+	{
+		vertexWk[i].diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	// テクスチャ座標の設定
+	for (int i = 0; i < nVertexNum; i += 4)
+	{
+		vertexWk[0 + i].tex = XMFLOAT2(0.0f, 0.0f);
+		vertexWk[1 + i].tex = XMFLOAT2(1.0f, 0.0f);
+		vertexWk[2 + i].tex = XMFLOAT2(0.0f, 1.0f);
+		vertexWk[3 + i].tex = XMFLOAT2(1.0f, 1.0f);
+	}
+
+	// インデックス数
+	m_mesh->nNumIndex = nIndexNum;
+
+	// インデックス配列の設定
+	for (int i = 0; i < nIndexNum; ++i)
+	{
+		indexWk[i] = i;
+	}
+
+	ID3D11Device* pDevice = GetDevice();
+	return MakeInstancingMeshVertex(pDevice, m_mesh, vertexWk, indexWk);
+}
+
+//========================================
+//
+// 十二面体
+//
+//========================================
+HRESULT InstancingMeshRenderer::MakeDodecahedron(const std::string tag)
+{
+	// メッシュデータの作成
+	if (!CreateMeshData(tag)) return S_OK;
+
+	// プリミティブ設定
+	m_mesh->primitiveType = PT_TRIANGLE;
+
+	// 頂点数
+	const int nVertexNum = 3 * 36;
+	const int nIndexNum = 3 * 36;
+
+	VERTEX_3D	vertexWk[nVertexNum];	// 頂点情報格納ワーク
+	int			indexWk[nIndexNum];	// インデックス格納ワーク
+
+	// 使いまわす頂点座標
+	XMFLOAT3 ver[20] = {
+		XMFLOAT3(-0.356822, - 0.491124,   0.794654),
+		XMFLOAT3( 0.356822, - 0.491124,   0.794654),
+		XMFLOAT3( 0.577350,   0.187592,   0.794655),
+		XMFLOAT3( 0.000000,   0.607062,   0.794655),
+		XMFLOAT3(-0.577350,   0.187592,   0.794655),
+		XMFLOAT3(-0.934172,   0.303531,   0.187593),
+		XMFLOAT3(-0.934172, - 0.303531, - 0.187593),
+		XMFLOAT3(-0.577350, - 0.794655,   0.187592),
+		XMFLOAT3( 0.000000, - 0.982247, - 0.187593),
+		XMFLOAT3( 0.577350, - 0.794655,   0.187592),
+		XMFLOAT3( 0.934172, - 0.303531, - 0.187593),
+		XMFLOAT3( 0.934172,   0.303531,   0.187593),
+		XMFLOAT3( 0.000000, - 0.607062, - 0.794655),
+		XMFLOAT3( 0.577350, - 0.187592, - 0.794655),
+		XMFLOAT3(-0.577350, - 0.187592, - 0.794655),
+		XMFLOAT3( 0.000000,   0.982247,   0.187593),
+		XMFLOAT3(-0.577350,   0.794655, - 0.187592),
+		XMFLOAT3( 0.577350,   0.794655, - 0.187592),
+		XMFLOAT3( 0.356822,   0.491124, - 0.794654),
+		XMFLOAT3(-0.356822,   0.491124, - 0.794654),
+	};
+
+	// 使いまわすインデックス
+	int index[nIndexNum] = {
+		2, 4, 5,
+		6, 7, 8,
+		8, 10, 2,
+		10, 11, 12,
+		9, 14, 11,
+		8, 7, 15,
+		16, 17, 6,
+		12, 16, 4,
+		14, 19, 18,
+		15, 19, 14,
+		17, 20, 15,
+		16, 18, 19,
+		5, 1, 2,
+		2, 3, 4,
+		8, 1, 5,
+		5, 6, 8,
+		2, 1, 8,
+		8, 9, 10,
+		3, 2, 12,
+		2, 10, 12,
+		11, 10, 9,
+		9, 13, 14,
+		13, 9, 15,
+		9, 8, 15,
+		6, 5, 4,
+		4, 16, 6,
+		4, 3, 12,
+		12, 18, 16,
+		12, 11, 18,
+		11, 14, 18,
+		14, 13, 15,
+		15, 20, 19,
+		15, 7, 6,
+		6, 17, 15,
+		20, 17, 19,
+		17, 16, 19,
+	};
+
+	// 頂点数
+	m_mesh->nNumVertex = nVertexNum;
+
+	// 頂点座標の設定
+	for (int i = 0; i < nVertexNum; ++i)
+	{
+		Vector3 halfV = ver[index[i] - 1];
+		halfV /= 2;
+		vertexWk[i].vtx = *halfV.GetFloat3();
+	}
+
+	// 法線ベクトルの設定
+	for (int i = 0; i < nVertexNum; i += 3)
+	{
+		XMFLOAT3 n = *Vector3::Cross(ver[index[i + 0] - 1], ver[index[i + 1] - 1], ver[index[i + 2] - 1]).GetFloat3();
+		vertexWk[i + 0].nor = n;
+		vertexWk[i + 1].nor = n;
+		vertexWk[i + 2].nor = n;
+	}
+
+	// 拡散反射光の設定
+	for (int i = 0; i < nVertexNum; i++)
+	{
+		vertexWk[i].diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	// テクスチャ座標の設定
+	for (int i = 0; i < nVertexNum; i += 4)
+	{
+		vertexWk[0 + i].tex = XMFLOAT2(0.0f, 0.0f);
+		vertexWk[1 + i].tex = XMFLOAT2(1.0f, 0.0f);
+		vertexWk[2 + i].tex = XMFLOAT2(0.0f, 1.0f);
+		vertexWk[3 + i].tex = XMFLOAT2(1.0f, 1.0f);
+	}
+
+	// インデックス数
+	m_mesh->nNumIndex = nIndexNum;
+
+	// インデックス配列の設定
+	for (int i = 0; i < nIndexNum; ++i)
+	{
+		indexWk[i] = i;
+	}
+
+	ID3D11Device* pDevice = GetDevice();
+	return MakeInstancingMeshVertex(pDevice, m_mesh, vertexWk, indexWk);
+}
+
+//========================================
+//
+// 二十面体
+//
+//========================================
+HRESULT InstancingMeshRenderer::MakeIcosahedron(const std::string tag)
+{
+	// メッシュデータの作成
+	if (!CreateMeshData(tag)) return S_OK;
+
+	// プリミティブ設定
+	m_mesh->primitiveType = PT_TRIANGLE;
+
+	// 頂点数
+	const int nVertexNum = 3 * 20;
+	const int nIndexNum = 3 * 20;
+
+	VERTEX_3D	vertexWk[nVertexNum];	// 頂点情報格納ワーク
+	int			indexWk[nIndexNum];	// インデックス格納ワーク
+
+	// 使いまわす頂点座標
+	XMFLOAT3 ver[12] = {
+		XMFLOAT3(-0.52573111, - 0.72360680,   0.44721360),
+		XMFLOAT3(-0.85065081,   0.27639320,   0.44721360),
+		XMFLOAT3(-0.00000000,   0.89442719,   0.44721360),
+		XMFLOAT3( 0.85065081,   0.27639320,   0.44721360),
+		XMFLOAT3( 0.52573111, - 0.72360680,   0.44721360),
+		XMFLOAT3( 0.00000000, - 0.89442719, - 0.44721360),
+		XMFLOAT3(-0.85065081, - 0.27639320, - 0.44721360),
+		XMFLOAT3(-0.52573111,   0.72360680, - 0.44721360),
+		XMFLOAT3( 0.52573111,   0.72360680, - 0.44721360),
+		XMFLOAT3( 0.85065081, - 0.27639320, - 0.44721360),
+		XMFLOAT3( 0.00000000,   0.00000000,   1.00000000),
+		XMFLOAT3(-0.00000000,   0.00000000, - 1.00000000),
+	};
+
+	// 使いまわすインデックス
+	int index[nIndexNum] = {
+		1, 2 ,7  ,
+		1, 7 ,6	 ,
+		1, 6 ,5	 ,
+		1, 5 ,11 ,
+		1, 11, 2 ,
+		2, 3 ,8	 ,
+		2, 8 ,7	 ,
+		2, 11, 3 ,
+		3, 4 ,9	 ,
+		3, 9 ,8	 ,
+		3, 11, 4 ,
+		4, 5 ,10 ,
+		4, 10, 9 ,
+		4, 11, 5 ,
+		5, 6 ,10 ,
+		6, 7 ,12 ,
+		6, 12, 10,
+		7, 8 ,12 ,
+		8, 9 ,12 ,
+		9, 10, 12,
+	};
+
+	// 頂点数
+	m_mesh->nNumVertex = nVertexNum;
+
+	// 頂点座標の設定
+	for (int i = 0; i < nVertexNum; ++i)
+	{
+		Vector3 halfV = ver[index[i] - 1];
+		halfV /= 2;
+		vertexWk[i].vtx = *halfV.GetFloat3();
+	}
+
+	// 法線ベクトルの設定
+	for (int i = 0; i < nVertexNum; i += 3)
+	{
+		XMFLOAT3 n = *Vector3::Cross(ver[index[i + 0] - 1], ver[index[i + 1] - 1], ver[index[i + 2] - 1]).GetFloat3();
+		vertexWk[i + 0].nor = n;
+		vertexWk[i + 1].nor = n;
+		vertexWk[i + 2].nor = n;
+	}
+
+	// 拡散反射光の設定
+	for (int i = 0; i < nVertexNum; i++)
+	{
+		vertexWk[i].diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	// テクスチャ座標の設定
+	for (int i = 0; i < nVertexNum; i += 4)
+	{
+		vertexWk[0 + i].tex = XMFLOAT2(0.0f, 0.0f);
+		vertexWk[1 + i].tex = XMFLOAT2(1.0f, 0.0f);
+		vertexWk[2 + i].tex = XMFLOAT2(0.0f, 1.0f);
+		vertexWk[3 + i].tex = XMFLOAT2(1.0f, 1.0f);
+	}
+
+	// インデックス数
+	m_mesh->nNumIndex = nIndexNum;
+
+	// インデックス配列の設定
+	for (int i = 0; i < nIndexNum; ++i)
+	{
+		indexWk[i] = i;
+	}
+
+	ID3D11Device* pDevice = GetDevice();
+	return MakeInstancingMeshVertex(pDevice, m_mesh, vertexWk, indexWk);
 }
 
 //========================================

@@ -55,7 +55,7 @@ struct MESH {
 	XMFLOAT4X4 mtxTexture;					// テクスチャ マトリックス
 	ID3D11ShaderResourceView* pTexture = nullptr;		// テクスチャ
 	ID3D11ShaderResourceView* pNormalTexture = nullptr;		// テクスチャ
-	bool bBump;
+	bool bBump = false;
 
 	ePrimitiveType primitiveType;			// プリミティブ型
 
