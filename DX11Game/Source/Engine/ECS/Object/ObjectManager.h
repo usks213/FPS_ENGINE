@@ -15,6 +15,8 @@
 
 //====== インクルード部 ======
 #include <list>
+#include <map>
+#include <unordered_map>
 #include "IObject.h"
 
 
@@ -47,12 +49,12 @@ namespace ECS
 
 	private:
 		// オブジェクトプール
-		using ObjectPool = std::list<std::shared_ptr<IObject>>;
+		using ObjectPool = std::unordered_map<const IObject*,std::shared_ptr<IObject>>;
 
 		// オブジェクトプール
 		ObjectPool m_ObjectList;
 		// オブジェクト破棄リスト
-		std::list<ObjectPool::iterator> m_DestroyList;
+		std::unordered_map<const IObject*, ObjectPool::iterator> m_DestroyList;
 
 	public:
 		// オブジェクトの生成
@@ -73,7 +75,8 @@ namespace ECS
 	void ObjectManager::AddObjectPool(const std::shared_ptr<T>& ptr)
 	{
 		// 格納
-		m_ObjectList.push_back(ptr);
+		//m_ObjectList.push_back(ptr);
+		m_ObjectList.emplace(ptr.get(), ptr);
 
 		// 自身を格納
 		ptr->m_self = ptr;

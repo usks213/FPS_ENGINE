@@ -89,19 +89,22 @@ void ObjectManager::Destroy()
 void ObjectManager::DestroyObject(const std::shared_ptr<IObject>& obj)
 {
 	// プールを検索
-	auto itr = std::find(m_ObjectList.begin(), m_ObjectList.end(), obj);
+	//auto itr = std::find(m_ObjectList.begin(), m_ObjectList.end(), obj);
+	auto itr = m_ObjectList.find(obj.get());
 
 	// プールになかった
 	if (m_ObjectList.end() == itr) return;
 
 	// デストロイリストを検索
-	auto destroyItr = std::find(m_DestroyList.begin(), m_DestroyList.end(), itr);
+	//auto destroyItr = std::find(m_DestroyList.begin(), m_DestroyList.end(), itr);
+	auto destroyItr = m_DestroyList.find(obj.get());
 
 	// 既に格納されていたら
 	if (m_DestroyList.end() != destroyItr) return;
 
 	// デストロイリストに格納
-	m_DestroyList.push_back(itr);
+	//m_DestroyList.push_back(itr);
+	m_DestroyList.emplace(obj.get(),itr);
 }
 
 //===================================
@@ -112,23 +115,27 @@ void ObjectManager::DestroyObject(const std::shared_ptr<IObject>& obj)
 void ObjectManager::DestroyObject(IObject* obj)
 {
 	// プールを検索
-	auto itr = std::find_if(m_ObjectList.begin(), m_ObjectList.end(),
+	/*auto itr = std::find_if(m_ObjectList.begin(), m_ObjectList.end(),
 		[obj](std::shared_ptr<IObject> obj_s)
 		{
 			return obj_s.get() == obj;
-		});
+		});*/
+	auto itr = m_ObjectList.find(obj);
+
 
 	// プールになかった
 	if (m_ObjectList.end() == itr) return;
 
 	// デストロイリストを検索
-	auto destroyItr = std::find(m_DestroyList.begin(), m_DestroyList.end(), itr);
+	//auto destroyItr = std::find(m_DestroyList.begin(), m_DestroyList.end(), itr);
+	auto destroyItr = m_DestroyList.find(obj);
 
 	// 既に格納されていたら
 	if (m_DestroyList.end() != destroyItr) return;
 
 	// デストロイリストに格納
-	m_DestroyList.push_back(itr);
+	//m_DestroyList.push_back(itr);
+	m_DestroyList.emplace(obj, itr);
 }
 
 
@@ -139,16 +146,27 @@ void ObjectManager::DestroyObject(IObject* obj)
 //===================================
 void ObjectManager::ClearnUpObject()
 {
-	// オブジェクトの破棄
-	std::for_each(m_DestroyList.begin(), m_DestroyList.end(),
-		[this](const ObjectPool::iterator& itr)
-		{
-			//削除時実行関数
-			(*itr)->OnDestroy();
+	//// オブジェクトの破棄
+	//std::for_each(m_DestroyList.begin(), m_DestroyList.end(),
+	//	[this](const ObjectPool::iterator& itr)
+	//	{
+	//		//削除時実行関数
+	//		//(*itr)->OnDestroy();
+	//		itr->second->OnDestroy();
 
-			// 完全消去
-			m_ObjectList.erase(itr);
-		});
+	//		// 完全消去
+	//		m_ObjectList.erase(itr);
+	//	});
+
+	// オブジェクトの破棄
+	for (auto obj : m_DestroyList)
+	{
+		//削除時実行関数
+		obj.second->second->OnDestroy();
+
+		// 完全消去
+		m_ObjectList.erase(obj.second);
+	}
 
 	// リストをクリア
 	m_DestroyList.clear();

@@ -75,3 +75,6 @@ VS_OUTPUT main(VS_INPUT input)
     
 	return output;
 }
+
+
+// nointerpolation ←セマンティクスの補正を無くす

@@ -53,17 +53,22 @@ namespace ECS
 		// コンポーネントデータ削除
 		void DestroyComponentData(T* com)
 		{
-			for (int i = 0; i < m_ComponentList.size(); ++i)
-			{
-				if (&m_ComponentList[i] == com)
-				{
-					m_ComponentList[i] = m_ComponentList.back();
-					// ポインタ付け替え
-					m_ComponentList[i].m_pHost->m_data = &m_ComponentList[i];
-					m_ComponentList.pop_back();
-					break;
-				}
-			}
+			//for (int i = 0; i < m_ComponentList.size(); ++i)
+			//{
+			//	if (&m_ComponentList[i] == com)
+			//	{
+			//		m_ComponentList[i] = m_ComponentList.back();
+			//		// ポインタ付け替え
+			//		m_ComponentList[i].m_pHost->m_data = &m_ComponentList[i];
+			//		m_ComponentList.pop_back();
+			//		break;
+			//	}
+			//}
+
+			*com = m_ComponentList.back();
+			// ポインタ付け替え
+			com->m_pHost->m_data = com;
+			m_ComponentList.pop_back();
 		}
 
 		// コンポーネンデータの再登録処理

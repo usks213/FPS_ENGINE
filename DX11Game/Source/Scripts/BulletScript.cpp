@@ -70,7 +70,7 @@ void BulletScript::Start()
 	gameObject().lock()->SetTag("Bullet");
 
 	// 大きさ
-	transform().lock()->m_scale = Vector3(100, 100, 100);
+	transform().lock()->m_scale = Vector3(1000, 1000, 1000);
 
 	//--- コンポーネンの追加
 
