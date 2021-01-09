@@ -64,9 +64,11 @@ using namespace ECS;
 //========================================
 void TrackingMoveEnemyHostScript::Start()
 {
+	// ベースクラス
+	EnemyBaseScript::Start();
+
 	// 名前・タグ
 	gameObject().lock()->SetName("TrackingMoveEnemyHost");
-	gameObject().lock()->SetTag("Enemy");
 
 	// 大きさ
 	transform().lock()->m_scale = Vector3(100, 100, 100);
@@ -74,26 +76,7 @@ void TrackingMoveEnemyHostScript::Start()
 	//--- コンポーネンの追加
 
 	// インスタンシングレンダラー
-	gameObject().lock()->AddComponent<InstancingMeshRenderer>()->MakeDodecahedron("TrackingMoveEnemyHost");
-
-	// ECSリジッドボディ
-	const auto& rb = gameObject().lock()->AddComponent<Rigidbody>();
-	rb->SetDrag({ 0,0,0 });
-	rb->SetGravityForce({ 0,0,0 });
-	rb->SetStaticFriction(0);
-	rb->SetDynamicFriction(0);
-	rb->SetMass(1);
-	rb->SetTorqueDrag({ 0,0,0 });
-	// リジッドボディ保存
-	m_rb = rb;
-	// 回転
-	Vector3 v = { rand() % 100 / 100.0f, rand() % 100 / 100.0f, rand() % 100 / 100.0f };
-	v = v.normalized();
-	rb->AddTorque(v * 3);
-
-	// ECSコライダー
-	gameObject().lock()->AddComponent<DeltaCollider>()->SetMain(false);
-
+	gameObject().lock()->AddComponent<InstancingMeshRenderer>()->MakeDodecahedron("TrackingMoveEnemy");
 
 	// 移動速度
 	m_speed = 18;
@@ -106,9 +89,13 @@ void TrackingMoveEnemyHostScript::Start()
 //========================================
 void TrackingMoveEnemyHostScript::Update()
 {
+	// ベースクラス
+	EnemyBaseScript::Update();
+
 	// ターゲットが存在しない
-	const auto& target = m_target.lock();
-	if (!target) return;
+	const auto& player = m_player.lock();
+	if (!player) return;
+	const auto& target = player->transform().lock();
 
 	//--- 追尾処理
 	Vector3 dir = target->m_pos - transform().lock()->m_pos;
@@ -135,6 +122,8 @@ void TrackingMoveEnemyHostScript::Update()
 //========================================
 void TrackingMoveEnemyHostScript::LateUpdate()
 {
+	// ベースクラス
+	EnemyBaseScript::LateUpdate();
 }
 
 //========================================
@@ -144,6 +133,8 @@ void TrackingMoveEnemyHostScript::LateUpdate()
 //========================================
 void TrackingMoveEnemyHostScript::End()
 {
+	// ベースクラス
+	EnemyBaseScript::End();
 }
 
 //========================================
@@ -182,6 +173,8 @@ void TrackingMoveEnemyHostScript::CreateChild(int nNum)
 	//	}
 	//}
 
+	int j = 0;
+	int k = 0;
 	for (int n = 0; n < nNum; n++)
 	{
 		float phi = rand() % 1000 / 100.0f;
@@ -192,80 +185,22 @@ void TrackingMoveEnemyHostScript::CreateChild(int nNum)
 		pos->x = cosf(phi) * cosf(theta);
 		pos->y = sinf(phi);
 		pos->z = cosf(phi) * sinf(theta);
-		pos->x *= (150 + (n / (n * ((n / 8) + 1) + 1)) * 100);
-		pos->z *= (150 + (n / (n * ((n / 8) + 1) + 1)) * 100);
-		pos->y *= (150 + (n / (n * ((n / 4) + 1) + 1)) * 100);
+
+		if (n > j * 4)
+		{
+			k++;
+			j += k;
+		}
+		pos->x *= (150 + k * 150);
+		pos->z *= (150 + k * 150);
+		pos->y *= (150 + k * 2 * 150);
 
 		// エネミー生成
 		const auto& obj = Instantiate<GameObject>(pos + transform().lock()->m_pos);
 		// コンポーネントの追加
 		const auto& tracking = obj->AddComponent<TrackingMoveEnemyScript>();
+		tracking->SetPlayer(m_player.lock());
 		// リストへ格納
 		m_childList.push_back(tracking);
 	}
 }
-
-
-//******************** コールバック関数 ********************
-
-
-//========================================
-//
-// 当たった時
-//
-//========================================
-void TrackingMoveEnemyHostScript::OnCollisionEnter(Collider* collider)
-{
-
-}
-
-//========================================
-//
-// 当たっている間
-//
-//========================================
-void TrackingMoveEnemyHostScript::OnCollisionStay(Collider* collider)
-{
-
-}
-
-//========================================
-//
-// 離れた時
-//
-//========================================
-void TrackingMoveEnemyHostScript::OnCollisionExit(Collider* collider)
-{
-
-}
-
-
-//===== ECS =====
-
-//========================================
-//
-// 当たった時
-//
-//========================================
-void TrackingMoveEnemyHostScript::OnDeltaCollisionEnter(DeltaCollider* collider)
-{
-}
-
-//========================================
-//
-// 当たっている間
-//
-//========================================
-void TrackingMoveEnemyHostScript::OnDeltaCollisionStay(DeltaCollider* collider)
-{
-}
-
-//========================================
-//
-// 離れた時
-//
-//========================================
-void TrackingMoveEnemyHostScript::OnDeltaCollisionExit(DeltaCollider* collider)
-{
-}
-

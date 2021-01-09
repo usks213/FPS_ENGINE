@@ -63,33 +63,18 @@ using namespace ECS;
 //========================================
 void StraightMoveEnemyScript::Start()
 {
+	// ベースクラス
+	EnemyBaseScript::Start();
+
 	// 名前・タグ
 	gameObject().lock()->SetName("StraightMoveEnemy");
-	gameObject().lock()->SetTag("Enemy");
-
-	// 大きさ
-	transform().lock()->m_scale = Vector3(200, 200, 200);
 
 	//--- コンポーネンの追加
 
 	// インスタンシングレンダラー
-	gameObject().lock()->AddComponent<InstancingMeshRenderer>()->MakeOctahedron("StraightMoveEnemy");
-
-	// ECSリジッドボディ
-	const auto& rb = gameObject().lock()->AddComponent<Rigidbody>();
-	rb->SetDrag({ 0,0,0 });
-	rb->SetGravityForce({ 0,0,0 });
-	rb->SetStaticFriction(0);
-	rb->SetDynamicFriction(0);
-	rb->SetMass(1);
-	rb->SetTorqueDrag({ 0,0,0 });
-	// 回転
-	Vector3 v = { rand() % 100 / 100.0f, rand() % 100 / 100.0f, rand() % 100 / 100.0f };
-	v = v.normalized();
-	rb->AddTorque(v * 3);
-
-	// ECSコライダー
-	gameObject().lock()->AddComponent<DeltaCollider>()->SetMain(false);
+	const auto& render = gameObject().lock()->AddComponent<InstancingMeshRenderer>();
+	render->MakeOctahedron("StraightMoveEnemy");
+	//render->SetDiffuseColor({ 1,1,0,1 });
 }
 
 //========================================
@@ -99,6 +84,8 @@ void StraightMoveEnemyScript::Start()
 //========================================
 void StraightMoveEnemyScript::Update()
 {
+	// ベースクラス
+	EnemyBaseScript::Update();
 }
 
 //========================================
@@ -108,6 +95,8 @@ void StraightMoveEnemyScript::Update()
 //========================================
 void StraightMoveEnemyScript::LateUpdate()
 {
+	// ベースクラス
+	EnemyBaseScript::LateUpdate();
 }
 
 //========================================
@@ -117,69 +106,6 @@ void StraightMoveEnemyScript::LateUpdate()
 //========================================
 void StraightMoveEnemyScript::End()
 {
+	// ベースクラス
+	EnemyBaseScript::End();
 }
-
-
-//******************** コールバック関数 ********************
-
-
-//========================================
-//
-// 当たった時
-//
-//========================================
-void StraightMoveEnemyScript::OnCollisionEnter(Collider* collider)
-{
-
-}
-
-//========================================
-//
-// 当たっている間
-//
-//========================================
-void StraightMoveEnemyScript::OnCollisionStay(Collider* collider)
-{
-
-}
-
-//========================================
-//
-// 離れた時
-//
-//========================================
-void StraightMoveEnemyScript::OnCollisionExit(Collider* collider)
-{
-
-}
-
-
-//===== ECS =====
-
-//========================================
-//
-// 当たった時
-//
-//========================================
-void StraightMoveEnemyScript::OnDeltaCollisionEnter(DeltaCollider* collider)
-{
-}
-
-//========================================
-//
-// 当たっている間
-//
-//========================================
-void StraightMoveEnemyScript::OnDeltaCollisionStay(DeltaCollider* collider)
-{
-}
-
-//========================================
-//
-// 離れた時
-//
-//========================================
-void StraightMoveEnemyScript::OnDeltaCollisionExit(DeltaCollider* collider)
-{
-}
-

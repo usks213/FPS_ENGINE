@@ -18,7 +18,7 @@
 #define M_SPECULAR		XMFLOAT4(0.1f,0.1f,0.1f,1.0f)
 #define M_AMBIENT		XMFLOAT4(1.0f,1.0f,1.0f,1.0f)
 #define M_EMISSIVE		XMFLOAT4(0.0f,0.0f,0.0f,1.0f)
-#define MAX_INSTANCE (512)
+#define MAX_INSTANCE (1024)
 
 
 //*****************************************************************************
@@ -28,13 +28,14 @@
 struct InstancingMatrix
 {
 	XMMATRIX mWorld;
-	XMMATRIX mTexture;
+	//XMMATRIX mTexture;
 };
 
 // シェーダに渡す値
 struct SHADER_GLOBAL {
 	XMMATRIX	mVP;		// ワールド×ビュー×射影行列(転置行列)
 	XMMATRIX	mLightVP;		// ワールド×ビュー×射影行列(転置行列)
+	XMMATRIX mTexture;
 };
 struct INSTANCING_GLOBAL
 {
@@ -42,16 +43,16 @@ struct INSTANCING_GLOBAL
 };
 
 // インスタンシングマテリアル
-struct InstancingMaterial
-{
-	// マテリアル
-	XMVECTOR	vAmbient;	// アンビエント色(+テクスチャ有無)
-	XMVECTOR	vDiffuse;	// ディフューズ色
-	XMVECTOR	vSpecular;	// スペキュラ色(+スペキュラ強度)
-	XMVECTOR	vEmissive;	// エミッシブ色
-
-	int		bBump = false;
-};
+//struct InstancingMaterial
+//{
+//	// マテリアル
+//	XMVECTOR	vAmbient;	// アンビエント色(+テクスチャ有無)
+//	XMVECTOR	vDiffuse;	// ディフューズ色
+//	XMVECTOR	vSpecular;	// スペキュラ色(+スペキュラ強度)
+//	XMVECTOR	vEmissive;	// エミッシブ色
+//
+//	int		bBump = false;
+//};
 
 struct SHADER_GLOBAL2 {
 	XMVECTOR	vEye;		// 視点座標
@@ -60,11 +61,19 @@ struct SHADER_GLOBAL2 {
 	XMVECTOR	vLa;		// 光源色(アンビエント)
 	XMVECTOR	vLd;		// 光源色(ディフューズ)
 	XMVECTOR	vLs;		// 光源色(スペキュラ)
+
+		// マテリアル
+	XMVECTOR	vAmbient;	// アンビエント色(+テクスチャ有無)
+	XMVECTOR	vDiffuse;	// ディフューズ色
+	XMVECTOR	vSpecular;	// スペキュラ色(+スペキュラ強度)
+	XMVECTOR	vEmissive;	// エミッシブ色
+
+	int		bBump = false;
 };
-struct INSTANCING_GLOBAL2
-{
-	InstancingMaterial aInstancing[MAX_INSTANCE];
-};
+//struct INSTANCING_GLOBAL2
+//{
+//	InstancingMaterial aInstancing[MAX_INSTANCE];
+//};
 
 
 //*****************************************************************************
@@ -87,7 +96,7 @@ static const XMMATRIX SHADOW_BIAS = XMMATRIX(
 	0.5f, 0.5f, 0.0f, 1.0f);
 
 static INSTANCING_GLOBAL icb;
-static INSTANCING_GLOBAL2 icb2;
+//static INSTANCING_GLOBAL2 icb2;
 
 //=============================================================================
 // 初期化処理
@@ -124,9 +133,9 @@ HRESULT InitInstancingMesh(void)
 	bd.ByteWidth = sizeof(INSTANCING_GLOBAL);
 	hr = pDevice->CreateBuffer(&bd, nullptr, &g_pConstantBuffer[2]);
 	if (FAILED(hr)) return hr;
-	bd.ByteWidth = sizeof(INSTANCING_GLOBAL2);
+	/*bd.ByteWidth = sizeof(INSTANCING_GLOBAL2);
 	hr = pDevice->CreateBuffer(&bd, nullptr, &g_pConstantBuffer[3]);
-	if (FAILED(hr)) return hr;
+	if (FAILED(hr)) return hr;*/
 
 	// テクスチャ サンプラ生成
 	D3D11_SAMPLER_DESC sd;
@@ -226,6 +235,7 @@ void DrawInstancingMeshShadow(ID3D11DeviceContext* pDeviceContext, InstancingMes
 		SHADER_GLOBAL cb;
 		cb.mVP = XMMatrixTranspose(XMLoadFloat4x4(&g_pLight->GetViewMatrix()) * XMLoadFloat4x4(&g_pCamera->GetProjMatrix()));
 		cb.mLightVP = XMMatrixTranspose(XMLoadFloat4x4(&g_pLight->GetViewMatrix()) * XMLoadFloat4x4(&g_pLight->GetProjMatrix()));
+		cb.mTexture = XMMatrixTranspose(XMLoadFloat4x4(pInstancingMesh->mtxTexture));
 		pDeviceContext->UpdateSubresource(g_pConstantBuffer[0], 0, nullptr, &cb, 0, 0);
 		pDeviceContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer[0]);
 
@@ -241,7 +251,7 @@ void DrawInstancingMeshShadow(ID3D11DeviceContext* pDeviceContext, InstancingMes
 				InstancingMeshData* pData = InstancingList[i * MAX_INSTANCE + j];
 
 				icb.aInstancing[j].mWorld = XMLoadFloat4x4(pData->mtxWorld);
-				icb.aInstancing[j].mTexture = XMLoadFloat4x4(pData->mtxTexture);
+				//icb.aInstancing[j].mTexture = XMLoadFloat4x4(pData->mtxTexture);
 			}
 			pDeviceContext->UpdateSubresource(g_pConstantBuffer[2], 0, nullptr, &icb, 0, 0);
 			pDeviceContext->VSSetConstantBuffers(2, 1, &g_pConstantBuffer[2]);
@@ -284,6 +294,7 @@ void DrawInstancingMesh(ID3D11DeviceContext* pDeviceContext, InstancingMesh* pIn
 	SHADER_GLOBAL cb;
 	cb.mVP = XMMatrixTranspose(XMLoadFloat4x4(&g_pCamera->GetViewMatrix()) * XMLoadFloat4x4(&g_pCamera->GetProjMatrix()));
 	cb.mLightVP = XMMatrixTranspose(XMLoadFloat4x4(&g_pLight->GetViewMatrix()) * XMLoadFloat4x4(&g_pCamera->GetProjMatrix()) * SHADOW_BIAS);
+	cb.mTexture = XMMatrixTranspose(XMLoadFloat4x4(pInstancingMesh->mtxTexture));
 	pDeviceContext->UpdateSubresource(g_pConstantBuffer[0], 0, nullptr, &cb, 0, 0);
 	pDeviceContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer[0]);
 
@@ -293,6 +304,14 @@ void DrawInstancingMesh(ID3D11DeviceContext* pDeviceContext, InstancingMesh* pIn
 	cb2.vLa = XMLoadFloat4(&g_pLight->GetAmbient());
 	cb2.vLd = XMLoadFloat4(&g_pLight->GetDiffuse());
 	cb2.vLs = XMLoadFloat4(&g_pLight->GetSpecular());
+
+	cb2.vDiffuse = XMLoadFloat4(&pInstancingMesh->material.Diffuse);
+	cb2.vAmbient = XMVectorSet(pInstancingMesh->material.Ambient.x, pInstancingMesh->material.Ambient.y, pInstancingMesh->material.Ambient.z, (pInstancingMesh->pTexture != nullptr) ? 1.f : 0.f);
+	cb2.vSpecular = XMVectorSet(pInstancingMesh->material.Specular.x, pInstancingMesh->material.Specular.y, pInstancingMesh->material.Specular.z, pInstancingMesh->material.Power);
+	cb2.vEmissive = XMLoadFloat4(&pInstancingMesh->material.Emissive);
+
+	cb2.bBump = pInstancingMesh->bBump;
+
 	pDeviceContext->UpdateSubresource(g_pConstantBuffer[1], 0, nullptr, &cb2, 0, 0);
 	pDeviceContext->PSSetConstantBuffers(1, 1, &g_pConstantBuffer[1]);
 
@@ -319,18 +338,18 @@ void DrawInstancingMesh(ID3D11DeviceContext* pDeviceContext, InstancingMesh* pIn
 			InstancingMeshData* pData = InstancingList[i * MAX_INSTANCE + j];
 
 			icb.aInstancing[j].mWorld = XMMatrixTranspose(XMLoadFloat4x4(pData->mtxWorld));
-			icb.aInstancing[j].mTexture = XMMatrixTranspose(XMLoadFloat4x4(pData->mtxTexture));
+			//icb.aInstancing[j].mTexture = XMMatrixTranspose(XMLoadFloat4x4(pData->mtxTexture));
 
-			icb2.aInstancing[j].vDiffuse = XMLoadFloat4(&pData->material.Diffuse);
+			/*icb2.aInstancing[j].vDiffuse = XMLoadFloat4(&pData->material.Diffuse);
 			icb2.aInstancing[j].vAmbient = XMVectorSet(pData->material.Ambient.x, pData->material.Ambient.y, pData->material.Ambient.z, (pInstancingMesh->pTexture != nullptr) ? 1.f : 0.f);
 			icb2.aInstancing[j].vSpecular = XMVectorSet(pData->material.Specular.x, pData->material.Specular.y, pData->material.Specular.z, pData->material.Power);
 			icb2.aInstancing[j].vEmissive = XMLoadFloat4(&pData->material.Emissive);
-			icb2.aInstancing[j].bBump = pData->bBump;
+			icb2.aInstancing[j].bBump = pData->bBump;*/
 		}
 		pDeviceContext->UpdateSubresource(g_pConstantBuffer[2], 0, nullptr, &icb, 0, 0);
 		pDeviceContext->VSSetConstantBuffers(2, 1, &g_pConstantBuffer[2]);
-		pDeviceContext->UpdateSubresource(g_pConstantBuffer[3], 0, nullptr, &icb2, 0, 0);
-		pDeviceContext->PSSetConstantBuffers(3, 1, &g_pConstantBuffer[3]);
+		/*pDeviceContext->UpdateSubresource(g_pConstantBuffer[3], 0, nullptr, &icb2, 0, 0);
+		pDeviceContext->PSSetConstantBuffers(3, 1, &g_pConstantBuffer[3]);*/
 
 		// ポリゴンの描画
 		pDeviceContext->DrawIndexedInstanced(pInstancingMesh->nNumIndex, m, 0, 0, 0);

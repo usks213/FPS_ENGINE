@@ -1,18 +1,5 @@
 // ピクセルシェーダ
 
-#define MAX_INSTANCE (512)
-// インスタンシングマテリアル
-struct InstancingMaterial
-{
-    // マテリアル
-    float4 g_vKa; // アンビエント色(+テクスチャ有無)
-    float4 g_vKd; // ディフューズ色
-    float4 g_vKs; // スペキュラ色(+スペキュラ強度)
-    float4 g_vKe; // エミッシブ色
-    
-    bool g_bBump;
-};
-
 // グローバル
 cbuffer global : register(b1) {
 	float4	g_vEye;			// 視点座標
@@ -21,12 +8,13 @@ cbuffer global : register(b1) {
 	float4	g_vLa;			// 環境光
 	float4	g_vLd;			// 拡散反射光
 	float4	g_vLs;			// 鏡面反射光
-};
-
-// インスタンシンググローバル
-cbuffer InstancingGlobal : register(b3)
-{
-    InstancingMaterial g_Material[MAX_INSTANCE];
+        // マテリアル
+    float4 g_vKa; // アンビエント色(+テクスチャ有無)
+    float4 g_vKd; // ディフューズ色
+    float4 g_vKs; // スペキュラ色(+スペキュラ強度)
+    float4 g_vKe; // エミッシブ色
+    
+    bool g_bBump;
 };
 
 // パラメータ
@@ -39,7 +27,7 @@ struct VS_OUTPUT {
     float3 Target : TEXCOORD3;
     float3 BinNormal : TEXCOORD4;
 	float4	Diffuse		: COLOR0;
-    uint    instID      : TEXCOORD5;
+   // uint    instID      : TEXCOORD5;
 };
 
 Texture2D    g_texture : register(t0);	// テクスチャ
@@ -61,13 +49,10 @@ float2 envMapEquirect(float3 dir)
 
 float4 main(VS_OUTPUT input) : SV_Target0
 {
-    uint n = input.instID;
-    
-    
-    float3 Diff = input.Diffuse.rgb * g_Material[n].g_vKd.rgb;
-    float Alpha = input.Diffuse.a * g_Material[n].g_vKd.a;
+    float3 Diff = input.Diffuse.rgb * g_vKd.rgb;
+    float Alpha = input.Diffuse.a * g_vKd.a;
     float4 vTd = float4(1.0f, 1.0f, 1.0f, 1.0f);
-    if (g_Material[n].g_vKa.a > 0.0f)
+    if (g_vKa.a > 0.0f)
     {
 		// テクスチャ有
         vTd = g_texture.Sample(g_sampler, input.TexCoord);
@@ -153,7 +138,7 @@ float4 main(VS_OUTPUT input) : SV_Target0
         
         
         // ===== バンプマップ =====
-        if (g_Material[n].g_bBump)
+        if (g_bBump)
         {
 			// 法線、接線、従法線
             //float3 n = normalize(input.Normal); // 法線ベクトル
@@ -218,11 +203,11 @@ float4 main(VS_OUTPUT input) : SV_Target0
         //Diff = g_vLd.rgb * Diff * N; // 拡散色
         
         
-        Diff += g_vLa.rgb * g_Material[n].g_vKa.rgb * vTd.rgb * sc; // 環境光
-        float3 Spec = g_vLs.rgb * g_Material[n].g_vKs.rgb *
-			pow(saturate(dot(N, H)), g_Material[n].g_vKs.a) * sc * vTd.rgb; // 鏡面反射色
+        Diff += g_vLa.rgb * g_vKa.rgb * vTd.rgb * sc; // 環境光
+        float3 Spec = g_vLs.rgb * g_vKs.rgb *
+			pow(saturate(dot(N, H)), g_vKs.a) * sc * vTd.rgb; // 鏡面反射色
         Diff += Spec;
-        Diff += g_Material[n].g_vKe.rgb * vTd.rgb; // エミッション
+        Diff += g_vKe.rgb * vTd.rgb; // エミッション
         
     }
 

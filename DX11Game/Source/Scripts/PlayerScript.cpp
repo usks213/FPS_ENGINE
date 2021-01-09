@@ -20,6 +20,7 @@
 // システム
 #include "../Engine/System/input.h"
 #include "../Engine/System/Sound.h"
+#include "../Engine/System/debugproc.h"
 
 // マネージャー
 #include "../Engine/ECS/Entity/EntityManager.h"
@@ -69,7 +70,7 @@ void PlayerScript::Start()
 	gameObject().lock()->SetTag("Player");
 
 	transform().lock()->m_pos = Vector3(1000, 1000, 1000);
-	transform().lock()->m_scale = Vector3(100, 200, 100);
+	transform().lock()->m_scale = Vector3(300, 300, 300);
 
 	// コンポーネントの追加
 
@@ -93,6 +94,10 @@ void PlayerScript::Start()
 	CCamera::GetMainCamera()->SetCameraTarget(gameObject().lock()->transform().lock());
 	// ライト
 	CLight::GetMainLight()->SetTargetPos(gameObject().lock()->transform().lock()->m_pos.GetFloat3());
+
+
+	// デルタカウンター
+	m_nDeltaCount = 0;
 }
 
 //========================================
@@ -164,6 +169,8 @@ void PlayerScript::Update()
 //========================================
 void PlayerScript::LateUpdate()
 {
+	// デバック表示
+	PrintDebugProc("DeltaCount:%d\n", m_nDeltaCount);
 }
 
 //========================================
@@ -178,55 +185,6 @@ void PlayerScript::End()
 
 //******************** コールバック関数 ********************
 
-
-//========================================
-//
-// 当たった時
-//
-//========================================
-void PlayerScript::OnCollisionEnter(Collider* collider)
-{
-	if (collider->gameObject().lock()->tag() == "Enemy")
-	{
-		// ドロップアイテムの生成
-		const auto& obj = Instantiate<GameObject>(collider->transform().lock()->m_pos);
-		obj->AddComponent<DropDeltaScript>();
-		// 削除
-		GetEntityManager()->DestroyEntity(collider->gameObject().lock());
-	}
-}
-
-//========================================
-//
-// 当たっている間
-//
-//========================================
-void PlayerScript::OnCollisionStay(Collider* collider)
-{
-	if (collider->gameObject().lock()->tag() == "Enemy")
-	{
-		// ドロップアイテムの生成
-		const auto& obj = Instantiate<GameObject>(collider->transform().lock()->m_pos);
-		obj->AddComponent<DropDeltaScript>();
-		// 削除
-		GetEntityManager()->DestroyEntity(collider->gameObject().lock());
-	}
-}
-
-//========================================
-//
-// 離れた時
-//
-//========================================
-void PlayerScript::OnCollisionExit(Collider* collider)
-{
-	
-}
-
-
-
-
-
 //========================================
 //
 // 当たった時
@@ -234,13 +192,10 @@ void PlayerScript::OnCollisionExit(Collider* collider)
 //========================================
 void PlayerScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 {
-	if (collider->gameObject().lock()->tag() == "Enemy")
+	if (collider->gameObject().lock()->tag() == "DropDelta")
 	{
-		// ドロップアイテムの生成
-		const auto& obj = Instantiate<GameObject>(collider->transform().lock()->m_pos);
-		obj->AddComponent<DropDeltaScript>();
-		// 削除
-		GetEntityManager()->DestroyEntity(collider->gameObject().lock());
+		// カウンター加算
+		m_nDeltaCount++;
 	}
 }
 
@@ -251,13 +206,10 @@ void PlayerScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 //========================================
 void PlayerScript::OnDeltaCollisionStay(DeltaCollider* collider)
 {
-	if (collider->gameObject().lock()->tag() == "Enemy")
+	if (collider->gameObject().lock()->tag() == "DropDelta")
 	{
-		// ドロップアイテムの生成
-		const auto& obj = Instantiate<GameObject>(collider->transform().lock()->m_pos);
-		obj->AddComponent<DropDeltaScript>();
-		// 削除
-		GetEntityManager()->DestroyEntity(collider->gameObject().lock());
+		// カウンター加算
+		m_nDeltaCount++;
 	}
 }
 

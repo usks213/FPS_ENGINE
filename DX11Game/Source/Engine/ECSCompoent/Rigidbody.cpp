@@ -123,6 +123,7 @@ void Rigidbody::Update()
 	// À•WE‰ñ“]
 	Vector3 pos = pTrans->m_pos;
 	Vector3 rot = pTrans->m_rot;
+	Vector3 scale = pTrans->m_scale;
 
 	//===== ‰ñ“] =====
 
@@ -182,21 +183,21 @@ void Rigidbody::Update()
 	pos->y += m_velocity->y;
 	pos->z += m_velocity->z;
 	// ˆÚ“®ŒÀŠE
-	if (pos->x < 0.0f)
+	//if (pos->x < scale->x)
+	//{
+	//	pos->x = scale->x;
+	//	m_force->x = 0.0f;
+	//}
+	if (pos->y < scale->y / 2)
 	{
-		pos->x = 0.0f;
-		m_force->x = 0.0f;
-	}
-	if (pos->y < 0.0f)
-	{
-		pos->y = 0.0f;
+		pos->y = scale->y / 2;
 		m_force->y = 0.0f;
 	}
-	if (pos->z < 0.0f)
-	{
-		pos->z = 0.0f;
-		m_force->z = 0.0f;
-	}
+	//if (pos->z < scale->z)
+	//{
+	//	pos->z = scale->x;
+	//	m_force->z = 0.0f;
+	//}
 	// XV
 	pTrans->m_pos = pos;
 }

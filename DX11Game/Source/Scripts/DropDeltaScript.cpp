@@ -74,7 +74,9 @@ void DropDeltaScript::Start()
 	//--- コンポーネンの追加
 
 	// インスタンシングレンダラー
-	gameObject().lock()->AddComponent<InstancingMeshRenderer>()->MakeTetraheron("DropDelta");
+	const auto& render = gameObject().lock()->AddComponent<InstancingMeshRenderer>();
+	render->MakeTetraheron("DropDelta");
+	//render->SetDiffuseColor({ 0,1,0,1 });
 
 	// ECSリジッドボディ
 	const auto& rb = gameObject().lock()->AddComponent<Rigidbody>();
@@ -84,14 +86,14 @@ void DropDeltaScript::Start()
 	rb->SetTorqueDrag({ 0,0,0 });
 	// 回転
 	rb->AddTorqueY(rand() % 3 + 1);
-
+	m_rb = rb;
 
 	// ECSコライダー
 	gameObject().lock()->AddComponent<DeltaCollider>()->SetMain(false);
 
 
 	// 生存時間
-	m_nExitTime = 300;
+	m_nExitTime = 600;
 }
 
 //========================================
@@ -101,12 +103,25 @@ void DropDeltaScript::Start()
 //========================================
 void DropDeltaScript::Update()
 {
+	// 生存
 	m_nExitTime--;
 	if (m_nExitTime < 0)
 	{
 		// 自身の削除
 		GetEntityManager()->DestroyEntity(gameObject().lock());
 	}
+
+	// 近いプレイヤーに追尾
+	const auto& player = m_player.lock();
+	if (!player) return;
+
+	Vector3 vec = player->transform().lock()->m_pos - transform().lock()->m_pos;
+	// 一定距離以下なら
+	if (vec.magnitude() > 1000) return;
+
+	// プレイヤーに近づく
+	m_rb.lock()->AddForce(vec.normalized() * 3);
+
 }
 
 //========================================
@@ -129,40 +144,6 @@ void DropDeltaScript::End()
 
 
 //******************** コールバック関数 ********************
-
-
-//========================================
-//
-// 当たった時
-//
-//========================================
-void DropDeltaScript::OnCollisionEnter(Collider* collider)
-{
-
-}
-
-//========================================
-//
-// 当たっている間
-//
-//========================================
-void DropDeltaScript::OnCollisionStay(Collider* collider)
-{
-
-}
-
-//========================================
-//
-// 離れた時
-//
-//========================================
-void DropDeltaScript::OnCollisionExit(Collider* collider)
-{
-
-}
-
-
-//===== ECS =====
 
 //========================================
 //

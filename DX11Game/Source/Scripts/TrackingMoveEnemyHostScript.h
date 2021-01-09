@@ -14,7 +14,7 @@
 #pragma once
 
 //====== インクルード部 ======
-#include "../Engine/ECSCompoent/Script.h"
+#include "EnemyBaseScript.h"
 
 #include "TrackingMoveEnemyScript.h"
 
@@ -24,26 +24,12 @@
 //===== クラス定義 =====
 namespace ECS
 {
-	class TrackingMoveEnemyHostScript : public Script
+	class TrackingMoveEnemyHostScript : public EnemyBaseScript
 	{
 	private:
 		// ----- メンバ -----
-
-		// ターゲット
-		std::weak_ptr<Transform> m_target;
-		// リジッドボディ
-		std::weak_ptr<Rigidbody> m_rb;
-		// 移動速度
-		float m_speed;
-
 		// 子リスト
 		std::list<std::weak_ptr<TrackingMoveEnemyScript>> m_childList;
-
-	public:
-		// ターゲットのセット
-		void SetTarget(std::weak_ptr<Transform> target) { m_target = target; }
-		// 子の生成
-		void CreateChild(int nNum);
 
 	protected:
 		// ----- メソッド -----
@@ -57,22 +43,8 @@ namespace ECS
 		// 終了時に呼ばれます
 		void End() override;
 
-
-		// ----- コールバック関数 -----
-
-		// 当たった時
-		void OnCollisionEnter(Collider* collider) override;
-		// 当たっている間
-		void OnCollisionStay (Collider* collider) override;
-		// 離れた時
-		void OnCollisionExit (Collider* collider) override;
-
-		// ECS
-		// 当たった時
-		void OnDeltaCollisionEnter(DeltaCollider* collider) override;
-		// 当たっている間
-		void OnDeltaCollisionStay(DeltaCollider* collider) override;
-		// 離れた時
-		void OnDeltaCollisionExit(DeltaCollider* collider) override;
+	public:
+		// 子の生成
+		void CreateChild(int nNum);
 	};
 }

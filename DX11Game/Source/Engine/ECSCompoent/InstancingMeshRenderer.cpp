@@ -37,14 +37,6 @@ std::map<const std::string, std::vector<InstancingMeshData*>, std::less<>> Insta
 InstancingMeshRenderer::InstancingMeshRenderer()
 {
 	m_mesh = nullptr;
-
-	m_data.material.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	m_data.material.Ambient = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	m_data.material.Specular = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	m_data.material.Emissive = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	m_data.material.Power = 50.0f;
-
-	//m_fLayer = 100;
 }
 
 //========================================
@@ -68,7 +60,6 @@ void InstancingMeshRenderer::OnCreate()
 	m_transform = m_Parent.lock()->GetComponent<Transform>();
 
 	m_data.mtxWorld = m_transform.lock()->GetWorldMatrix();
-	m_data.mtxTexture = &m_mtxTexture;
 }
 
 //========================================
@@ -187,6 +178,7 @@ bool InstancingMeshRenderer::CreateMeshData(std::string tag)
 		InstancingMeshRenderer* p = new InstancingMeshRenderer();
 		p->m_tag = tag;
 		p->m_mesh = m_mesh;
+		p->m_mesh->mtxTexture = &p->m_mtxTexture;
 		sys->AddList(p);
 	}
 

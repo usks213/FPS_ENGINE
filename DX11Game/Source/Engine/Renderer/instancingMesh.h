@@ -22,13 +22,17 @@ struct InstancingMesh {
 	ID3D11ShaderResourceView* pNormalTexture = nullptr;		// テクスチャ
 	ePrimitiveType primitiveType;			// プリミティブ型
 	float fAlpha;							// 頂点カラーα最小値
+
+	XMFLOAT4X4* mtxTexture = nullptr;					// テクスチャ マトリックス
+	MATERIAL material;					// マテリアル
+	bool bBump = false;
 } ;
 
 struct InstancingMeshData {
 	XMFLOAT4X4* mtxWorld = nullptr;					// ワールドマトリックス
-	XMFLOAT4X4* mtxTexture = nullptr;					// テクスチャ マトリックス
-	MATERIAL material;					// マテリアル
-	bool bBump = false;
+	//XMFLOAT4X4* mtxTexture = nullptr;					// テクスチャ マトリックス
+	//MATERIAL material;					// マテリアル
+	//bool bBump = false;
 };
 
 //*****************************************************************************

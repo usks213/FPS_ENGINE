@@ -58,7 +58,7 @@ using namespace ECS;
 
 
 //===== マクロ定義 =====
-#define MAX_SPAWN_NUM (64)
+#define MAX_SPAWN_NUM (80)
 
 
 //******************** スクリプトメソッド ********************
@@ -148,7 +148,7 @@ void MakeEnemyScript::Update()
 			// エネミー生成
 			const auto& obj = Instantiate<GameObject>(pos.RotationY(addAngle * i) - backPos + spawnPos);
 			// コンポーネントの追加
-			obj->AddComponent<StraightMoveEnemyScript>();
+			obj->AddComponent<StraightMoveEnemyScript>()->SetPlayer(player);
 			// 進む向き
 			const auto& rb = obj->GetComponent<Rigidbody>();
 			Vector3 dir = (temp - center).normalized();
@@ -175,7 +175,7 @@ void MakeEnemyScript::Update()
 			// エネミー生成
 			const auto& obj = Instantiate<GameObject>(pos + center);
 			// コンポーネントの追加
-			obj->AddComponent<StraightMoveEnemyScript>();
+			obj->AddComponent<StraightMoveEnemyScript>()->SetPlayer(player);
 			// 進む向き
 			const auto& rb = obj->GetComponent<Rigidbody>();
 			center->y = 0;
@@ -190,7 +190,7 @@ void MakeEnemyScript::Update()
 		const auto& obj = Instantiate<GameObject>(spawnPos);
 		// コンポーネントの追加
 		const auto& tracking = obj->AddComponent<TrackingMoveEnemyHostScript>();
-		tracking->SetTarget(playerTrans);
+		tracking->SetPlayer(player);
 
 		// 生成数
 		int SpawnNum = m_nSpawnNum * 3;

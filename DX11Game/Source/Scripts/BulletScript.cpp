@@ -131,48 +131,6 @@ void BulletScript::End()
 
 //******************** コールバック関数 ********************
 
-
-//========================================
-//
-// 当たった時
-//
-//========================================
-void BulletScript::OnCollisionEnter(Collider* collider)
-{
-	// ドロップアイテムの生成
-	const auto& obj = Instantiate<GameObject>(collider->transform().lock()->m_pos);
-	obj->AddComponent<DropDeltaScript>();
-	// 削除
-	GetEntityManager()->DestroyEntity(collider->gameObject().lock());
-}
-
-//========================================
-//
-// 当たっている間
-//
-//========================================
-void BulletScript::OnCollisionStay(Collider* collider)
-{
-	// ドロップアイテムの生成
-	const auto& obj = Instantiate<GameObject>(collider->transform().lock()->m_pos);
-	obj->AddComponent<DropDeltaScript>();
-	// 削除
-	GetEntityManager()->DestroyEntity(collider->gameObject().lock());
-}
-
-//========================================
-//
-// 離れた時
-//
-//========================================
-void BulletScript::OnCollisionExit(Collider* collider)
-{
-
-}
-
-
-//===== ECS =====
-
 //========================================
 //
 // 当たった時
@@ -182,11 +140,7 @@ void BulletScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 {
 	if (collider->gameObject().lock()->tag() == "Enemy")
 	{
-		// ドロップアイテムの生成
-		const auto& obj = Instantiate<GameObject>(collider->transform().lock()->m_pos);
-		obj->AddComponent<DropDeltaScript>();
-		// 削除
-		GetEntityManager()->DestroyEntity(collider->gameObject().lock());
+
 	}
 }
 
@@ -199,11 +153,7 @@ void BulletScript::OnDeltaCollisionStay(DeltaCollider* collider)
 {
 	if (collider->gameObject().lock()->tag() == "Enemy")
 	{
-		// ドロップアイテムの生成
-		const auto& obj = Instantiate<GameObject>(collider->transform().lock()->m_pos);
-		obj->AddComponent<DropDeltaScript>();
-		// 削除
-		GetEntityManager()->DestroyEntity(collider->gameObject().lock());
+
 	}
 }
 

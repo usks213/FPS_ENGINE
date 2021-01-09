@@ -8,6 +8,7 @@
 //	開発履歴
 //
 //	2020/12/27	プレイヤースクリプトクラス作成(Test)
+//	2021/01/09	デルタカウンターの追加
 //
 //===================================================================
 
@@ -30,6 +31,9 @@ namespace ECS
 		std::weak_ptr<Rigidbody> m_rb;
 		int m_nShotCnt;
 
+		// デルタカウンター
+		int m_nDeltaCount;
+
 	protected:
 		// ----- メソッド -----
 
@@ -44,13 +48,6 @@ namespace ECS
 
 
 		// ----- コールバック関数 -----
-
-		// 当たった時
-		void OnCollisionEnter(Collider* collider) override;
-		// 当たっている間
-		void OnCollisionStay (Collider* collider) override;
-		// 離れた時
-		void OnCollisionExit (Collider* collider) override;
 
 		// 当たった時
 		void OnDeltaCollisionEnter(DeltaCollider* collider) override;

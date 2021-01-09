@@ -63,9 +63,11 @@ using namespace ECS;
 //========================================
 void TrackingMoveEnemyScript::Start()
 {
+	// ベースクラス
+	EnemyBaseScript::Start();
+
 	// 名前・タグ
 	gameObject().lock()->SetName("TrackingMoveEnemy");
-	gameObject().lock()->SetTag("Enemy");
 
 	// 大きさ
 	transform().lock()->m_scale = Vector3(200, 200, 200);
@@ -73,26 +75,9 @@ void TrackingMoveEnemyScript::Start()
 	//--- コンポーネンの追加
 
 	// インスタンシングレンダラー
-	gameObject().lock()->AddComponent<InstancingMeshRenderer>()->MakeDodecahedron("TrackingMoveEnemy");
-
-	// ECSリジッドボディ
-	const auto& rb = gameObject().lock()->AddComponent<Rigidbody>();
-	rb->SetDrag({ 0,0,0 });
-	rb->SetGravityForce({ 0,0,0 });
-	rb->SetStaticFriction(0);
-	rb->SetDynamicFriction(0);
-	rb->SetMass(1);
-	rb->SetTorqueDrag({ 0,0,0 });
-	// リジッドボディ保存
-	m_rb = rb;
-	// 回転
-	Vector3 v = { rand() % 100 / 100.0f, rand() % 100 / 100.0f, rand() % 100 / 100.0f };
-	v = v.normalized();
-	rb->AddTorque(v * 3);
-
-	// ECSコライダー
-	gameObject().lock()->AddComponent<DeltaCollider>()->SetMain(false);
-
+	const auto& render = gameObject().lock()->AddComponent<InstancingMeshRenderer>();
+	render->MakeDodecahedron("TrackingMoveEnemy");
+	//render->SetDiffuseColor({ 1,165 / 255.0f,0,1 });
 }
 
 //========================================
@@ -102,6 +87,8 @@ void TrackingMoveEnemyScript::Start()
 //========================================
 void TrackingMoveEnemyScript::Update()
 {
+	// ベースクラス
+	EnemyBaseScript::Update();
 }
 
 //========================================
@@ -111,6 +98,8 @@ void TrackingMoveEnemyScript::Update()
 //========================================
 void TrackingMoveEnemyScript::LateUpdate()
 {
+	// ベースクラス
+	EnemyBaseScript::LateUpdate();
 }
 
 //========================================
@@ -120,69 +109,7 @@ void TrackingMoveEnemyScript::LateUpdate()
 //========================================
 void TrackingMoveEnemyScript::End()
 {
-}
-
-
-//******************** コールバック関数 ********************
-
-
-//========================================
-//
-// 当たった時
-//
-//========================================
-void TrackingMoveEnemyScript::OnCollisionEnter(Collider* collider)
-{
-
-}
-
-//========================================
-//
-// 当たっている間
-//
-//========================================
-void TrackingMoveEnemyScript::OnCollisionStay(Collider* collider)
-{
-
-}
-
-//========================================
-//
-// 離れた時
-//
-//========================================
-void TrackingMoveEnemyScript::OnCollisionExit(Collider* collider)
-{
-
-}
-
-
-//===== ECS =====
-
-//========================================
-//
-// 当たった時
-//
-//========================================
-void TrackingMoveEnemyScript::OnDeltaCollisionEnter(DeltaCollider* collider)
-{
-}
-
-//========================================
-//
-// 当たっている間
-//
-//========================================
-void TrackingMoveEnemyScript::OnDeltaCollisionStay(DeltaCollider* collider)
-{
-}
-
-//========================================
-//
-// 離れた時
-//
-//========================================
-void TrackingMoveEnemyScript::OnDeltaCollisionExit(DeltaCollider* collider)
-{
+	// ベースクラス
+	EnemyBaseScript::End();
 }
 

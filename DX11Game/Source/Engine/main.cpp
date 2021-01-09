@@ -547,8 +547,8 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 		// è∞
 		if (i == 0)
 		{
-			pos = Vector3{ 50000, -100, 50000 };
-			scale = Vector3{ 100000, 10, 100000 };
+			pos = Vector3{ 0, 0, 0 };
+			scale = Vector3{ 100000, 1, 100000 };
 		}
 		// ìVà‰
 		else if (i == 1)

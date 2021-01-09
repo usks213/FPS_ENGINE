@@ -44,13 +44,6 @@ namespace ECS
 
 		// ----- コールバック関数 -----
 
-		// 当たった時
-		void OnCollisionEnter(Collider* collider) override;
-		// 当たっている間
-		void OnCollisionStay (Collider* collider) override;
-		// 離れた時
-		void OnCollisionExit (Collider* collider) override;
-
 		// ECS
 		// 当たった時
 		void OnDeltaCollisionEnter(DeltaCollider* collider) override;
