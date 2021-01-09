@@ -40,8 +40,8 @@
 //
 //	2021/01/06	データ指向化(ECS)成功！！ インスタンスをvectorの連番で生成
 //				IComponentData,IECSComponent,ECSSystem の作成
-//				ECSRigidbody,ECSRigidbodySystem,
-//				ECSSphereCollider,ECSSphereCollisionSystem の作成
+//				Rigidbody,RigidbodySystem,
+//				DeltaCollider,DeltaCollisionSystem の作成
 //
 //	2021/01/07	デルタ多面体、正多面体の作成
 //				ゲームの方向性決定！！ タイトル「 デルタ Δ 」
@@ -95,11 +95,8 @@
 #include "../Scripts/MakeEnemyScript.h"
 
 // ECS
-#include "../Engine/ECSCompoent/ECSRigidbody.h"
-#include "../Engine/ECSSystem/ECSRigidbodySystem.h"
-
-#include "../Engine/ECSCompoent/ECSSphereCollider.h"
-#include "../Engine/ECSSystem/ECSSphereCollisionSystem.h"
+#include "../Engine/ECSCompoent/DeltaCollider.h"
+#include "../Engine/ECSSystem/DeltaCollisionSystem.h"
 
 
 
@@ -527,8 +524,7 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	g_world.AddSystem<RendererSystem>();
 	g_world.AddSystem<CollisionSystem>();
 	g_world.AddSystem<RigidbodySystem>();
-	g_world.AddSystem<ECSRigidbodySystem>();
-	g_world.AddSystem<ECSSphereCollisionSystem>();
+	g_world.AddSystem<DeltaCollisionSystem>();
 	g_world.AddSystem<ScriptSystem>();
 
 
@@ -648,8 +644,8 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	//		//test->AddComponent<InstancingMeshRenderer>()->MakeOctahedron("a");
 	//		test->AddComponent<InstancingMeshRenderer>()->MakeDodecahedron("a");
 	//		//test->AddComponent<InstancingMeshRenderer>()->MakeIcosahedron("a");
-	//		const auto& rb = test->AddComponent<ECSRigidbody>();
-	//		test->AddComponent<ECSSphereCollider>()->GetData()->SetMain(false);
+	//		const auto& rb = test->AddComponent<Rigidbody>();
+	//		test->AddComponent<DeltaCollider>()->SetMain(false);
 
 	//		test->transform().lock()->m_pos = pos;
 	//		test->transform().lock()->m_scale = Vector3{ 200, 200, 200 };

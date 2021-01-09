@@ -39,12 +39,10 @@
 #include "../Engine/ECSCompoent/SphereCollider.h"
 
 // ECSコンポーネント
-#include "../Engine/ECSCompoent/ECSRigidbody.h"
-#include "../Engine/ECSCompoent/ECSSphereCollider.h"
+#include "../Engine/ECSCompoent/DeltaCollider.h"
 
 // ECSシステム
-#include "../Engine/ECSSystem/ECSRigidbodySystem.h"
-#include "../Engine/ECSSystem/ECSSphereCollisionSystem.h"
+#include "../Engine/ECSSystem/DeltaCollisionSystem.h"
 
 
 // ネームスペース
@@ -93,7 +91,7 @@ void TrackingMoveEnemyScript::Start()
 	rb->AddTorque(v * 3);
 
 	// ECSコライダー
-	gameObject().lock()->AddComponent<ECSSphereCollider>()->GetData()->SetMain(false);
+	gameObject().lock()->AddComponent<DeltaCollider>()->SetMain(false);
 
 }
 
@@ -166,7 +164,7 @@ void TrackingMoveEnemyScript::OnCollisionExit(Collider* collider)
 // 当たった時
 //
 //========================================
-void TrackingMoveEnemyScript::OnECSCollisionEnter(SphereColliderData* collider)
+void TrackingMoveEnemyScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 {
 }
 
@@ -175,7 +173,7 @@ void TrackingMoveEnemyScript::OnECSCollisionEnter(SphereColliderData* collider)
 // 当たっている間
 //
 //========================================
-void TrackingMoveEnemyScript::OnECSCollisionStay(SphereColliderData* collider)
+void TrackingMoveEnemyScript::OnDeltaCollisionStay(DeltaCollider* collider)
 {
 }
 
@@ -184,7 +182,7 @@ void TrackingMoveEnemyScript::OnECSCollisionStay(SphereColliderData* collider)
 // 離れた時
 //
 //========================================
-void TrackingMoveEnemyScript::OnECSCollisionExit(SphereColliderData* collider)
+void TrackingMoveEnemyScript::OnDeltaCollisionExit(DeltaCollider* collider)
 {
 }
 

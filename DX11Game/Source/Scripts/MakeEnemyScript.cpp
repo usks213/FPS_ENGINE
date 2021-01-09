@@ -39,12 +39,12 @@
 #include "../Engine/ECSCompoent/SphereCollider.h"
 
 // ECSコンポーネント
-#include "../Engine/ECSCompoent/ECSRigidbody.h"
-#include "../Engine/ECSCompoent/ECSSphereCollider.h"
+#include "../Engine/ECSCompoent/Rigidbody.h"
+#include "../Engine/ECSCompoent/DeltaCollider.h"
 
 // ECSシステム
-#include "../Engine/ECSSystem/ECSRigidbodySystem.h"
-#include "../Engine/ECSSystem/ECSSphereCollisionSystem.h"
+#include "../Engine/ECSSystem/RigidbodySystem.h"
+#include "../Engine/ECSSystem/DeltaCollisionSystem.h"
 
 // スクリプト
 #include "StraightMoveEnemyScript.h"
@@ -150,7 +150,7 @@ void MakeEnemyScript::Update()
 			// コンポーネントの追加
 			obj->AddComponent<StraightMoveEnemyScript>();
 			// 進む向き
-			const auto& rb = obj->GetComponent<ECSRigidbody>()->GetData();
+			const auto& rb = obj->GetComponent<Rigidbody>();
 			Vector3 dir = (temp - center).normalized();
 			rb->AddForce(dir * 20);
 		}
@@ -177,7 +177,7 @@ void MakeEnemyScript::Update()
 			// コンポーネントの追加
 			obj->AddComponent<StraightMoveEnemyScript>();
 			// 進む向き
-			const auto& rb = obj->GetComponent<ECSRigidbody>()->GetData();
+			const auto& rb = obj->GetComponent<Rigidbody>();
 			center->y = 0;
 			Vector3 dir = (temp - center).normalized();
 			rb->AddForce(dir * 20);

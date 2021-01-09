@@ -133,9 +133,6 @@
     <ClCompile Include="Source\Engine\ECS\World\World.cpp">
       <Filter>ソース\エンジン\ECS\World</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\ECS\System\ISystem.cpp">
-      <Filter>ソース\エンジン\ECS\System</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Engine\ECSCompoent\Transform.cpp">
       <Filter>ソース\エンジン\ECSComponent</Filter>
     </ClCompile>
@@ -220,21 +217,6 @@
     <ClCompile Include="Source\Engine\ECSCompoent\InstancingMeshRenderer.cpp">
       <Filter>ソース\エンジン\ECSComponent</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Engine\ECSSystem\ECSRigidbodySystem.cpp">
-      <Filter>ソース\エンジン\ECSSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\ECSCompoent\ECSRigidbody.cpp">
-      <Filter>ソース\エンジン\ECSComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\ECS\Component\IComponentData.cpp">
-      <Filter>ソース\エンジン\ECS\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\ECSSystem\ECSSphereCollisionSystem.cpp">
-      <Filter>ソース\エンジン\ECSSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Engine\ECSCompoent\ECSSphereCollider.cpp">
-      <Filter>ソース\エンジン\ECSComponent</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scripts\BulletScript.cpp">
       <Filter>ソース\スクリプト</Filter>
     </ClCompile>
@@ -258,6 +240,9 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\ECSCompoent\DeltaCollider.cpp">
       <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECS\System\ISystem.cpp">
+      <Filter>ソース\エンジン\ECS\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -309,14 +294,8 @@
     <ClInclude Include="Source\Engine\ECS\World\World.h">
       <Filter>ソース\エンジン\ECS\World</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\ECS\System\ISystem.h">
-      <Filter>ソース\エンジン\ECS\System</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\ECSCompoent\Transform.h">
       <Filter>ソース\エンジン\ECSComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\ECS\System\System.h">
-      <Filter>ソース\エンジン\ECS\System</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\ECSSystem\TransformSystem.h">
       <Filter>ソース\エンジン\ECSSystem</Filter>
@@ -399,27 +378,6 @@
     <ClInclude Include="Source\Engine\ECSCompoent\InstancingMeshRenderer.h">
       <Filter>ソース\エンジン\ECSComponent</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Engine\ECS\System\ECSSystem.h">
-      <Filter>ソース\エンジン\ECS\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\ECSSystem\ECSRigidbodySystem.h">
-      <Filter>ソース\エンジン\ECSSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\ECSCompoent\ECSRigidbody.h">
-      <Filter>ソース\エンジン\ECSComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\ECS\Component\IComponentData.h">
-      <Filter>ソース\エンジン\ECS\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\ECS\Component\IECSComponent.h">
-      <Filter>ソース\エンジン\ECS\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\ECSSystem\ECSSphereCollisionSystem.h">
-      <Filter>ソース\エンジン\ECSSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Engine\ECSCompoent\ECSSphereCollider.h">
-      <Filter>ソース\エンジン\ECSComponent</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\System\CCell.h">
       <Filter>ソース\エンジン\System</Filter>
     </ClInclude>
@@ -446,6 +404,12 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\ECSCompoent\DeltaCollider.h">
       <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECS\System\ISystem.h">
+      <Filter>ソース\エンジン\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECS\System\System.h">
+      <Filter>ソース\エンジン\ECS\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

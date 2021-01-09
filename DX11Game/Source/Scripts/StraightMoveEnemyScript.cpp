@@ -39,12 +39,10 @@
 #include "../Engine/ECSCompoent/SphereCollider.h"
 
 // ECSコンポーネント
-#include "../Engine/ECSCompoent/ECSRigidbody.h"
-#include "../Engine/ECSCompoent/ECSSphereCollider.h"
+#include "../Engine/ECSCompoent/DeltaCollider.h"
 
 // ECSシステム
-#include "../Engine/ECSSystem/ECSRigidbodySystem.h"
-#include "../Engine/ECSSystem/ECSSphereCollisionSystem.h"
+#include "../Engine/ECSSystem/DeltaCollisionSystem.h"
 
 
 // ネームスペース
@@ -78,7 +76,7 @@ void StraightMoveEnemyScript::Start()
 	gameObject().lock()->AddComponent<InstancingMeshRenderer>()->MakeOctahedron("StraightMoveEnemy");
 
 	// ECSリジッドボディ
-	const auto& rb = gameObject().lock()->AddComponent<ECSRigidbody>()->GetData();
+	const auto& rb = gameObject().lock()->AddComponent<Rigidbody>();
 	rb->SetDrag({ 0,0,0 });
 	rb->SetGravityForce({ 0,0,0 });
 	rb->SetStaticFriction(0);
@@ -91,7 +89,7 @@ void StraightMoveEnemyScript::Start()
 	rb->AddTorque(v * 3);
 
 	// ECSコライダー
-	gameObject().lock()->AddComponent<ECSSphereCollider>()->GetData()->SetMain(false);
+	gameObject().lock()->AddComponent<DeltaCollider>()->SetMain(false);
 }
 
 //========================================
@@ -163,7 +161,7 @@ void StraightMoveEnemyScript::OnCollisionExit(Collider* collider)
 // 当たった時
 //
 //========================================
-void StraightMoveEnemyScript::OnECSCollisionEnter(SphereColliderData* collider)
+void StraightMoveEnemyScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 {
 }
 
@@ -172,7 +170,7 @@ void StraightMoveEnemyScript::OnECSCollisionEnter(SphereColliderData* collider)
 // 当たっている間
 //
 //========================================
-void StraightMoveEnemyScript::OnECSCollisionStay(SphereColliderData* collider)
+void StraightMoveEnemyScript::OnDeltaCollisionStay(DeltaCollider* collider)
 {
 }
 
@@ -181,7 +179,7 @@ void StraightMoveEnemyScript::OnECSCollisionStay(SphereColliderData* collider)
 // 離れた時
 //
 //========================================
-void StraightMoveEnemyScript::OnECSCollisionExit(SphereColliderData* collider)
+void StraightMoveEnemyScript::OnDeltaCollisionExit(DeltaCollider* collider)
 {
 }
 

@@ -29,7 +29,7 @@ namespace ECS
 	class GameObject;
 	class Transform;
 	class Collider;
-	class SphereColliderData;
+	class DeltaCollider;
 	class DeltaCollider;
 	class Rigidbody;
 
@@ -80,11 +80,6 @@ namespace ECS
 		virtual void OnCollisionEnter(Collider* collider) {};
 		virtual void OnCollisionStay(Collider* collider)  {};
 		virtual void OnCollisionExit(Collider* collider)  {};
-
-		// ECS“–‚½‚è”»’è
-		virtual void OnECSCollisionEnter(SphereColliderData* collider) {};
-		virtual void OnECSCollisionStay(SphereColliderData* collider) {};
-		virtual void OnECSCollisionExit(SphereColliderData* collider) {};
 
 		// Delta“–‚½‚è”»’è
 		virtual void OnDeltaCollisionEnter(DeltaCollider* collider) {};

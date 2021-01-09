@@ -39,12 +39,10 @@
 #include "../Engine/ECSCompoent/SphereCollider.h"
 
 // ECSコンポーネント
-#include "../Engine/ECSCompoent/ECSRigidbody.h"
-#include "../Engine/ECSCompoent/ECSSphereCollider.h"
+#include "../Engine/ECSCompoent/DeltaCollider.h"
 
 // ECSシステム
-#include "../Engine/ECSSystem/ECSRigidbodySystem.h"
-#include "../Engine/ECSSystem/ECSSphereCollisionSystem.h"
+#include "../Engine/ECSSystem/DeltaCollisionSystem.h"
 
 
 // ネームスペース
@@ -136,7 +134,7 @@ void ScriptBaseLayout::OnCollisionExit(Collider* collider)
 // 当たった時
 //
 //========================================
-void ScriptBaseLayout::OnECSCollisionEnter(SphereColliderData* collider)
+void ScriptBaseLayout::OnDeltaCollisionEnter(DeltaCollider* collider)
 {
 }
 
@@ -145,7 +143,7 @@ void ScriptBaseLayout::OnECSCollisionEnter(SphereColliderData* collider)
 // 当たっている間
 //
 //========================================
-void ScriptBaseLayout::OnECSCollisionStay(SphereColliderData* collider)
+void ScriptBaseLayout::OnDeltaCollisionStay(DeltaCollider* collider)
 {
 }
 
@@ -154,7 +152,7 @@ void ScriptBaseLayout::OnECSCollisionStay(SphereColliderData* collider)
 // 離れた時
 //
 //========================================
-void ScriptBaseLayout::OnECSCollisionExit(SphereColliderData* collider)
+void ScriptBaseLayout::OnDeltaCollisionExit(DeltaCollider* collider)
 {
 }
 

@@ -31,16 +31,14 @@
 #include "../Engine/ECSCompoent/Transform.h"
 #include "../Engine/ECSCompoent/MeshRenderer.h"
 #include "../Engine/ECSCompoent/Rigidbody.h"
-#include "../Engine/ECSCompoent/ECSRigidbody.h"
 #include "../Engine/ECSCompoent/BoxCollider.h"
 #include "../Engine/ECSCompoent/SphereCollider.h"
-#include "../Engine/ECSCompoent/ECSSphereCollider.h"
+#include "../Engine/ECSCompoent/DeltaCollider.h"
 
 #include "../Engine/Renderer/Camera.h"
 #include "../Engine/Renderer/Light.h"
 
-#include "../Engine/ECSSystem/ECSRigidbodySystem.h"
-#include "../Engine/ECSSystem/ECSSphereCollisionSystem.h"
+#include "../Engine/ECSSystem/DeltaCollisionSystem.h"
 
 
 // スクリプト
@@ -89,7 +87,7 @@ void PlayerScript::Start()
 	// コライダー
 	//const auto& collider = gameObject().lock()->AddComponent<SphereCollider>();
 	//collider->SetRadius(50);
-	const auto& collider = gameObject().lock()->AddComponent<ECSSphereCollider>();
+	const auto& collider = gameObject().lock()->AddComponent<DeltaCollider>();
 
 	// カメラ
 	CCamera::GetMainCamera()->SetCameraTarget(gameObject().lock()->transform().lock());
@@ -147,13 +145,13 @@ void PlayerScript::Update()
 		//const auto& test = GetEntityManager()->CreateEntity<GameObject>();
 		const auto& test = Instantiate<GameObject>();
 		test->AddComponent<BulletScript>();
-		const auto& rb = test->GetComponent<ECSRigidbody>();
+		const auto& rb = test->GetComponent<Rigidbody>();
 
 		Vector3 dir = CCamera::GetMainCamera()->GetForward().normalized();
 
 		test->transform().lock()->m_pos = transform().lock()->m_pos + dir * 200;
-		rb->GetData()->AddForce(dir * 100 + Vector3::WallVerticalVector(m_rb.lock()->GetForce(), dir));
-		rb->GetData()->AddTorque(dir * 10);
+		rb->AddForce(dir * 100 + Vector3::WallVerticalVector(m_rb.lock()->GetForce(), dir));
+		rb->AddTorque(dir * 10);
 
 		m_nShotCnt = 5;
 	}
@@ -234,7 +232,7 @@ void PlayerScript::OnCollisionExit(Collider* collider)
 // 当たった時
 //
 //========================================
-void PlayerScript::OnECSCollisionEnter(SphereColliderData* collider)
+void PlayerScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 {
 	if (collider->gameObject().lock()->tag() == "Enemy")
 	{
@@ -251,7 +249,7 @@ void PlayerScript::OnECSCollisionEnter(SphereColliderData* collider)
 // 当たっている間
 //
 //========================================
-void PlayerScript::OnECSCollisionStay(SphereColliderData* collider)
+void PlayerScript::OnDeltaCollisionStay(DeltaCollider* collider)
 {
 	if (collider->gameObject().lock()->tag() == "Enemy")
 	{
@@ -268,7 +266,7 @@ void PlayerScript::OnECSCollisionStay(SphereColliderData* collider)
 // 離れた時
 //
 //========================================
-void PlayerScript::OnECSCollisionExit(SphereColliderData* collider)
+void PlayerScript::OnDeltaCollisionExit(DeltaCollider* collider)
 {
 
 }

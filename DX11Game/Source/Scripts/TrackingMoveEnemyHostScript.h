@@ -69,10 +69,10 @@ namespace ECS
 
 		// ECS
 		// “–‚½‚Á‚½Žž
-		void OnECSCollisionEnter(SphereColliderData* collider) override;
+		void OnDeltaCollisionEnter(DeltaCollider* collider) override;
 		// “–‚½‚Á‚Ä‚¢‚éŠÔ
-		void OnECSCollisionStay(SphereColliderData* collider) override;
+		void OnDeltaCollisionStay(DeltaCollider* collider) override;
 		// —£‚ê‚½Žž
-		void OnECSCollisionExit(SphereColliderData* collider) override;
+		void OnDeltaCollisionExit(DeltaCollider* collider) override;
 	};
 }

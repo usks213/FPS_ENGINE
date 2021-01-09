@@ -39,12 +39,10 @@
 #include "../Engine/ECSCompoent/SphereCollider.h"
 
 // ECSコンポーネント
-#include "../Engine/ECSCompoent/ECSRigidbody.h"
-#include "../Engine/ECSCompoent/ECSSphereCollider.h"
+#include "../Engine/ECSCompoent/DeltaCollider.h"
 
 // ECSシステム
-#include "../Engine/ECSSystem/ECSRigidbodySystem.h"
-#include "../Engine/ECSSystem/ECSSphereCollisionSystem.h"
+#include "../Engine/ECSSystem/DeltaCollisionSystem.h"
 
 
 // ネームスペース
@@ -79,17 +77,17 @@ void DropDeltaScript::Start()
 	gameObject().lock()->AddComponent<InstancingMeshRenderer>()->MakeTetraheron("DropDelta");
 
 	// ECSリジッドボディ
-	const auto& rb = gameObject().lock()->AddComponent<ECSRigidbody>();
-	rb->GetData()->SetStaticFriction(0);
-	rb->GetData()->SetDynamicFriction(0);
-	rb->GetData()->SetMass(1);
-	rb->GetData()->SetTorqueDrag({ 0,0,0 });
+	const auto& rb = gameObject().lock()->AddComponent<Rigidbody>();
+	rb->SetStaticFriction(0);
+	rb->SetDynamicFriction(0);
+	rb->SetMass(1);
+	rb->SetTorqueDrag({ 0,0,0 });
 	// 回転
-	rb->GetData()->AddTorqueY(rand() % 3 + 1);
+	rb->AddTorqueY(rand() % 3 + 1);
 
 
 	// ECSコライダー
-	gameObject().lock()->AddComponent<ECSSphereCollider>()->GetData()->SetMain(false);
+	gameObject().lock()->AddComponent<DeltaCollider>()->SetMain(false);
 
 
 	// 生存時間
@@ -171,7 +169,7 @@ void DropDeltaScript::OnCollisionExit(Collider* collider)
 // 当たった時
 //
 //========================================
-void DropDeltaScript::OnECSCollisionEnter(SphereColliderData* collider)
+void DropDeltaScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 {
 	if (collider->gameObject().lock()->tag() == "Player")
 	{
@@ -185,7 +183,7 @@ void DropDeltaScript::OnECSCollisionEnter(SphereColliderData* collider)
 // 当たっている間
 //
 //========================================
-void DropDeltaScript::OnECSCollisionStay(SphereColliderData* collider)
+void DropDeltaScript::OnDeltaCollisionStay(DeltaCollider* collider)
 {
 	if (collider->gameObject().lock()->tag() == "Player")
 	{
@@ -199,7 +197,7 @@ void DropDeltaScript::OnECSCollisionStay(SphereColliderData* collider)
 // 離れた時
 //
 //========================================
-void DropDeltaScript::OnECSCollisionExit(SphereColliderData* collider)
+void DropDeltaScript::OnDeltaCollisionExit(DeltaCollider* collider)
 {
 }
 
