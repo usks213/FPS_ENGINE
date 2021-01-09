@@ -16,7 +16,6 @@
 //====== インクルード部 ======
 #include "../Engine/ECSCompoent/Script.h"
 
-#include "../Engine/ECSCompoent/ECSRigidbody.h"
 
 //===== マクロ定義 =====
 
@@ -29,11 +28,11 @@ namespace ECS
 	private:
 		// ----- メンバ -----
 		// リジッドボディ
-		std::weak_ptr<ECSRigidbody> m_rb;
+		std::weak_ptr<Rigidbody> m_rb;
 
 	public:
 		// ターゲットのセット
-		RigidbodyData* GetRb() { return m_rb.lock()->GetData(); }
+		std::weak_ptr<Rigidbody> GetRb() { return m_rb.lock(); }
 
 	protected:
 		// ----- メソッド -----

@@ -114,14 +114,14 @@ void MakeEnemyScript::Update()
 
 	// 生成するエネミーの種類
 	//int type = rand() % eMaxType;
-	//m_nType = (m_nType +1) % 3;
 	m_nType = (m_nType +1) % 3;
+	//m_nType = 2;
 
 	//--- エネミーを生成する座標
-	float height = (rand() % 15 - 5) * 100;
+	float height = (rand() % 10 - 3) * 100;
 	Vector3 spawnPos = {4000, height, 0};
 	Vector3 temp = playerPos;
-	temp->y = 0;
+	//temp->y = 0;
 	spawnPos = spawnPos.RotationY(rand() % 360) + temp;
 
 	// タイプで分ける
@@ -186,17 +186,17 @@ void MakeEnemyScript::Update()
 		break;
 	case ECS::MakeEnemyScript::eTracking:
 	{
-		//// エネミー生成
-		//const auto& obj = Instantiate<GameObject>(spawnPos);
-		//// コンポーネントの追加
-		//const auto& tracking = obj->AddComponent<TrackingMoveEnemyHostScript>();
-		//tracking->SetTarget(playerTrans);
+		// エネミー生成
+		const auto& obj = Instantiate<GameObject>(spawnPos);
+		// コンポーネントの追加
+		const auto& tracking = obj->AddComponent<TrackingMoveEnemyHostScript>();
+		tracking->SetTarget(playerTrans);
 
-		//// 生成数
-		//int SpawnNum = m_nSpawnNum / 3 + 1;
+		// 生成数
+		int SpawnNum = m_nSpawnNum * 3;
 
-		//// 子の生成
-		////tracking->CreateChild(SpawnNum);
+		// 子の生成
+		tracking->CreateChild(SpawnNum);
 	}
 		break;
 	case ECS::MakeEnemyScript::eGroup:

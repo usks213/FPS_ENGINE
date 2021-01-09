@@ -16,7 +16,6 @@
 //====== インクルード部 ======
 #include "../Engine/ECSCompoent/Script.h"
 
-#include "../Engine/ECSCompoent/ECSRigidbody.h"
 #include "TrackingMoveEnemyScript.h"
 
 //===== マクロ定義 =====
@@ -33,7 +32,7 @@ namespace ECS
 		// ターゲット
 		std::weak_ptr<Transform> m_target;
 		// リジッドボディ
-		std::weak_ptr<ECSRigidbody> m_rb;
+		std::weak_ptr<Rigidbody> m_rb;
 		// 移動速度
 		float m_speed;
 

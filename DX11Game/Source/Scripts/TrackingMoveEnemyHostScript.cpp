@@ -71,7 +71,7 @@ void TrackingMoveEnemyHostScript::Start()
 	gameObject().lock()->SetTag("Enemy");
 
 	// 大きさ
-	transform().lock()->m_scale = Vector3(300, 300, 300);
+	transform().lock()->m_scale = Vector3(100, 100, 100);
 
 	//--- コンポーネンの追加
 
@@ -79,15 +79,19 @@ void TrackingMoveEnemyHostScript::Start()
 	gameObject().lock()->AddComponent<InstancingMeshRenderer>()->MakeDodecahedron("TrackingMoveEnemyHost");
 
 	// ECSリジッドボディ
-	const auto& rb = gameObject().lock()->AddComponent<ECSRigidbody>();
-	rb->GetData()->SetDrag({ 0,0,0 });
-	rb->GetData()->SetGravityForce({ 0,0,0 });
-	rb->GetData()->SetStaticFriction(0);
-	rb->GetData()->SetDynamicFriction(0);
-	rb->GetData()->SetMass(1);
-	rb->GetData()->SetTorqueDrag({ 0,0,0 });
+	const auto& rb = gameObject().lock()->AddComponent<Rigidbody>();
+	rb->SetDrag({ 0,0,0 });
+	rb->SetGravityForce({ 0,0,0 });
+	rb->SetStaticFriction(0);
+	rb->SetDynamicFriction(0);
+	rb->SetMass(1);
+	rb->SetTorqueDrag({ 0,0,0 });
 	// リジッドボディ保存
 	m_rb = rb;
+	// 回転
+	Vector3 v = { rand() % 100 / 100.0f, rand() % 100 / 100.0f, rand() % 100 / 100.0f };
+	v = v.normalized();
+	rb->AddTorque(v * 3);
 
 	// ECSコライダー
 	gameObject().lock()->AddComponent<ECSSphereCollider>()->GetData()->SetMain(false);
@@ -113,17 +117,17 @@ void TrackingMoveEnemyHostScript::Update()
 	dir = dir.normalized();
 
 	// 力を加える
-	m_rb.lock()->GetData()->SetForce(dir * m_speed);
+	m_rb.lock()->SetForce(dir * m_speed);
 
-	//// 子にも加える
-	//for (const auto& child_w : m_childList)
-	//{
-	//	const auto& child_s = child_w.lock();
-	//	if (!child_s) continue;
+	// 子にも加える
+	for (const auto& child_w : m_childList)
+	{
+		const auto& child_s = child_w.lock();
+		if (!child_s) continue;
 
-	//	// 力を加える
-	//	child_s->GetRb()->SetForce(dir * m_speed);
-	//}
+		// 力を加える
+		child_s->GetRb().lock()->SetForce(dir * m_speed);
+	}
 }
 
 //========================================
@@ -154,31 +158,52 @@ void TrackingMoveEnemyHostScript::CreateChild(int nNum)
 	//x = Mathf.Cos(phi) * Mathf.Cos(theta);
 	//y = Mathf.Cos(phi) * Mathf.Sin(theta);
 	//z = Mathf.Sin(phi);
-	for (int n = 0; n < nNum; ++n)
+	//for (int n = 0; n < nNum; ++n)
+	//{
+	//	for (int i = 0; i < n; ++i)
+	//	{
+	//		float phi = 360.0f / n * i * (XM_PI / 180.0f);
+
+	//		for (int j = 0; j < n; ++j)
+	//		{
+	//			float theta = 360.0f / n * j * (XM_PI / 180.0f);
+	//			// 座標
+	//			Vector3 pos;
+	//			pos->x = cosf(phi) * cosf(theta);
+	//			pos->y = cosf(phi) * sinf(theta);
+	//			pos->z = sinf(phi);
+	//			pos *= 100 * n;
+
+	//			// エネミー生成
+	//			const auto& obj = Instantiate<GameObject>(pos + transform().lock()->m_pos);
+	//			// コンポーネントの追加
+	//			const auto& tracking = obj->AddComponent<TrackingMoveEnemyScript>();
+	//			// リストへ格納
+	//			m_childList.push_back(tracking);
+	//		}
+	//	}
+	//}
+
+	for (int n = 0; n < nNum; n++)
 	{
-		for (int i = 0; i < n; ++i)
-		{
-			float phi = 360.0f / i;
+		float phi = rand() % 1000 / 100.0f;
 
-			for (int j = 0; j < n; ++j)
-			{
-				float theta = 360.0f / j;
-				// 座標
-				Vector3 pos = {
-					CosDeg(phi) * CosDeg(theta),
-					CosDeg(phi) * SinDeg(theta),
-					SinDeg(phi)
-				};
-				pos *= 200;
+		float theta = rand() % 1000 / 100.0f;
+		// 座標
+		Vector3 pos;
+		pos->x = cosf(phi) * cosf(theta);
+		pos->y = sinf(phi);
+		pos->z = cosf(phi) * sinf(theta);
+		pos->x *= (150 + (n / n * ((n / 8) + 1)) * 100);
+		pos->z *= (150 + (n / n * ((n / 8) + 1)) * 100);
+		pos->y *= (150 + (n / n * ((n / 4) + 1)) * 100);
 
-				// エネミー生成
-				const auto& obj = Instantiate<GameObject>(pos);
-				// コンポーネントの追加
-				const auto& tracking = obj->AddComponent<TrackingMoveEnemyScript>();
-				// リストへ格納
-				//m_childList.push_back(tracking);
-			}
-		}
+		// エネミー生成
+		const auto& obj = Instantiate<GameObject>(pos + transform().lock()->m_pos);
+		// コンポーネントの追加
+		const auto& tracking = obj->AddComponent<TrackingMoveEnemyScript>();
+		// リストへ格納
+		m_childList.push_back(tracking);
 	}
 }
 

@@ -78,15 +78,19 @@ void TrackingMoveEnemyScript::Start()
 	gameObject().lock()->AddComponent<InstancingMeshRenderer>()->MakeDodecahedron("TrackingMoveEnemy");
 
 	// ECSリジッドボディ
-	const auto& rb = gameObject().lock()->AddComponent<ECSRigidbody>();
-	rb->GetData()->SetDrag({ 0,0,0 });
-	rb->GetData()->SetGravityForce({ 0,0,0 });
-	rb->GetData()->SetStaticFriction(0);
-	rb->GetData()->SetDynamicFriction(0);
-	rb->GetData()->SetMass(1);
-	rb->GetData()->SetTorqueDrag({ 0,0,0 });
+	const auto& rb = gameObject().lock()->AddComponent<Rigidbody>();
+	rb->SetDrag({ 0,0,0 });
+	rb->SetGravityForce({ 0,0,0 });
+	rb->SetStaticFriction(0);
+	rb->SetDynamicFriction(0);
+	rb->SetMass(1);
+	rb->SetTorqueDrag({ 0,0,0 });
 	// リジッドボディ保存
 	m_rb = rb;
+	// 回転
+	Vector3 v = { rand() % 100 / 100.0f, rand() % 100 / 100.0f, rand() % 100 / 100.0f };
+	v = v.normalized();
+	rb->AddTorque(v * 3);
 
 	// ECSコライダー
 	gameObject().lock()->AddComponent<ECSSphereCollider>()->GetData()->SetMain(false);
