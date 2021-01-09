@@ -122,6 +122,20 @@ void Script::SendComponentMessage(const std::string& message, void* value)
 		this->OnECSCollisionExit(static_cast<SphereColliderData*>(value));
 	}
 
+	// Delta当たり判定コールバック
+	else if ("OnDeltaCollisionEnter" == message)
+	{
+		this->OnDeltaCollisionEnter(static_cast<DeltaCollider*>(value));
+	}
+	else if ("OnDeltaCollisionStay" == message)
+	{
+		this->OnDeltaCollisionStay(static_cast<DeltaCollider*>(value));
+	}
+	else if ("OnDeltaCollisionExit" == message)
+	{
+		this->OnDeltaCollisionExit(static_cast<DeltaCollider*>(value));
+	}
+
 	// アニメーションコールバック
 
 

@@ -30,6 +30,7 @@ namespace ECS
 	class Transform;
 	class Collider;
 	class SphereColliderData;
+	class DeltaCollider;
 	class Rigidbody;
 
 
@@ -84,6 +85,11 @@ namespace ECS
 		virtual void OnECSCollisionEnter(SphereColliderData* collider) {};
 		virtual void OnECSCollisionStay(SphereColliderData* collider) {};
 		virtual void OnECSCollisionExit(SphereColliderData* collider) {};
+
+		// Delta当たり判定
+		virtual void OnDeltaCollisionEnter(DeltaCollider* collider) {};
+		virtual void OnDeltaCollisionStay(DeltaCollider* collider) {};
+		virtual void OnDeltaCollisionExit(DeltaCollider* collider) {};
 
 		// アニメーション
 
