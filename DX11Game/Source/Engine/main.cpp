@@ -50,6 +50,8 @@
 //				StraightMoveEnemy,TrackingMoveEnemy の作成
 //				TrackingMoveEnemyの生成バグあり...???
 //
+//	2021/01/09	ドロップアイテム作成
+//
 //
 //======================================================================
 #include "main.h"

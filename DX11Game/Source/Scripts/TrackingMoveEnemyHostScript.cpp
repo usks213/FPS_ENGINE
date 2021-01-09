@@ -194,9 +194,9 @@ void TrackingMoveEnemyHostScript::CreateChild(int nNum)
 		pos->x = cosf(phi) * cosf(theta);
 		pos->y = sinf(phi);
 		pos->z = cosf(phi) * sinf(theta);
-		pos->x *= (150 + (n / n * ((n / 8) + 1)) * 100);
-		pos->z *= (150 + (n / n * ((n / 8) + 1)) * 100);
-		pos->y *= (150 + (n / n * ((n / 4) + 1)) * 100);
+		pos->x *= (150 + (n / (n * ((n / 8) + 1) + 1)) * 100);
+		pos->z *= (150 + (n / (n * ((n / 8) + 1) + 1)) * 100);
+		pos->y *= (150 + (n / (n * ((n / 4) + 1) + 1)) * 100);
 
 		// エネミー生成
 		const auto& obj = Instantiate<GameObject>(pos + transform().lock()->m_pos);

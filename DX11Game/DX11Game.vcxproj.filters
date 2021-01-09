@@ -250,6 +250,9 @@
     <ClCompile Include="Source\Scripts\MakeEnemyScript.cpp">
       <Filter>ソース\スクリプト</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scripts\DropDeltaScript.cpp">
+      <Filter>ソース\スクリプト</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\main.h">
@@ -427,6 +430,9 @@
       <Filter>ソース\スクリプト</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scripts\MakeEnemyScript.h">
+      <Filter>ソース\スクリプト</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\DropDeltaScript.h">
       <Filter>ソース\スクリプト</Filter>
     </ClInclude>
   </ItemGroup>

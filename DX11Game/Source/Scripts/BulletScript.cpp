@@ -46,6 +46,9 @@
 #include "../Engine/ECSSystem/ECSRigidbodySystem.h"
 #include "../Engine/ECSSystem/ECSSphereCollisionSystem.h"
 
+// スクリプト
+#include "DropDeltaScript.h"
+
 
 // ネームスペース
 using namespace ECS;
@@ -138,7 +141,11 @@ void BulletScript::End()
 //========================================
 void BulletScript::OnCollisionEnter(Collider* collider)
 {
-
+	// ドロップアイテムの生成
+	const auto& obj = Instantiate<GameObject>(collider->transform().lock()->m_pos);
+	obj->AddComponent<DropDeltaScript>();
+	// 削除
+	GetEntityManager()->DestroyEntity(collider->gameObject().lock());
 }
 
 //========================================
@@ -148,7 +155,11 @@ void BulletScript::OnCollisionEnter(Collider* collider)
 //========================================
 void BulletScript::OnCollisionStay(Collider* collider)
 {
-
+	// ドロップアイテムの生成
+	const auto& obj = Instantiate<GameObject>(collider->transform().lock()->m_pos);
+	obj->AddComponent<DropDeltaScript>();
+	// 削除
+	GetEntityManager()->DestroyEntity(collider->gameObject().lock());
 }
 
 //========================================
@@ -173,10 +184,11 @@ void BulletScript::OnECSCollisionEnter(SphereColliderData* collider)
 {
 	if (collider->gameObject().lock()->tag() == "Enemy")
 	{
+		// ドロップアイテムの生成
+		const auto& obj = Instantiate<GameObject>(collider->transform().lock()->m_pos);
+		obj->AddComponent<DropDeltaScript>();
 		// 削除
 		GetEntityManager()->DestroyEntity(collider->gameObject().lock());
-		// 自身の削除
-		//GetEntityManager()->DestroyEntity(gameObject().lock());
 	}
 }
 
@@ -189,10 +201,11 @@ void BulletScript::OnECSCollisionStay(SphereColliderData* collider)
 {
 	if (collider->gameObject().lock()->tag() == "Enemy")
 	{
+		// ドロップアイテムの生成
+		const auto& obj = Instantiate<GameObject>(collider->transform().lock()->m_pos);
+		obj->AddComponent<DropDeltaScript>();
 		// 削除
 		GetEntityManager()->DestroyEntity(collider->gameObject().lock());
-		// 自身の削除
-		//GetEntityManager()->DestroyEntity(gameObject().lock());
 	}
 }
 
