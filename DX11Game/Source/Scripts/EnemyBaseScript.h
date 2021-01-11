@@ -57,10 +57,10 @@ namespace ECS
 
 		// Delta
 		// “–‚½‚Á‚½Žž
-		void OnDeltaCollisionEnter(DeltaCollider* collider) override;
+		virtual void OnDeltaCollisionEnter(DeltaCollider* collider) override;
 		// “–‚½‚Á‚Ä‚¢‚éŠÔ
-		void OnDeltaCollisionStay(DeltaCollider* collider) override;
+		virtual void OnDeltaCollisionStay(DeltaCollider* collider) override;
 		// —£‚ê‚½Žž
-		void OnDeltaCollisionExit(DeltaCollider* collider) override;
+		virtual void OnDeltaCollisionExit(DeltaCollider* collider) override;
 	};
 }

@@ -301,6 +301,9 @@
     <ClCompile Include="Source\Engine\System\Shader.cpp" />
     <ClCompile Include="Source\Engine\System\Sound.cpp" />
     <ClCompile Include="Source\Engine\System\Texture.cpp" />
+    <ClCompile Include="Source\Scripts\BombCollisionScript.cpp" />
+    <ClCompile Include="Source\Scripts\BombCrystalScript.cpp" />
+    <ClCompile Include="Source\Scripts\BombEffectScript.cpp" />
     <ClCompile Include="Source\Scripts\BulletScript.cpp" />
     <ClCompile Include="Source\Scripts\DropDeltaScript.cpp" />
     <ClCompile Include="Source\Scripts\EnemyBaseScript.cpp" />
@@ -359,6 +362,9 @@
     <ClInclude Include="Source\Engine\System\Shader.h" />
     <ClInclude Include="Source\Engine\System\Sound.h" />
     <ClInclude Include="Source\Engine\System\Texture.h" />
+    <ClInclude Include="Source\Scripts\BombCollisionScript.h" />
+    <ClInclude Include="Source\Scripts\BombCrystalScript.h" />
+    <ClInclude Include="Source\Scripts\BombEffectScript.h" />
     <ClInclude Include="Source\Scripts\BulletScript.h" />
     <ClInclude Include="Source\Scripts\DropDeltaScript.h" />
     <ClInclude Include="Source\Scripts\EnemyBaseScript.h" />

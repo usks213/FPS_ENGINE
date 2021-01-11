@@ -47,6 +47,8 @@ namespace ECS
 		// カメラからの距離
 		void LayerUpdate() override {}
 
+		// スプライトメッシュ
+		HRESULT MakeSprite(const std::string tag);
 		// 平面メッシュの生成
 		HRESULT MakePlane(const std::string tag, int nNumBlockX, int nNumBlockZ, float fSizeBlockX, float fSizeBlockZ,
 			float fTexSizeX = 1.0f, float fTexSizeZ = 1.0f);
@@ -72,6 +74,10 @@ namespace ECS
 		//--- マテリアル
 		// カラー変更
 		void SetDiffuseColor(XMFLOAT4 color) { if (m_mesh) m_mesh->material.Diffuse = color; }
+		// ビルボード
+		void SetBillboard(bool bFlg) { if (m_mesh) m_mesh->bBillboard = bFlg; }
+		// ブレンドステート
+		void SetBlendStateData(EBlendState eState) { if (m_mesh) m_mesh->blendState = eState; }
 
 		// ベースカラーテクスチャのセット
 		void SetDiffuseTexture(const char* filename);

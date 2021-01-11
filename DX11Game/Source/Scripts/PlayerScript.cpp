@@ -79,10 +79,9 @@ void PlayerScript::Start()
 	m_rb = rb;
 	rb->SetMass(2);
 
-	// レンダラー
+	//// レンダラー
 	//const auto& renderer = gameObject().lock()->AddComponent<MeshRenderer>();
 	//renderer->MakeSphere("Player", 100, 50);
-	//renderer->MakeCube("Player");
 	//renderer->SetDiffuseColor({ 0,1,0,1 });
 
 	// コライダー
@@ -96,8 +95,11 @@ void PlayerScript::Start()
 	CLight::GetMainLight()->SetTargetPos(gameObject().lock()->transform().lock()->m_pos.GetFloat3());
 
 
+	// ジャンプ
+	m_nJump = 0;
 	// デルタカウンター
 	m_nDeltaCount = 0;
+
 }
 
 //========================================
@@ -107,8 +109,8 @@ void PlayerScript::Start()
 //========================================
 void PlayerScript::Update()
 {
-	const float speed = 2.0f;
-	const float jump = 14.0f;
+	const float speed = 1.0f;
+	const float jump = 20.0f;
 
 	Vector3 forward = CCamera::GetMainCamera()->GetForward() * speed;
 	forward->y = 0.0f;
@@ -137,15 +139,17 @@ void PlayerScript::Update()
 	}
 
 	// ジャンプ
-	if (GetKeyTrigger(VK_SPACE))
+	if (GetKeyTrigger(VK_SPACE) && 
+		(transform().lock()->m_pos->y <= transform().lock()->m_scale->y / 2 || m_nJump > 0))
 	{
-		m_rb.lock()->SetForceY(jump);
+		m_rb.lock()->SetForceY(jump + m_nJump);
 	}
-
+	m_nJump--;
+	if (m_nJump < 0) m_nJump = 0;
 
 	// ショット
 	m_nShotCnt--;
-	if (GetMouseButton(MOUSEBUTTON_L) && m_nShotCnt < 0)
+	if (m_nShotCnt < 0)
 	{
 		//const auto& test = GetEntityManager()->CreateEntity<GameObject>();
 		const auto& test = Instantiate<GameObject>();
@@ -154,7 +158,7 @@ void PlayerScript::Update()
 
 		Vector3 dir = CCamera::GetMainCamera()->GetForward().normalized();
 
-		test->transform().lock()->m_pos = transform().lock()->m_pos + dir * 200;
+		test->transform().lock()->m_pos = transform().lock()->m_pos + dir * 300;
 		rb->AddForce(dir * 100 + Vector3::WallVerticalVector(m_rb.lock()->GetForce(), dir));
 		rb->AddTorque(dir * 10);
 
@@ -197,6 +201,10 @@ void PlayerScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 		// カウンター加算
 		m_nDeltaCount++;
 	}
+	else if (collider->gameObject().lock()->tag() == "BombCrystal")
+	{
+		m_nJump = 10;
+	}
 }
 
 //========================================
@@ -210,6 +218,10 @@ void PlayerScript::OnDeltaCollisionStay(DeltaCollider* collider)
 	{
 		// カウンター加算
 		m_nDeltaCount++;
+	}
+	else if (collider->gameObject().lock()->tag() == "BombCrystal")
+	{
+		m_nJump = 10;
 	}
 }
 

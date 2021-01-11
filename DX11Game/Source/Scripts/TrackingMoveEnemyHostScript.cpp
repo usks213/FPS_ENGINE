@@ -69,6 +69,7 @@ void TrackingMoveEnemyHostScript::Start()
 
 	// 名前・タグ
 	gameObject().lock()->SetName("TrackingMoveEnemyHost");
+	gameObject().lock()->SetTag("Host");
 
 	// 大きさ
 	transform().lock()->m_scale = Vector3(100, 100, 100);
@@ -76,10 +77,10 @@ void TrackingMoveEnemyHostScript::Start()
 	//--- コンポーネンの追加
 
 	// インスタンシングレンダラー
-	gameObject().lock()->AddComponent<InstancingMeshRenderer>()->MakeDodecahedron("TrackingMoveEnemy");
+	//gameObject().lock()->AddComponent<InstancingMeshRenderer>()->MakeDodecahedron("TrackingMoveEnemy");
 
-	// 移動速度
-	m_speed = 18;
+	// 生存時間
+	m_nExitTime = 360;
 }
 
 //========================================
@@ -92,6 +93,14 @@ void TrackingMoveEnemyHostScript::Update()
 	// ベースクラス
 	EnemyBaseScript::Update();
 
+	// 生存時間
+	m_nExitTime--;
+	if (m_nExitTime < 0)
+	{
+		// 自身の削除
+		GetEntityManager()->DestroyEntity(gameObject().lock());
+	}
+
 	// ターゲットが存在しない
 	const auto& player = m_player.lock();
 	if (!player) return;
@@ -99,6 +108,7 @@ void TrackingMoveEnemyHostScript::Update()
 
 	//--- 追尾処理
 	Vector3 dir = target->m_pos - transform().lock()->m_pos;
+	if (dir.magnitude() < 500) return;
 	dir = dir.normalized();
 
 	// 力を加える
@@ -203,4 +213,24 @@ void TrackingMoveEnemyHostScript::CreateChild(int nNum)
 		// リストへ格納
 		m_childList.push_back(tracking);
 	}
+}
+
+//******************** コールバック関数 ********************
+
+//========================================
+//
+// 当たった時
+//
+//========================================
+void TrackingMoveEnemyHostScript::OnDeltaCollisionEnter(DeltaCollider* collider)
+{
+}
+
+//========================================
+//
+// 当たっている間
+//
+//========================================
+void TrackingMoveEnemyHostScript::OnDeltaCollisionStay(DeltaCollider* collider)
+{
 }

@@ -1,13 +1,13 @@
 //==================================================================
-//								DropDeltaScript.h
-//	敵からドロップするアイテム
+//								BombCrystalScript.h
+//	ボム生成アイテム 
 //
 //==================================================================
 //	author :	AT12A 05 宇佐美晃之
 //==================================================================
 //	開発履歴
 //
-//	2021/01/09	ドロップデルタスクリプトクラス作成
+//	2021/01/10	ボムクリスタルスクリプトクラス作成
 //
 //===================================================================
 
@@ -23,19 +23,11 @@
 //===== クラス定義 =====
 namespace ECS
 {
-	class DropDeltaScript : public Script
+	class BombCrystalScript : public Script
 	{
 	private:
 		// ----- メンバ -----
 		int m_nExitTime;	// 生存時間
-		std::weak_ptr<Rigidbody> m_rb;
-		// プレイヤー
-		std::weak_ptr<GameObject> m_player;
-		// 追尾フラグ
-		bool m_IsTracking;
-	public:
-		// プレイヤーのセット
-		void SetPlayer(std::weak_ptr<GameObject> player) { m_player = player; }
 
 	protected:
 		// ----- メソッド -----
@@ -49,8 +41,10 @@ namespace ECS
 		// 終了時に呼ばれます
 		void End() override;
 
+
 		// ----- コールバック関数 -----
 
+		// Delta
 		// 当たった時
 		void OnDeltaCollisionEnter(DeltaCollider* collider) override;
 		// 当たっている間

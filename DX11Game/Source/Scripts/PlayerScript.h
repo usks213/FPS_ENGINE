@@ -30,9 +30,14 @@ namespace ECS
 		// ----- メンバ -----
 		std::weak_ptr<Rigidbody> m_rb;
 		int m_nShotCnt;
-
+		// ジャンプフラグ
+		int m_nJump;
 		// デルタカウンター
 		int m_nDeltaCount;
+
+	public:
+		// デルタ数取得
+		int GetDeltaCount() { return m_nDeltaCount; }
 
 	protected:
 		// ----- メソッド -----

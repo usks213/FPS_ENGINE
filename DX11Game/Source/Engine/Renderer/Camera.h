@@ -3,7 +3,7 @@
 #include "../ECSCompoent/Transform.h"
 
 #define	VIEW_NEAR_Z			(50.0f)					// ビュー平面のNearZ値
-#define	VIEW_FAR_Z			(15000.0f)				// ビュー平面のFarZ値
+#define	VIEW_FAR_Z			(2500.0f)				// ビュー平面のFarZ値
 
 class CCamera
 {

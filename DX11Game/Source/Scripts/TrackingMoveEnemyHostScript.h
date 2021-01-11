@@ -30,7 +30,8 @@ namespace ECS
 		// ----- メンバ -----
 		// 子リスト
 		std::list<std::weak_ptr<TrackingMoveEnemyScript>> m_childList;
-
+		// 生存時間
+		int m_nExitTime;	
 	protected:
 		// ----- メソッド -----
 
@@ -43,6 +44,12 @@ namespace ECS
 		// 終了時に呼ばれます
 		void End() override;
 
+		// ----- コールバック関数 -----
+
+		// 当たった時
+		void OnDeltaCollisionEnter(DeltaCollider* collider) override;
+		// 当たっている間
+		void OnDeltaCollisionStay(DeltaCollider* collider) override;
 	public:
 		// 子の生成
 		void CreateChild(int nNum);

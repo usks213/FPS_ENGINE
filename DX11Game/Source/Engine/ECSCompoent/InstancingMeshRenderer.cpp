@@ -59,7 +59,11 @@ void InstancingMeshRenderer::OnCreate()
 	// トランスフォームから取得
 	m_transform = m_Parent.lock()->GetComponent<Transform>();
 
+	// インスタンスシングデータの初期化
 	m_data.mtxWorld = m_transform.lock()->GetWorldMatrix();
+	m_data.pPos = m_transform.lock()->m_pos.GetFloat3();
+	m_data.pRot = m_transform.lock()->m_rot.GetFloat3();
+	m_data.pScale = m_transform.lock()->m_scale.GetFloat3();
 }
 
 //========================================
@@ -183,6 +187,69 @@ bool InstancingMeshRenderer::CreateMeshData(std::string tag)
 	}
 
 	return true;
+}
+
+//========================================
+//
+// スプライト
+//
+//========================================
+HRESULT InstancingMeshRenderer::MakeSprite(const std::string tag)
+{
+	// メッシュデータの作成
+	if (!CreateMeshData(tag)) return S_OK;
+
+	// オブジェクトの頂点配列を生成
+	m_mesh->nNumVertex = 4;
+	VERTEX_3D* pVertexWk = new VERTEX_3D[m_mesh->nNumVertex];
+
+	// 頂点配列の中身を埋める
+	VERTEX_3D* pVtx = pVertexWk;
+
+	// 頂点座標の設定
+	pVtx[0].vtx = XMFLOAT3(-1.0f / 2, -1.0f / 2, 0.0f);
+	pVtx[1].vtx = XMFLOAT3(-1.0f / 2, 1.0f / 2, 0.0f);
+	pVtx[2].vtx = XMFLOAT3(1.0f / 2, -1.0f / 2, 0.0f);
+	pVtx[3].vtx = XMFLOAT3(1.0f / 2, 1.0f / 2, 0.0f);
+
+	// 法線の設定
+	pVtx[0].nor = XMFLOAT3(0.0f, 0.0f, -1.0f);
+	pVtx[1].nor = XMFLOAT3(0.0f, 0.0f, -1.0f);
+	pVtx[2].nor = XMFLOAT3(0.0f, 0.0f, -1.0f);
+	pVtx[3].nor = XMFLOAT3(0.0f, 0.0f, -1.0f);
+
+	// 反射光の設定
+	pVtx[0].diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[1].diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[2].diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[3].diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	// テクスチャ座標の設定
+	pVtx[0].tex = XMFLOAT2(0.0f, 1.0f);
+	pVtx[1].tex = XMFLOAT2(0.0f, 0.0f);
+	pVtx[2].tex = XMFLOAT2(1.0f, 1.0f);
+	pVtx[3].tex = XMFLOAT2(1.0f, 0.0f);
+
+	// インデックス配列を生成
+	m_mesh->nNumIndex = 4;
+	int* pIndexWk = new int[m_mesh->nNumIndex];
+
+	// インデックス配列の中身を埋める
+	pIndexWk[0] = 0;
+	pIndexWk[1] = 1;
+	pIndexWk[2] = 2;
+	pIndexWk[3] = 3;
+
+	ID3D11Device* pDevice = GetDevice();
+	// 頂点バッファ生成
+	HRESULT hr = MakeInstancingMeshVertex(pDevice, m_mesh, pVertexWk, pIndexWk);
+
+	// 一時配列の解放
+	delete[] pIndexWk;
+	delete[] pVertexWk;
+
+	return hr;
+
 }
 
 //========================================

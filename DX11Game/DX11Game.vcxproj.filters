@@ -247,6 +247,15 @@
     <ClCompile Include="Source\Scripts\EnemyBaseScript.cpp">
       <Filter>ソース\スクリプト</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scripts\BombCrystalScript.cpp">
+      <Filter>ソース\スクリプト</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\BombEffectScript.cpp">
+      <Filter>ソース\スクリプト</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\BombCollisionScript.cpp">
+      <Filter>ソース\スクリプト</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\main.h">
@@ -415,6 +424,15 @@
       <Filter>ソース\エンジン\ECS\System</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scripts\EnemyBaseScript.h">
+      <Filter>ソース\スクリプト</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\BombCrystalScript.h">
+      <Filter>ソース\スクリプト</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\BombEffectScript.h">
+      <Filter>ソース\スクリプト</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\BombCollisionScript.h">
       <Filter>ソース\スクリプト</Filter>
     </ClInclude>
   </ItemGroup>

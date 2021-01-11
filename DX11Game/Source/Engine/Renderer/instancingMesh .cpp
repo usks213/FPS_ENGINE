@@ -240,6 +240,8 @@ void DrawInstancingMeshShadow(ID3D11DeviceContext* pDeviceContext, InstancingMes
 		pDeviceContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer[0]);
 
 		//================== インスタンシングデータ ==================
+		// カメラ行列取得
+		XMFLOAT4X4& mtxView = CCamera::GetMainCamera()->GetViewMatrix();
 
 		int count = (int)InstancingList.size();
 		int n = (count - 1) / MAX_INSTANCE + 1;
@@ -250,8 +252,44 @@ void DrawInstancingMeshShadow(ID3D11DeviceContext* pDeviceContext, InstancingMes
 			{
 				InstancingMeshData* pData = InstancingList[i * MAX_INSTANCE + j];
 
-				icb.aInstancing[j].mWorld = XMLoadFloat4x4(pData->mtxWorld);
-				//icb.aInstancing[j].mTexture = XMLoadFloat4x4(pData->mtxTexture);
+				if (pInstancingMesh->bBillboard)
+				{
+					// マトリックス作成
+					XMMATRIX mtxWorld, mtxScale, mtxTranslate;
+					// ワールドマトリックスの初期化
+					mtxWorld = XMMatrixIdentity();
+					XMFLOAT4X4* m_mtxWorld = pData->mtxWorld;
+					XMStoreFloat4x4(m_mtxWorld, mtxWorld);
+
+					m_mtxWorld->_11 = mtxView._11;
+					m_mtxWorld->_12 = mtxView._21;
+					m_mtxWorld->_13 = mtxView._31;
+					m_mtxWorld->_21 = mtxView._12;
+					m_mtxWorld->_22 = mtxView._22;
+					m_mtxWorld->_23 = mtxView._32;
+					m_mtxWorld->_31 = mtxView._13;
+					m_mtxWorld->_32 = mtxView._23;
+					m_mtxWorld->_33 = mtxView._33;
+
+					mtxWorld = XMLoadFloat4x4(m_mtxWorld);
+
+					// スケールを反映
+					mtxScale = XMMatrixScaling(pData->pScale->x, pData->pScale->y, 1.0f);
+					mtxWorld = XMMatrixMultiply(mtxScale, mtxWorld);
+
+					// 移動を反映
+					mtxTranslate = XMMatrixTranslation(pData->pPos->x, pData->pPos->y, pData->pPos->z);
+					mtxWorld = XMMatrixMultiply(mtxWorld, mtxTranslate);
+
+					// ワールドマトリックスの設定
+					XMStoreFloat4x4(m_mtxWorld, mtxWorld);
+					icb.aInstancing[j].mWorld = XMMatrixTranspose(XMLoadFloat4x4(m_mtxWorld));
+				}
+				else
+				{
+					icb.aInstancing[j].mWorld = XMMatrixTranspose(XMLoadFloat4x4(pData->mtxWorld));
+					//icb.aInstancing[j].mTexture = XMLoadFloat4x4(pData->mtxTexture);
+				}
 			}
 			pDeviceContext->UpdateSubresource(g_pConstantBuffer[2], 0, nullptr, &icb, 0, 0);
 			pDeviceContext->VSSetConstantBuffers(2, 1, &g_pConstantBuffer[2]);
@@ -326,8 +364,13 @@ void DrawInstancingMesh(ID3D11DeviceContext* pDeviceContext, InstancingMesh* pIn
 	};
 	pDeviceContext->IASetPrimitiveTopology(pt[pInstancingMesh->primitiveType]);
 
+	// ブレンドステート
+	SetBlendState(pInstancingMesh->blendState);
 
 	//================== インスタンシングデータ ==================
+			// カメラ行列取得
+	XMFLOAT4X4& mtxView = CCamera::GetMainCamera()->GetViewMatrix();
+
 	int count = (int)InstancingList.size();
 	int n = (count - 1) / MAX_INSTANCE + 1;
 	for (int i = 0; i < n; i++)
@@ -337,14 +380,44 @@ void DrawInstancingMesh(ID3D11DeviceContext* pDeviceContext, InstancingMesh* pIn
 		{
 			InstancingMeshData* pData = InstancingList[i * MAX_INSTANCE + j];
 
-			icb.aInstancing[j].mWorld = XMMatrixTranspose(XMLoadFloat4x4(pData->mtxWorld));
-			//icb.aInstancing[j].mTexture = XMMatrixTranspose(XMLoadFloat4x4(pData->mtxTexture));
+			if (pInstancingMesh->bBillboard)
+			{
+				// マトリックス作成
+				XMMATRIX mtxWorld, mtxScale, mtxTranslate;
+				// ワールドマトリックスの初期化
+				mtxWorld = XMMatrixIdentity();
+				XMFLOAT4X4* m_mtxWorld = pData->mtxWorld;
+				XMStoreFloat4x4(m_mtxWorld, mtxWorld);
 
-			/*icb2.aInstancing[j].vDiffuse = XMLoadFloat4(&pData->material.Diffuse);
-			icb2.aInstancing[j].vAmbient = XMVectorSet(pData->material.Ambient.x, pData->material.Ambient.y, pData->material.Ambient.z, (pInstancingMesh->pTexture != nullptr) ? 1.f : 0.f);
-			icb2.aInstancing[j].vSpecular = XMVectorSet(pData->material.Specular.x, pData->material.Specular.y, pData->material.Specular.z, pData->material.Power);
-			icb2.aInstancing[j].vEmissive = XMLoadFloat4(&pData->material.Emissive);
-			icb2.aInstancing[j].bBump = pData->bBump;*/
+				m_mtxWorld->_11 = mtxView._11;
+				m_mtxWorld->_12 = mtxView._21;
+				m_mtxWorld->_13 = mtxView._31;
+				m_mtxWorld->_21 = mtxView._12;
+				m_mtxWorld->_22 = mtxView._22;
+				m_mtxWorld->_23 = mtxView._32;
+				m_mtxWorld->_31 = mtxView._13;
+				m_mtxWorld->_32 = mtxView._23;
+				m_mtxWorld->_33 = mtxView._33;
+
+				mtxWorld = XMLoadFloat4x4(m_mtxWorld);
+
+				// スケールを反映
+				mtxScale = XMMatrixScaling(pData->pScale->x, pData->pScale->y, 1.0f);
+				mtxWorld = XMMatrixMultiply(mtxScale, mtxWorld);
+
+				// 移動を反映
+				mtxTranslate = XMMatrixTranslation(pData->pPos->x, pData->pPos->y, pData->pPos->z);
+				mtxWorld = XMMatrixMultiply(mtxWorld, mtxTranslate);
+
+				// ワールドマトリックスの設定
+				XMStoreFloat4x4(m_mtxWorld, mtxWorld);
+				icb.aInstancing[j].mWorld = XMMatrixTranspose(XMLoadFloat4x4(m_mtxWorld));
+			}
+			else
+			{
+				icb.aInstancing[j].mWorld = XMMatrixTranspose(XMLoadFloat4x4(pData->mtxWorld));
+				//icb.aInstancing[j].mTexture = XMLoadFloat4x4(pData->mtxTexture);
+			}
 		}
 		pDeviceContext->UpdateSubresource(g_pConstantBuffer[2], 0, nullptr, &icb, 0, 0);
 		pDeviceContext->VSSetConstantBuffers(2, 1, &g_pConstantBuffer[2]);
@@ -354,6 +427,9 @@ void DrawInstancingMesh(ID3D11DeviceContext* pDeviceContext, InstancingMesh* pIn
 		// ポリゴンの描画
 		pDeviceContext->DrawIndexedInstanced(pInstancingMesh->nNumIndex, m, 0, 0, 0);
 	}
+
+	// ブレンドステート
+	SetBlendState(BS_NONE);
 }
 
 //=============================================================================

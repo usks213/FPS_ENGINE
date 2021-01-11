@@ -50,8 +50,15 @@
 //				StraightMoveEnemy,TrackingMoveEnemy の作成
 //				TrackingMoveEnemyの生成バグあり...???
 //
-//	2021/01/09	ドロップアイテム作成
+//	2021/01/09	ドロップアイテム作成(DropDelta)
+//				全ECS系の処理を削除 Deltaに以降でバグの解消
 //
+//	2021/01/10	ゲームシステムの調整
+//				BombCrystal,BombEffect の作成
+//				インスタンスシングにビルボードを追加
+//
+//	2021/01/11	BombCollisionの追加
+//				WorldManager,Fade の作成
 //
 //======================================================================
 #include "main.h"

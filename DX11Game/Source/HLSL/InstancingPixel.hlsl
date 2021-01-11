@@ -194,8 +194,8 @@ float4 main(VS_OUTPUT input) : SV_Target0
         val = val * val; // * (3.0f / (4.0f * PI));
         
         // ハーフランバート
-        //Diff = g_vLd.rgb * Diff * val * sc; // 拡散色
-        Diff = g_vLd.rgb * Diff * val * sc * N * 2; // 拡散色
+        Diff = g_vLd.rgb * Diff * val * sc * 2; // 拡散色
+        //Diff = g_vLd.rgb * Diff * val * sc * N * 2; // 拡散色
        // Diff = g_vLd.rgb * Diff * val * sc + N; // 拡散色
         
         // ランバート

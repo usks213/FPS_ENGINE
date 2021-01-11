@@ -334,7 +334,7 @@ HRESULT MeshRenderer::MakeSphere(std::string tag, int nSegment, float fTexSplit,
 
 
 	// プリミティブ種別設定
-	m_mesh->primitiveType = PT_TRIANGLESTRIP;
+	m_mesh->primitiveType = PT_TRIANGLE;
 	float fScale = 0.5f;
 
 	//頂点バッファ作成

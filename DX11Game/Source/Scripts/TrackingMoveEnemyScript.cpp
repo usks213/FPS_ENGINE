@@ -77,7 +77,7 @@ void TrackingMoveEnemyScript::Start()
 	// インスタンシングレンダラー
 	const auto& render = gameObject().lock()->AddComponent<InstancingMeshRenderer>();
 	render->MakeDodecahedron("TrackingMoveEnemy");
-	//render->SetDiffuseColor({ 1,165 / 255.0f,0,1 });
+	render->SetDiffuseColor({ 1,100 / 255.0f,0,1 });
 }
 
 //========================================

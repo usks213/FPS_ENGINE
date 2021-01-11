@@ -30,8 +30,8 @@ namespace ECS
 		enum EEnemyType
 		{
 			eStraightCircle,
-			eStraightTower,
 			eTracking,
+			eStraightTower,
 			eGroup,
 
 			eMaxType,

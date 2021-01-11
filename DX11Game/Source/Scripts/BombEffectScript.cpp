@@ -1,13 +1,13 @@
 //==================================================================
-//								StraightMoveEnemyScript.cpp
-//	ストレートムーブエネミー
+//								BombEffectScript.cpp
+//	ボムエフェクト
 //
 //==================================================================
 //	author :	AT12A 05 宇佐美晃之
 //==================================================================
 //	開発履歴
 //
-//	2021/01/08	ストレートムーブエネミークラス作成
+//	2021/01/10	ボムエフェクトスクリプトクラス作成
 //
 //===================================================================
 
@@ -15,7 +15,7 @@
 //====== インクルード部 ======
 
 // 自身
-#include "StraightMoveEnemyScript.h"
+#include "BombEffectScript.h"
 
 // システム
 #include "../Engine/System/input.h"
@@ -44,6 +44,9 @@
 // ECSシステム
 #include "../Engine/ECSSystem/DeltaCollisionSystem.h"
 
+// スクリプト
+#include "DropDeltaScript.h"
+
 
 // ネームスペース
 using namespace ECS;
@@ -61,20 +64,35 @@ using namespace ECS;
 //	開始時
 //
 //========================================
-void StraightMoveEnemyScript::Start()
+void BombEffectScript::Start()
 {
-	// ベースクラス
-	EnemyBaseScript::Start();
-
 	// 名前・タグ
-	gameObject().lock()->SetName("StraightMoveEnemy");
+	gameObject().lock()->SetName("BombEffect");
+	gameObject().lock()->SetTag("BombEffect");
 
+	// 大きさ
+	transform().lock()->m_scale = Vector3(20, 20, 20);
+	transform().lock()->m_rot->x = 90;
 	//--- コンポーネンの追加
 
 	// インスタンシングレンダラー
-	const auto& render = gameObject().lock()->AddComponent<InstancingMeshRenderer>();
-	render->MakeOctahedron("StraightMoveEnemy");
-	render->SetDiffuseColor({ 1,1,0,1 });
+	const auto& rn = gameObject().lock()->AddComponent<InstancingMeshRenderer>();
+	rn->MakeOctahedron("BombEffect");
+	//rn->SetBillboard(true);
+	rn->SetDiffuseColor({ 1,0,1,1 });
+	rn->SetBlendStateData(BS_ADDITIVE);
+
+	// ECSリジッドボディ
+	const auto& rb = gameObject().lock()->AddComponent<Rigidbody>();
+	rb->SetDrag({ 0.0f,0.0f,0.0f });
+	rb->SetGravityForce({ 0,0,0 });
+	rb->SetStaticFriction(0);
+	rb->SetDynamicFriction(0);
+	rb->SetMass(1);
+	rb->SetTorqueDrag({ 0,0,0 });
+
+	// 生存時間
+	m_nExitTime = 180;
 }
 
 //========================================
@@ -82,10 +100,14 @@ void StraightMoveEnemyScript::Start()
 //	更新時
 //
 //========================================
-void StraightMoveEnemyScript::Update()
+void BombEffectScript::Update()
 {
-	// ベースクラス
-	EnemyBaseScript::Update();
+	m_nExitTime--;
+	if (m_nExitTime < 0)
+	{
+		// 自身の削除
+		GetEntityManager()->DestroyEntity(gameObject().lock());
+	}
 }
 
 //========================================
@@ -93,10 +115,8 @@ void StraightMoveEnemyScript::Update()
 //	後更新時
 //
 //========================================
-void StraightMoveEnemyScript::LateUpdate()
+void BombEffectScript::LateUpdate()
 {
-	// ベースクラス
-	EnemyBaseScript::LateUpdate();
 }
 
 //========================================
@@ -104,8 +124,6 @@ void StraightMoveEnemyScript::LateUpdate()
 //	終了時
 //
 //========================================
-void StraightMoveEnemyScript::End()
+void BombEffectScript::End()
 {
-	// ベースクラス
-	EnemyBaseScript::End();
 }
