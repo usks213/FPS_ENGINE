@@ -18,6 +18,15 @@
 #include "../System/ISystem.h"
 #include <algorithm>
 
+// システム
+#include "../../ECSSystem/TransformSystem.h"
+#include "../../ECSSystem/RendererSystem.h"
+#include "../../ECSSystem/Animation2DSystem.h"
+#include "../../ECSSystem/CollisionSystem.h"
+#include "../../ECSSystem/DeltaCollisionSystem.h"
+#include "../../ECSSystem/RigidbodySystem.h"
+#include "../../ECSSystem/ScriptSystem.h"
+
 using namespace ECS;
 
 
@@ -35,10 +44,20 @@ using namespace ECS;
 //	コンストラクタ
 //
 //===================================
-World::World()
+World::World(std::string name)
+	:m_name(name)
 {
 	// エンティティマネージャーの生成
 	m_pEntityManager.reset(new EntityManager(this));
+
+	// システムの追加
+	AddSystem<TransformSystem>();
+	AddSystem<RendererSystem>();
+	AddSystem<Animation2DSystem>();
+	AddSystem<CollisionSystem>();
+	AddSystem<DeltaCollisionSystem>();
+	AddSystem<RigidbodySystem>();
+	AddSystem<ScriptSystem>();
 }
 
 
@@ -49,6 +68,12 @@ World::World()
 //===================================
 World::~World()
 {
+	// エンティティの破棄
+	GetEntityManager()->ClearEntityPool();
+
+	// オブジェクトのプールの破棄
+	ObjectManager::GetInstance()->ClearnUpObject();
+
 	// システムリストの終了処理
 	for (auto&& system : m_SystemList)
 	{

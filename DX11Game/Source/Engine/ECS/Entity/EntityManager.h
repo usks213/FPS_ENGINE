@@ -56,6 +56,9 @@ namespace ECS
 		// エンティティの除外
 		void RemoveEntityPool(const std::weak_ptr<IEntity>& entity);
 		
+		// エンティティプールのクリア
+		void ClearEntityPool();
+
 		// エンティティの数を取得
 		int GetEntityCount() { return static_cast<int>(m_EntityList.size()); }
 		// ワールドの取得

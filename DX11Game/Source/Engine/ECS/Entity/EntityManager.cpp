@@ -102,3 +102,18 @@ void EntityManager::RemoveEntityPool(const std::weak_ptr<IEntity>& entity)
 	// プールから削除
 	m_EntityList.erase(itr);
 }
+
+
+//===================================
+//
+//	エンティティプールのクリア
+//
+//===================================
+void EntityManager::ClearEntityPool()
+{
+	// 全エンティティの破棄
+	for (const auto& entity : m_EntityList)
+	{
+		DestroyEntity(entity.lock());
+	}
+}

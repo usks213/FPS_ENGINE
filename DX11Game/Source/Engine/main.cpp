@@ -58,37 +58,16 @@
 //				インスタンスシングにビルボードを追加
 //
 //	2021/01/11	BombCollisionの追加
-//				WorldManager,Fade の作成
+//				WorldManager の作成
 //
 //======================================================================
 #include "main.h"
+
+// システム
 #include "System/input.h"
 #include "System/polygon.h"
 #include "System/debugproc.h"
 #include "System/Sound.h"
-
-// ECS
-#include "ECS/Object/ObjectManager.h"
-#include "ECS/Entity/EntityManager.h"
-#include "ECS/System/ISystem.h"
-#include "ECS/Entity/IEntity.h"
-#include "ECS/Component/IComponent.h"
-#include "ECSEntity/GameObject.h"
-
-// システム
-#include "ECSSystem/TransformSystem.h"
-#include "ECSSystem/RendererSystem.h"
-#include "ECSSystem/CollisionSystem.h"
-#include "ECSSystem/RigidbodySystem.h"
-#include "ECSSystem/ScriptSystem.h"
-
-// コンポーネント
-#include "ECSCompoent/Transform.h"
-#include "ECSCompoent/MeshRenderer.h"
-#include "ECSCompoent/InstancingMeshRenderer.h"
-#include "ECSCompoent/Rigidbody.h"
-#include "ECSCompoent/SphereCollider.h"
-#include "ECSCompoent/BoxCollider.h"
 
 // レンダラー
 #include "Renderer/Camera.h"
@@ -97,13 +76,12 @@
 #include "Renderer/instancingMesh.h"
 #include "Renderer/AssimpModel.h"
 
-// スクリプト
-#include "../Scripts/PlayerScript.h"
-#include "../Scripts/MakeEnemyScript.h"
-
 // ECS
-#include "../Engine/ECSCompoent/DeltaCollider.h"
-#include "../Engine/ECSSystem/DeltaCollisionSystem.h"
+#include "ECS/Object/ObjectManager.h"
+#include "ECS/World/WorldManager.h"
+// ワールド
+#include "ECSWorld/GameWorld.h"
+
 
 
 
@@ -151,8 +129,6 @@ CCamera						g_camera;				// カメラ
 CLight						g_light;				// 光源
 
 using namespace ECS;
-
-World g_world;
 
 
 //=============================================================================
@@ -526,142 +502,12 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	// オブジェクト
 	ECS::ObjectManager::Create();
 	
-	// システムを追加
-	g_world.AddSystem<TransformSystem>();
-	g_world.AddSystem<RendererSystem>();
-	g_world.AddSystem<CollisionSystem>();
-	g_world.AddSystem<RigidbodySystem>();
-	g_world.AddSystem<DeltaCollisionSystem>();
-	g_world.AddSystem<ScriptSystem>();
+	// ワールド
+	WorldManager::Create();
 
-
-	// ゲームオブジェクトを追加
-
-	// プレイヤー
-	const auto& player = g_world.GetEntityManager()->CreateEntity<GameObject>();
-	player->AddComponent<PlayerScript>();
+	// ゲームワールドの追加
+	WorldManager::GetInstance()->LoadWorld<GameWorld>("Game1");
 	
-	// エネミーメイカー
-	const auto& enemyMaker = g_world.GetEntityManager()->CreateEntity<GameObject>();
-	enemyMaker->AddComponent<MakeEnemyScript>()->SetPlayer(player);
-
-
-	for (int i = 0; i < 1; i++)
-	{
-		Vector3 pos;
-		Vector3 scale;
-
-		// 床
-		if (i == 0)
-		{
-			pos = Vector3{ 0, 0, 0 };
-			scale = Vector3{ 100000, 1, 100000 };
-		}
-		// 天井
-		else if (i == 1)
-		{
-			pos = Vector3{ 5000, 10000, 5000 };
-			scale = Vector3{ 10000, 1000, 10000 };
-		}
-		// 右
-		else if (i == 2)
-		{
-			pos = Vector3{ 10000, 5000, 5000 };
-			scale = Vector3{ 1000, 10000, 10000 };
-		}
-		// 左
-		else if (i == 3)
-		{
-			pos = Vector3{ 0, 5000, 5000 };
-			scale = Vector3{ 1000, 10000, 10000 };
-		}
-		// 奥
-		else if (i == 4)
-		{
-			pos = Vector3{ 5000, 5000, 10000 };
-			scale = Vector3{ 10000, 10000, 1000 };
-		}
-		// 手前
-		else if (i == 5)
-		{
-			pos = Vector3{ 5000, 5000, 0 };
-			scale = Vector3{ 10000, 10000, 1000 };
-		}
-
-		const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-		const auto renderer = test->AddComponent<MeshRenderer>();
-		renderer->MakeCube("plane");
-		renderer->SetDiffuseTexture("data/texture/grid.png");
-		renderer->SetTexSize({ 100, 100, 0 });
-		renderer->UpdateTexMatrix();
-		//const auto& rb1 = test->AddComponent<Rigidbody>();
-		//test->AddComponent<BoxCollider>();
-		test->transform().lock()->m_scale = scale;
-		test->transform().lock()->m_pos = pos;
-		//rb1->SetUsePhysics(false);
-		//rb1->SetUseGravity(false);
-		//rb1->SetMass(100);
-		//rb1->SetE(0.8f);
-		//rb1->SetDynamicFriction(0.0f);
-	}
-
-	Vector3 pos = { 400, 2000, 200 };
-	//for (int i = 0; i < 10; i++)
-	//{
-	//	const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-	//	const auto& rb = test->AddComponent<Rigidbody>();
-	//	//test->AddComponent<PlayerScript>();
-	//	//test->AddComponent<MeshRenderer>()->MakeSphere("test", 100, 100);
-	//	//test->AddComponent<SphereCollider>()->SetRadius(100);
-	//	test->AddComponent<MeshRenderer>()->MakeCube("test");
-	//	test->AddComponent<BoxCollider>();
-
-	//	pos->y -= 300;
-	//	test->transform().lock()->m_pos = pos;
-	//	test->transform().lock()->m_scale = Vector3{ 100, 100, 100 };
-
-	//	rb->SetMass(2);
-	//	//rb->SetUsePhysics(false);
-	//}
-
-	pos = Vector3{ 0, 1000, 0 };
-	//for (int z = 0; z < 10; z++)
-	//{
-	//	for (int i = 0; i < 10; i++)
-	//	{
-	//		const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-	//		test->AddComponent<InstancingMeshRenderer>()->MakeCube("test2");
-	//		test->AddComponent<Rigidbody>();
-	//		//test->AddComponent<SphereCollider>();
-
-	//		test->transform().lock()->m_pos = pos;
-	//		test->transform().lock()->m_scale = Vector3{ 200, 200, 200 };
-	//		pos->x += 200;
-	//	}
-	//	pos->x = 100;
-	//	pos->z += 200;
-	//}
-	//for (int z = 0; z < 100; z++)
-	//{
-	//	for (int i = 0; i < 200; i++)
-	//	{
-	//		const auto& test = g_world.GetEntityManager()->CreateEntity<GameObject>();
-	//		//test->AddComponent<InstancingMeshRenderer>()->MakeSphere("test3", 10);
-	//		//test->AddComponent<InstancingMeshRenderer>()->MakeTetraheron("a");
-	//		//test->AddComponent<InstancingMeshRenderer>()->MakeOctahedron("a");
-	//		test->AddComponent<InstancingMeshRenderer>()->MakeDodecahedron("a");
-	//		//test->AddComponent<InstancingMeshRenderer>()->MakeIcosahedron("a");
-	//		const auto& rb = test->AddComponent<Rigidbody>();
-	//		test->AddComponent<DeltaCollider>()->SetMain(false);
-
-	//		test->transform().lock()->m_pos = pos;
-	//		test->transform().lock()->m_scale = Vector3{ 200, 200, 200 };
-	//		pos->x += 200;
-	//	}
-	//	pos->x = 0;
-	//	pos->z += 200;
-	//}
-
 	return hr;
 }
 
@@ -685,6 +531,9 @@ void Uninit(void)
 {
 	// オブジェクト
 	ECS::ObjectManager::Destroy();
+
+	// ワールド
+	WorldManager::GetInstance()->End();
 
 	// メッシュ終了処理
 	UninitMesh();
@@ -752,22 +601,24 @@ void Update(void)
 	UpdatePolygon();
 
 	// ワールドの更新
-	g_world.Update();
-
-	// ワールドの後更新
-	g_world.LateUpdate();
+	WorldManager::GetInstance()->Update();
 
 	// カメラ更新
 	g_camera.Update();
 	// ライトの更新
 	g_light.Update();
 
-
 	// サウンド更新処理
 	CSound::Update();
 
-	// オブジェクト
-	ECS::ObjectManager::GetInstance()->ClearnUpObject();
+
+	// debug
+	//static int n;
+	//if (GetKeyTrigger(VK_O))
+	//{
+	//	n++;
+	//	WorldManager::GetInstance()->LoadWorld<GameWorld>(std::string("Game" + n));
+	//}
 }
 
 //=============================================================================
@@ -791,7 +642,7 @@ void Draw(void)
 	SetZBuffer(true);
 
 	// ワールドの描画
-	g_world.Draw();
+	WorldManager::GetInstance()->Draw();
 
 	// Zバッファ無効
 	SetZBuffer(false);

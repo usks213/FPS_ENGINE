@@ -53,6 +53,9 @@
     <Filter Include="ソース\ゲームオブジェクト">
       <UniqueIdentifier>{8312bb02-83ed-4055-b583-6177a84d8e07}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース\エンジン\ECSWorld">
+      <UniqueIdentifier>{e0f75631-3622-4408-8f0c-09cf3aa77d3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11Game.rc">
@@ -256,6 +259,15 @@
     <ClCompile Include="Source\Scripts\BombCollisionScript.cpp">
       <Filter>ソース\スクリプト</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\ECS\World\WorldManager.cpp">
+      <Filter>ソース\エンジン\ECS\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSWorld\MasterWorld.cpp">
+      <Filter>ソース\エンジン\ECSWorld</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSWorld\GameWorld.cpp">
+      <Filter>ソース\エンジン\ECSWorld</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\main.h">
@@ -434,6 +446,15 @@
     </ClInclude>
     <ClInclude Include="Source\Scripts\BombCollisionScript.h">
       <Filter>ソース\スクリプト</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECS\World\WorldManager.h">
+      <Filter>ソース\エンジン\ECS\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSWorld\MasterWorld.h">
+      <Filter>ソース\エンジン\ECSWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSWorld\GameWorld.h">
+      <Filter>ソース\エンジン\ECSWorld</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

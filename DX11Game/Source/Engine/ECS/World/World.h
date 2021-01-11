@@ -18,7 +18,7 @@
 #include <memory>
 #include "../uniqueTypeID.h"
 #include "../System/ISystem.h"
-
+#include <string>
 
 //===== マクロ定義 =====
 
@@ -28,21 +28,30 @@ namespace ECS
 {
 	// 前定義
 	class EntityManager;
+	class WorldManager;
 
 	// ワールドクラス
 	class World
 	{
+		friend WorldManager;
 	private:
 		// エンティティマネージャー
 		std::unique_ptr<EntityManager> m_pEntityManager;
 		// システムリスト
 		std::vector<std::unique_ptr<ISystem>> m_SystemList;
+		// ワールドネーム
+		std::string m_name;
 
 	public:
 		// コンストラクタ
-		World();
+		World(std::string name);
 		// デストラクタ
 		virtual ~World();
+
+		// ワールドの初期化
+		virtual void Start(){}
+		// ワールドの終了
+		virtual void End(){}
 
 		// システムリストの更新
 		void Update();
