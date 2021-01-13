@@ -179,6 +179,9 @@ void BombCrystalScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 
 		// 自身の破棄
 		Destroy(gameObject().lock());
+
+		// サウンド
+		CSound::PlaySE("Crystal.wav");
 	}
 }
 
@@ -225,6 +228,9 @@ void BombCrystalScript::OnDeltaCollisionStay(DeltaCollider* collider)
 
 		// 自身の破棄
 		Destroy(gameObject().lock());
+
+		// サウンド
+		CSound::PlaySE("Crystal.wav");
 	}
 }
 

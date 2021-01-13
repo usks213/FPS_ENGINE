@@ -59,6 +59,8 @@
 //
 //	2021/01/11	BombCollisionの追加
 //				WorldManager の作成
+//	2021/01/12	Fadeの作成
+//				サウンド追加
 //
 //======================================================================
 #include "main.h"
@@ -229,10 +231,13 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 				dwExecLastTime = dwCurrentTime;
 				// 更新処理
 				Update();
+				// 描画処理
+				Draw();
+				dwFrameCount++;
 			}
-			// 描画処理
-			Draw();
-			dwFrameCount++;
+			//// 描画処理
+			//Draw();
+			//dwFrameCount++;
 		}
 	}
 
@@ -506,7 +511,7 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	WorldManager::Create();
 
 	// ゲームワールドの追加
-	WorldManager::GetInstance()->LoadWorld<GameWorld>("Game1");
+	WorldManager::GetInstance()->LoadWorld<GameWorld>("Game");
 	
 	return hr;
 }
@@ -610,15 +615,6 @@ void Update(void)
 
 	// サウンド更新処理
 	CSound::Update();
-
-
-	// debug
-	//static int n;
-	//if (GetKeyTrigger(VK_O))
-	//{
-	//	n++;
-	//	WorldManager::GetInstance()->LoadWorld<GameWorld>(std::string("Game" + n));
-	//}
 }
 
 //=============================================================================
@@ -627,7 +623,8 @@ void Update(void)
 void Draw(void)
 {
 	// バックバッファ＆Ｚバッファのクリア
-	float ClearColor[4] = { 0.117647f, 0.254902f, 0.352941f, 1.0f };
+	//float ClearColor[4] = { 0.117647f, 0.254902f, 0.352941f, 1.0f };
+	float ClearColor[4] = { 0.f, 0.f, 0.f, 1.0f };
 	g_pDeviceContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
 	g_pDeviceContext->ClearDepthStencilView(g_pDepthStencilView,
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);

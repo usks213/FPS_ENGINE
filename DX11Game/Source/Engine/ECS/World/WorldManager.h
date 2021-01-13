@@ -18,6 +18,8 @@
 #include <map>
 #include <string>
 #include "World.h"
+#include "../../../Scripts/FadeScript.h"
+#include "../../ECSEntity/GameObject.h"
 
 
 //===== マクロ定義 =====
@@ -78,6 +80,9 @@ namespace ECS
 		// ワールドの生成
 		template<class T> 
 		std::shared_ptr<T> CreateWorld(const std::string name);
+		// ワールドの追加
+		void AddWorld(const std::shared_ptr<World>& world ) {
+			m_WorldList.emplace(world->m_name, world);}
 
 		// ワールドの破棄
 		void DestroyWorld(const std::string name);
@@ -126,14 +131,41 @@ namespace ECS
 		// 次のワールドの生成
 		m_nextWorld = CreateWorld<T>(name);
 
-		if (m_currentWorld.lock().get() == m_nextWorld.lock().get()) return;
+		// 同じワールドがあったら
+		if (m_currentWorld.lock().get() == m_nextWorld.lock().get())
+		{
+			// ワールドをリロード
+			std::shared_ptr<T> ptr(new T(name));
+			m_nextWorld = ptr;
+
+			// ワールド変更フラグオン
+			m_bChange = true;
+
+			// フェードの生成
+			const auto& obj = m_masterWorld->GetEntityManager()->CreateEntity<GameObject>();
+			const auto& fade = obj->AddComponent<FadeScript>();
+			fade->SetFadeEndFunc([this, ptr]() 
+				{
+				this->SetNextWorld(); 
+				this->AddWorld(ptr);
+				});
+			// フェードの実行
+			fade->StartFadeOut();
+
+			return;
+		}
 
 		// ワールド変更フラグオン
 		m_bChange = true;
 
 		// フェードの生成
+		const auto& obj = m_masterWorld->GetEntityManager()->CreateEntity<GameObject>();
+		const auto& fade = obj->AddComponent<FadeScript>();
+		fade->SetFadeEndFunc([this]() {this->SetNextWorld(); });
+		// フェードの実行
+		fade->StartFadeOut();
 
 		// Test 
-		SetNextWorld();
+		//SetNextWorld();
 	}
 }

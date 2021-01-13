@@ -310,9 +310,11 @@
     <ClCompile Include="Source\Scripts\BulletScript.cpp" />
     <ClCompile Include="Source\Scripts\DropDeltaScript.cpp" />
     <ClCompile Include="Source\Scripts\EnemyBaseScript.cpp" />
+    <ClCompile Include="Source\Scripts\FadeScript.cpp" />
     <ClCompile Include="Source\Scripts\MakeEnemyScript.cpp" />
     <ClCompile Include="Source\Scripts\PlayerScript.cpp" />
     <ClCompile Include="Source\Scripts\ScriptBaseLayout.cpp" />
+    <ClCompile Include="Source\Scripts\StartCrystalScript.cpp" />
     <ClCompile Include="Source\Scripts\StraightMoveEnemyScript.cpp" />
     <ClCompile Include="Source\Scripts\TrackingMoveEnemyScript.cpp" />
     <ClCompile Include="Source\Scripts\TrackingMoveEnemyHostScript.cpp" />
@@ -374,8 +376,10 @@
     <ClInclude Include="Source\Scripts\BulletScript.h" />
     <ClInclude Include="Source\Scripts\DropDeltaScript.h" />
     <ClInclude Include="Source\Scripts\EnemyBaseScript.h" />
+    <ClInclude Include="Source\Scripts\FadeScript.h" />
     <ClInclude Include="Source\Scripts\MakeEnemyScript.h" />
     <ClInclude Include="Source\Scripts\PlayerScript.h" />
+    <ClInclude Include="Source\Scripts\StartCrystalScript.h" />
     <ClInclude Include="Source\Scripts\StraightMoveEnemyScript.h" />
     <ClInclude Include="Source\Scripts\ScriptBaseLayout.h" />
     <ClInclude Include="Source\Scripts\TrackingMoveEnemyScript.h" />

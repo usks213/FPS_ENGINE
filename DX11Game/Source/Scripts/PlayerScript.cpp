@@ -41,6 +41,9 @@
 
 #include "../Engine/ECSSystem/DeltaCollisionSystem.h"
 
+// ワールド
+#include "../Engine/ECS/World/WorldManager.h"
+#include "../Engine/ECSWorld/GameWorld.h"
 
 // スクリプト
 #include "BulletScript.h"
@@ -69,8 +72,8 @@ void PlayerScript::Start()
 	gameObject().lock()->SetName("Player");
 	gameObject().lock()->SetTag("Player");
 
-	transform().lock()->m_pos = Vector3(1000, 1000, 1000);
-	transform().lock()->m_scale = Vector3(300, 300, 300);
+	transform().lock()->m_pos = Vector3(0, 1000, 0);
+	transform().lock()->m_scale = Vector3(300, 600, 300);
 
 	// コンポーネントの追加
 
@@ -99,7 +102,8 @@ void PlayerScript::Start()
 	m_nJump = 0;
 	// デルタカウンター
 	m_nDeltaCount = 0;
-
+	// ショット
+	m_bShot = false;
 }
 
 //========================================
@@ -143,13 +147,15 @@ void PlayerScript::Update()
 		(transform().lock()->m_pos->y <= transform().lock()->m_scale->y / 2 || m_nJump > 0))
 	{
 		m_rb.lock()->SetForceY(jump + m_nJump);
+		// サウンド
+		CSound::PlaySE("Jump.wav", 0.8f);
 	}
 	m_nJump--;
 	if (m_nJump < 0) m_nJump = 0;
 
 	// ショット
 	m_nShotCnt--;
-	if (m_nShotCnt < 0)
+	if (m_bShot && m_nShotCnt < 0)
 	{
 		//const auto& test = GetEntityManager()->CreateEntity<GameObject>();
 		const auto& test = Instantiate<GameObject>();
@@ -163,6 +169,10 @@ void PlayerScript::Update()
 		rb->AddTorque(dir * 10);
 
 		m_nShotCnt = 5;
+
+		// サウンド
+		CSound::PlaySE("Shot.wav", 0.1f);
+
 	}
 }
 
@@ -205,6 +215,22 @@ void PlayerScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 	{
 		m_nJump = 10;
 	}
+	else if (collider->gameObject().lock()->tag() == "StartCrystal")
+	{
+		m_bShot = true;
+	}
+	else if (collider->gameObject().lock()->tag() == "Enemy")
+	{
+		// 当たった角度を計算
+		Vector3 vec = collider->transform().lock()->m_pos - transform().lock()->m_pos;
+		Vector3 forward = CCamera::GetMainCamera()->GetForward();
+
+		if (Vector3::Dot(vec.normalized(), forward.normalized()) < -0.8f)
+		{
+			// ゲームオーバー
+			WorldManager::GetInstance()->LoadWorld<GameWorld>("Game");
+		}
+	}
 }
 
 //========================================
@@ -214,15 +240,8 @@ void PlayerScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 //========================================
 void PlayerScript::OnDeltaCollisionStay(DeltaCollider* collider)
 {
-	if (collider->gameObject().lock()->tag() == "DropDelta")
-	{
-		// カウンター加算
-		m_nDeltaCount++;
-	}
-	else if (collider->gameObject().lock()->tag() == "BombCrystal")
-	{
-		m_nJump = 10;
-	}
+	// 同じ処理
+	OnDeltaCollisionEnter(collider);
 }
 
 //========================================

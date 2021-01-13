@@ -17,9 +17,12 @@
 #include "../ECSSystem/RendererSystem.h"
 #include "../ECS/Entity/EntityManager.h"
 
+#include "../ECSEntity/GameObject.h"
 #include "Transform.h"
 #include "../Renderer/Camera.h"
 #include "../System/Texture.h"
+#include "../System/debugproc.h"
+
 
 using namespace ECS;
 
@@ -130,6 +133,10 @@ void InstancingMeshRenderer::LateDraw(ID3D11DeviceContext* pDC)
 	{
 		DrawInstancingMesh(pDC, mesh, itr->second);
 	}
+
+
+	// デバック
+	PrintDebugProc("%s : %d\n", itr->first.c_str(), itr->second.size());
 }
 
 
@@ -147,8 +154,10 @@ bool InstancingMeshRenderer::CreateMeshData(std::string tag)
 	const auto& itr = m_meshPool.find(tag);
 	if (m_meshPool.end() != itr)
 	{
+		// あった
 		m_mesh = itr->second;
-		// リストに格納
+
+		// リストがある時
 		auto itr2 = m_meshList.find(tag);
 		if (itr2 != m_meshList.end())
 		{
@@ -162,28 +171,50 @@ bool InstancingMeshRenderer::CreateMeshData(std::string tag)
 			m_meshList.emplace(tag, list);
 		}
 
+		// メッシュデータがない→
+		if (m_meshList[tag].size() <= 1)
+		{
+			// システムに格納
+			RendererSystem* sys = GetEntityManager()->GetWorld()->GetSystem<RendererSystem>();
+			if (sys)
+			{
+				const auto& obj = GetEntityManager()->CreateEntity<GameObject>();
+				const auto& p = obj->AddComponent<InstancingMeshRenderer>();
+				p->m_tag = tag;
+				p->m_mesh = m_mesh;
+				p->m_mesh->mtxTexture = &p->m_mtxTexture;
+				sys->AddList(p.get());
+				// メッシュリストに
+				m_meshList[tag].push_back(&p->m_data);
+			}
+		}
+
 		return false;
 	}
 
-	// 新規作成
-	m_mesh = new InstancingMesh();
-
-	// プールに格納
-	m_meshPool.emplace(tag, m_mesh);
 	// リスト作成
 	std::vector<InstancingMeshData*> list;
 	list.push_back(&this->m_data);
 	m_meshList.emplace(tag, list);
 
+	// 新規作成
+	m_mesh = new InstancingMesh();
+	// プールに格納
+	m_meshPool.emplace(tag, m_mesh);
+
+
 	// システムに格納
 	RendererSystem* sys = GetEntityManager()->GetWorld()->GetSystem<RendererSystem>();
 	if (sys)
 	{
-		InstancingMeshRenderer* p = new InstancingMeshRenderer();
+		const auto& obj = GetEntityManager()->CreateEntity<GameObject>();
+		const auto& p = obj->AddComponent<InstancingMeshRenderer>();
 		p->m_tag = tag;
 		p->m_mesh = m_mesh;
 		p->m_mesh->mtxTexture = &p->m_mtxTexture;
-		sys->AddList(p);
+		sys->AddList(p.get());
+		// メッシュリストに
+		m_meshList[tag].push_back(&p->m_data);
 	}
 
 	return true;

@@ -17,7 +17,7 @@
 #define	CAM_POS_R_X			(0.0f)					// カメラの注視点初期位置(X座標)
 #define	CAM_POS_R_Y			(0.0f)					// カメラの注視点初期位置(Y座標)
 #define	CAM_POS_R_Z			(0.0f)					// カメラの注視点初期位置(Z座標)
-#define	VIEW_ANGLE			(70.0f)					// ビュー平面の視野角
+#define	VIEW_ANGLE			(80.0f)					// ビュー平面の視野角
 #define	VIEW_ASPECT			((float)SCREEN_WIDTH/SCREEN_HEIGHT)	// ビュー平面のアスペクト比
 
 #define	VALUE_MOVE_CAMERA	(0.65f)					// カメラの移動量
@@ -81,6 +81,10 @@ void CCamera::Init()
 
 
 	CalcWorldMatrix();
+	SetCursorPos(SCREEN_CENTER_X, SCREEN_CENTER_Y);
+
+	// 更新
+	this->Update();
 }
 
 // 更新

@@ -34,7 +34,8 @@ namespace ECS
 		int m_nJump;
 		// デルタカウンター
 		int m_nDeltaCount;
-
+		// ショット
+		bool m_bShot;
 	public:
 		// デルタ数取得
 		int GetDeltaCount() { return m_nDeltaCount; }

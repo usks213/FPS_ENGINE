@@ -111,6 +111,10 @@ void TrackingMoveEnemyHostScript::Update()
 	if (dir.magnitude() < 500) return;
 	dir = dir.normalized();
 
+	// Œü‚¢‚Ä‚éŒü‚«
+	Vector3 cameraDir = CCamera::GetMainCamera()->GetForward();
+	if (Vector3::Dot(cameraDir, dir) >= 0) return;
+
 	// —Í‚ð‰Á‚¦‚é
 	m_rb.lock()->SetForce(dir * m_speed);
 

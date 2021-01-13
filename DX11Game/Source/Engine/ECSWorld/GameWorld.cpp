@@ -19,6 +19,7 @@
 // システム
 #include "../ECS/Entity/EntityManager.h"
 #include "../ECSEntity/GameObject.h"
+#include "../Renderer/Camera.h"
 
 // コンポーネント
 #include "../ECSCompoent/Transform.h"
@@ -27,6 +28,8 @@
 // スクリプト
 #include "../../Scripts/PlayerScript.h"
 #include "../../Scripts/MakeEnemyScript.h"
+#include "../../Scripts/StartCrystalScript.h"
+
 
 using namespace ECS;
 
@@ -72,9 +75,18 @@ void GameWorld::Start()
 	const auto& player = GetEntityManager()->CreateEntity<GameObject>();
 	player->AddComponent<PlayerScript>();
 
-	// エネミーメイカー
-	const auto& enemyMaker = GetEntityManager()->CreateEntity<GameObject>();
-	enemyMaker->AddComponent<MakeEnemyScript>()->SetPlayer(player);
+	//// エネミーメイカー
+	//const auto& enemyMaker = GetEntityManager()->CreateEntity<GameObject>();
+	//enemyMaker->AddComponent<MakeEnemyScript>()->SetPlayer(player);
+
+	// スタートクリスタル
+	const auto& crystal = GetEntityManager()->CreateEntity<GameObject>();
+	CCamera::GetMainCamera()->Update();
+	Vector3 dir = CCamera::GetMainCamera()->GetForward();
+	dir *= 1500;
+	dir->y = 700;
+	crystal->transform().lock()->m_pos = dir;
+	crystal->AddComponent<StartCrystalScript>()->SetPlayer(player);
 
 	// 床
 	const auto& test = GetEntityManager()->CreateEntity<GameObject>();

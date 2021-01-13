@@ -114,11 +114,11 @@ void MakeEnemyScript::Update()
 	// ƒfƒ‹ƒ^”‚ðŽæ“¾
 	int nDelta = player->GetComponent<PlayerScript>()->GetDeltaCount();
 	for(int i = 1; i < m_nSpawnNum; i++)
-		nDelta -= i * 10;
+		nDelta -= i * 5;
 	// ¶¬”‚ðŒvŽZ
-	if (nDelta / (m_nSpawnNum * 10))
+	if (nDelta / (m_nSpawnNum * 5))
 	{
-		m_nSpawnNum++;
+		m_nSpawnNum += 2;
 	}
 	if (m_nSpawnNum > MAX_SPAWN_NUM) m_nSpawnNum = MAX_SPAWN_NUM;
 
@@ -139,7 +139,7 @@ void MakeEnemyScript::Update()
 		if (rand() % 100 < 30)
 		{
 			Vector3 bombPos = spawnPos * 0.75f;
-			bombPos->y = playerPos->y + (5) * 100;
+			bombPos->y = playerPos->y + (7) * 100;
 			const auto& bomb = Instantiate<GameObject>(bombPos);
 			bomb->AddComponent<BombCrystalScript>();
 		}

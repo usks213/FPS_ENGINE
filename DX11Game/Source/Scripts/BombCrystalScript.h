@@ -25,7 +25,7 @@ namespace ECS
 {
 	class BombCrystalScript : public Script
 	{
-	private:
+	protected:
 		// ----- メンバ -----
 		int m_nExitTime;	// 生存時間
 
@@ -33,22 +33,22 @@ namespace ECS
 		// ----- メソッド -----
 
 		// 開始時に呼ばれます
-		void Start() override;
+		virtual void Start() override;
 		// 毎フレーム呼ばれます
 		void Update() override;
 		// 毎フレーム更新後に呼ばれます
 		void LateUpdate() override;
 		// 終了時に呼ばれます
-		void End() override;
+		virtual void End() override;
 
 
 		// ----- コールバック関数 -----
 
 		// Delta
 		// 当たった時
-		void OnDeltaCollisionEnter(DeltaCollider* collider) override;
+		virtual void OnDeltaCollisionEnter(DeltaCollider* collider) override;
 		// 当たっている間
-		void OnDeltaCollisionStay(DeltaCollider* collider) override;
+		virtual void OnDeltaCollisionStay(DeltaCollider* collider) override;
 		// 離れた時
 		void OnDeltaCollisionExit(DeltaCollider* collider) override;
 	};

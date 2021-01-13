@@ -80,6 +80,8 @@ void SpriteRenderer::LateDraw(ID3D11DeviceContext* pDC)
 
 	// Zバッファ無効
 	SetZBuffer(false);
+	// ブレンドステート
+	SetBlendState(m_eState);
 
 	// 座標
 	SetPolygonPos(trans->m_pos->x, trans->m_pos->y);
@@ -101,6 +103,8 @@ void SpriteRenderer::LateDraw(ID3D11DeviceContext* pDC)
 	// 描画
 	DrawPolygon(pDC);
 
+	// ブレンドステート
+	SetBlendState(BS_NONE);
 	// Zバッファ有効
 	SetZBuffer(true);
 }

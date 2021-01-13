@@ -198,7 +198,7 @@ void WorldManager::DestroyWorld(const std::string name)
 void WorldManager::DestroyWorld(const std::shared_ptr<World>& obj)
 {
 	// 名前で検索
-	DestroyWorld(obj->m_name);
+	DestroyWorld(obj.get());
 }
 
 //===================================
@@ -208,8 +208,24 @@ void WorldManager::DestroyWorld(const std::shared_ptr<World>& obj)
 //===================================
 void WorldManager::DestroyWorld(World* obj)
 {
-	// 名前で検索
-	DestroyWorld(obj->m_name);
+	// プールを検索
+	auto itr = std::find_if(m_WorldList.begin(), m_WorldList.end(),
+		[&obj](const auto& map)
+		{
+			return map.second.get() == obj;
+		});
+
+	// プールになかった
+	if (m_WorldList.end() == itr) return;
+
+	// デストロイリストを検索
+	auto destroyItr = m_DestroyList.find(itr->second.get());
+
+	// 既に格納されていたら
+	if (m_DestroyList.end() != destroyItr) return;
+
+	// デストロイリストに格納
+	m_DestroyList.emplace(itr->second.get(), itr);
 }
 
 //===================================
@@ -258,6 +274,8 @@ void WorldManager::SetNextWorld()
 	{
 		// 現在のシーンの変更
 		m_currentWorld = m_nextWorld;
+		// 次のシーンをからに
+		m_nextWorld.reset();
 		// 次のシーンの初期化
 		m_currentWorld.lock()->Start();
 	}
