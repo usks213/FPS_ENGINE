@@ -16,6 +16,7 @@
 #include "RendererSystem.h"
 #include "../ECSCompoent/Renderer.h"
 #include <algorithm>
+#include <execution>
 
 #include "../main.h"
 
@@ -83,19 +84,14 @@ void RendererSystem::OnDraw()
 		});
 
 	// ソート
-	//std::sort(m_ComponentList.begin(), m_ComponentList.end(), 
-	//	[](Renderer* lhs, Renderer* rhs) 
-	//	{
-	//		// 降順
-	//		return lhs->GetLayer() > rhs->GetLayer();
-	//	}); 
+	m_ComponentList.sort(Renderer::swapR);
 
 	// 前描画
-	std::for_each(m_ComponentList.begin(), m_ComponentList.end(),
-		[&pDC](Renderer* trans)
-		{
-			trans->EarlyDraw(pDC);
-		});
+	//std::for_each(m_ComponentList.begin(), m_ComponentList.end(),
+	//	[&pDC](Renderer* trans)
+	//	{
+	//		trans->EarlyDraw(pDC);
+	//	});
 
 	// 後描画
 	std::for_each(m_ComponentList.begin(), m_ComponentList.end(),
@@ -112,4 +108,13 @@ void RendererSystem::OnDraw()
 //===================================
 void RendererSystem::OnDestroy()
 {
+}
+
+//===================================
+//
+//	ソート用
+//
+//===================================
+bool RendererSystem::swapR(Renderer* lhs, Renderer* rhs) {
+	return lhs->GetLayer() > rhs->GetLayer(); // 降順にしてみる
 }

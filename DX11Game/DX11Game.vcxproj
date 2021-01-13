@@ -97,7 +97,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\..\DirectXTex;..\..\Assimp\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -117,7 +117,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\..\DirectXTex;..\..\Assimp\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -139,7 +139,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\..\DirectXTex;..\..\Assimp\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -163,7 +163,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\..\DirectXTex;..\..\Assimp\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -298,6 +298,7 @@
     <ClCompile Include="Source\Engine\Renderer\instancingMesh .cpp" />
     <ClCompile Include="Source\Engine\Renderer\Light.cpp" />
     <ClCompile Include="Source\Engine\Renderer\mesh.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\PostProcessing.cpp" />
     <ClCompile Include="Source\Engine\System\debugproc.cpp" />
     <ClCompile Include="Source\Engine\System\input.cpp" />
     <ClCompile Include="Source\Engine\System\polygon.cpp" />
@@ -362,6 +363,7 @@
     <ClInclude Include="Source\Engine\Renderer\instancingMesh.h" />
     <ClInclude Include="Source\Engine\Renderer\Light.h" />
     <ClInclude Include="Source\Engine\Renderer\mesh.h" />
+    <ClInclude Include="Source\Engine\Renderer\PostProcessing.h" />
     <ClInclude Include="Source\Engine\System\CCell.h" />
     <ClInclude Include="Source\Engine\System\debugproc.h" />
     <ClInclude Include="Source\Engine\System\input.h" />

@@ -40,5 +40,8 @@ namespace ECS
 		void OnDraw() override;
 		// 削除時
 		void OnDestroy() override;
+	private:
+		// ソート用
+		static bool swapR(Renderer* lhs, Renderer* rhs);
 	};
 }

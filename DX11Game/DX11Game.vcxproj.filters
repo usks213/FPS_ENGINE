@@ -274,6 +274,9 @@
     <ClCompile Include="Source\Scripts\StartCrystalScript.cpp">
       <Filter>ソース\スクリプト</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Engine\Renderer\PostProcessing.cpp">
+      <Filter>ソース\エンジン\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\main.h">
@@ -467,6 +470,9 @@
     </ClInclude>
     <ClInclude Include="Source\Scripts\StartCrystalScript.h">
       <Filter>ソース\スクリプト</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\Renderer\PostProcessing.h">
+      <Filter>ソース\エンジン\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

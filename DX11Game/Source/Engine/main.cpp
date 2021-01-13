@@ -77,6 +77,7 @@
 #include "Renderer/mesh.h"
 #include "Renderer/instancingMesh.h"
 #include "Renderer/AssimpModel.h"
+#include "Renderer/PostProcessing.h"
 
 // ECS
 #include "ECS/Object/ObjectManager.h"
@@ -129,6 +130,8 @@ int							g_nCountFPS;			// FPSカウンタ
 
 CCamera						g_camera;				// カメラ
 CLight						g_light;				// 光源
+
+PostProcessing g_post;
 
 using namespace ECS;
 
@@ -503,6 +506,9 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	g_camera.Init();
 	CCamera::SetMainCamera(&g_camera);
 
+	// ポストエフェクト
+	g_post.Init();
+
 
 	// オブジェクト
 	ECS::ObjectManager::Create();
@@ -630,9 +636,13 @@ void Draw(void)
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	ClearShadowBuffer();
+	// ポストエフェクトバッファ
+	g_pDeviceContext->ClearRenderTargetView(g_post.m_pRenderTargetView, ClearColor);
+
 
 	// 各ターゲットビューをレンダーターゲットに設定
-	g_pDeviceContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
+	//g_pDeviceContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
+	g_pDeviceContext->OMSetRenderTargets(1, &g_post.m_pRenderTargetView, g_pDepthStencilView);
 
 
 	// Zバッファ有効
@@ -640,6 +650,15 @@ void Draw(void)
 
 	// ワールドの描画
 	WorldManager::GetInstance()->Draw();
+
+	// ポストエフェクトポストエフェクト描画
+	g_pDeviceContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
+	SetPolygonSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	SetPolygonPos(0, 0);
+	SetPolygonColor(1, 1, 1);
+	SetPolygonTexture(g_post.m_pTexureResourceView);
+	DrawPolygon(g_pDeviceContext);
+
 
 	// Zバッファ無効
 	SetZBuffer(false);
@@ -730,5 +749,6 @@ void SetCullMode(int nCullMode)
 void SetRenderTarget()
 {
 	// 各ターゲットビューをレンダーターゲットに設定
-	g_pDeviceContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
+	//g_pDeviceContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
+	g_pDeviceContext->OMSetRenderTargets(1, &g_post.m_pRenderTargetView, g_pDepthStencilView);
 }

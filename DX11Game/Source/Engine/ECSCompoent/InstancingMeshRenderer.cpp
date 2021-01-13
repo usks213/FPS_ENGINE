@@ -105,15 +105,15 @@ void InstancingMeshRenderer::OnDestroy()
 //========================================
 void InstancingMeshRenderer::EarlyDraw(ID3D11DeviceContext* pDC)
 {
-	//auto itr = m_meshList.find(m_tag);
-	//if (m_meshList.end() == itr) return;
+	auto itr = m_meshList.find(m_tag);
+	if (m_meshList.end() == itr) return;
 
-	//const auto& mesh = m_mesh;
+	const auto& mesh = m_mesh;
 
-	//if (mesh)
-	//{
-	//	DrawInstancingMeshShadow(pDC, mesh, itr->second);
-	//}
+	if (mesh)
+	{
+		DrawInstancingMeshShadow(pDC, mesh, itr->second);
+	}
 }
 
 //========================================
