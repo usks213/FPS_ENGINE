@@ -236,6 +236,18 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Source\HLSL\PostPixel2D.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Source\HLSL\PostVertex2D.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="source\HLSL\Vertex.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
@@ -315,6 +327,7 @@
     <ClCompile Include="Source\Scripts\MakeEnemyScript.cpp" />
     <ClCompile Include="Source\Scripts\PlayerScript.cpp" />
     <ClCompile Include="Source\Scripts\ScriptBaseLayout.cpp" />
+    <ClCompile Include="Source\Scripts\SkyDomeScript.cpp" />
     <ClCompile Include="Source\Scripts\StartCrystalScript.cpp" />
     <ClCompile Include="Source\Scripts\StraightMoveEnemyScript.cpp" />
     <ClCompile Include="Source\Scripts\TrackingMoveEnemyScript.cpp" />
@@ -381,6 +394,7 @@
     <ClInclude Include="Source\Scripts\FadeScript.h" />
     <ClInclude Include="Source\Scripts\MakeEnemyScript.h" />
     <ClInclude Include="Source\Scripts\PlayerScript.h" />
+    <ClInclude Include="Source\Scripts\SkyDomeScript.h" />
     <ClInclude Include="Source\Scripts\StartCrystalScript.h" />
     <ClInclude Include="Source\Scripts\StraightMoveEnemyScript.h" />
     <ClInclude Include="Source\Scripts\ScriptBaseLayout.h" />

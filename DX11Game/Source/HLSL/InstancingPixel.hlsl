@@ -27,6 +27,8 @@ struct VS_OUTPUT {
     float3 Target : TEXCOORD3;
     float3 BinNormal : TEXCOORD4;
 	float4	Diffuse		: COLOR0;
+    float  Fog     : COLOR1;
+    
    // uint    instID      : TEXCOORD5;
 };
 
@@ -115,26 +117,26 @@ float4 main(VS_OUTPUT input) : SV_Target0
         float lighting = 1;
         float3 sc = float3(1.0f, 1.0f, 1.0f);
 
-        if ((saturate(shadowTexCoords.x) == shadowTexCoords.x) &&
-			(saturate(shadowTexCoords.y) == shadowTexCoords.y) &&
-			(pixelDepth > 0))
-        {
-            float margin = acos(saturate(dot(N, L)));
-#ifdef LINEAR
-				float epsilon = 0.0005 / margin;
-#else
-            float epsilon = 0.005 / margin;
-#endif
-            epsilon = clamp(epsilon, 0, 0.1);
+//        if ((saturate(shadowTexCoords.x) == shadowTexCoords.x) &&
+//			(saturate(shadowTexCoords.y) == shadowTexCoords.y) &&
+//			(pixelDepth > 0))
+//        {
+//            float margin = acos(saturate(dot(N, L)));
+//#ifdef LINEAR
+//				float epsilon = 0.0005 / margin;
+//#else
+//            float epsilon = 0.005 / margin;
+//#endif
+//            epsilon = clamp(epsilon, 0, 0.1);
 
-            lighting = float(g_shadowTexture.SampleCmpLevelZero(
-				g_shadowSampler,
-				shadowTexCoords,
-				pixelDepth - epsilon));
-            sc = float3(0.5f, 0.5f, 0.5f);
-            sc = lerp(sc, float3(1.0f, 1.0f, 1.0f), lighting);
+//            lighting = float(g_shadowTexture.SampleCmpLevelZero(
+//				g_shadowSampler,
+//				shadowTexCoords,
+//				pixelDepth - epsilon));
+//            sc = float3(0.5f, 0.5f, 0.5f);
+//            sc = lerp(sc, float3(1.0f, 1.0f, 1.0f), lighting);
 
-        }
+//        }
         
         
         // ===== バンプマップ =====
@@ -209,6 +211,11 @@ float4 main(VS_OUTPUT input) : SV_Target0
         Diff += Spec;
         Diff += g_vKe.rgb * vTd.rgb; // エミッション
         
+        //　フォグ色とオブジェクト色と線形合成
+        //float3 FogColor = float3(1, 1, 1);
+        //float3 FogColor = float3(0.557f, 0.631f, 0.6f);
+        float3 FogColor = float3(0.0f, 0.51f, 0.51f);
+        Diff = lerp(FogColor, Diff, input.Fog);
     }
 
 

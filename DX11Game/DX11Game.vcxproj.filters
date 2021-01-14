@@ -92,6 +92,12 @@
     <FxCompile Include="Source\HLSL\InstancingVertex.hlsl">
       <Filter>シェーダー</Filter>
     </FxCompile>
+    <FxCompile Include="Source\HLSL\PostPixel2D.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="Source\HLSL\PostVertex2D.hlsl">
+      <Filter>シェーダー</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\main.cpp">
@@ -276,6 +282,9 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\Renderer\PostProcessing.cpp">
       <Filter>ソース\エンジン\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\SkyDomeScript.cpp">
+      <Filter>ソース\スクリプト</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -473,6 +482,9 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\Renderer\PostProcessing.h">
       <Filter>ソース\エンジン\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\SkyDomeScript.h">
+      <Filter>ソース\スクリプト</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

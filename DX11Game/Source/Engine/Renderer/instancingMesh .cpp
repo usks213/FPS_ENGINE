@@ -35,7 +35,8 @@ struct InstancingMatrix
 struct SHADER_GLOBAL {
 	XMMATRIX	mVP;		// ƒ[ƒ‹ƒh~ƒrƒ…[~ŽË‰es—ñ(“]’us—ñ)
 	XMMATRIX	mLightVP;		// ƒ[ƒ‹ƒh~ƒrƒ…[~ŽË‰es—ñ(“]’us—ñ)
-	XMMATRIX mTexture;
+	XMMATRIX	mTexture;
+	XMVECTOR	vFog;
 };
 struct INSTANCING_GLOBAL
 {
@@ -333,6 +334,8 @@ void DrawInstancingMesh(ID3D11DeviceContext* pDeviceContext, InstancingMesh* pIn
 	cb.mVP = XMMatrixTranspose(XMLoadFloat4x4(&g_pCamera->GetViewMatrix()) * XMLoadFloat4x4(&g_pCamera->GetProjMatrix()));
 	cb.mLightVP = XMMatrixTranspose(XMLoadFloat4x4(&g_pLight->GetViewMatrix()) * XMLoadFloat4x4(&g_pCamera->GetProjMatrix()) * SHADOW_BIAS);
 	cb.mTexture = XMMatrixTranspose(XMLoadFloat4x4(pInstancingMesh->mtxTexture));
+	XMFLOAT2 fog = { FOG_FAR_Z / (FOG_FAR_Z - FOG_NEAR_Z), -1 / (FOG_FAR_Z - FOG_NEAR_Z) };
+	cb.vFog = XMLoadFloat2(&fog);
 	pDeviceContext->UpdateSubresource(g_pConstantBuffer[0], 0, nullptr, &cb, 0, 0);
 	pDeviceContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer[0]);
 

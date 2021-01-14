@@ -507,7 +507,7 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	CCamera::SetMainCamera(&g_camera);
 
 	// ポストエフェクト
-	g_post.Init();
+	g_post.Init(g_pDevice);
 
 
 	// オブジェクト
@@ -635,14 +635,18 @@ void Draw(void)
 	g_pDeviceContext->ClearDepthStencilView(g_pDepthStencilView,
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
+	// シャドウマップ
 	ClearShadowBuffer();
+
 	// ポストエフェクトバッファ
 	g_pDeviceContext->ClearRenderTargetView(g_post.m_pRenderTargetView, ClearColor);
+	g_pDeviceContext->ClearDepthStencilView(g_post.m_pDepthStencilView,
+		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 
 	// 各ターゲットビューをレンダーターゲットに設定
 	//g_pDeviceContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
-	g_pDeviceContext->OMSetRenderTargets(1, &g_post.m_pRenderTargetView, g_pDepthStencilView);
+	g_pDeviceContext->OMSetRenderTargets(1, &g_post.m_pRenderTargetView, g_post.m_pDepthStencilView);
 
 
 	// Zバッファ有効
@@ -653,12 +657,7 @@ void Draw(void)
 
 	// ポストエフェクトポストエフェクト描画
 	g_pDeviceContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
-	SetPolygonSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-	SetPolygonPos(0, 0);
-	SetPolygonColor(1, 1, 1);
-	SetPolygonTexture(g_post.m_pTexureResourceView);
-	DrawPolygon(g_pDeviceContext);
-
+	g_post.Draw(g_pDeviceContext);
 
 	// Zバッファ無効
 	SetZBuffer(false);
@@ -750,5 +749,5 @@ void SetRenderTarget()
 {
 	// 各ターゲットビューをレンダーターゲットに設定
 	//g_pDeviceContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
-	g_pDeviceContext->OMSetRenderTargets(1, &g_post.m_pRenderTargetView, g_pDepthStencilView);
+	g_pDeviceContext->OMSetRenderTargets(1, &g_post.m_pRenderTargetView, g_post.m_pDepthStencilView);
 }

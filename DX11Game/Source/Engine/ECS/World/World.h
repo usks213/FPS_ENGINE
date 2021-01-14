@@ -75,6 +75,9 @@ namespace ECS
 		void sortSystem();
 		// OnCreateコールバック関数
 		static void CallOnCreate(ISystem* pSystem);
+
+		// 終了時
+		void OnDestroy();
 	};
 
 

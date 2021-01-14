@@ -157,22 +157,8 @@ bool InstancingMeshRenderer::CreateMeshData(std::string tag)
 		// あった
 		m_mesh = itr->second;
 
-		// リストがある時
-		auto itr2 = m_meshList.find(tag);
-		if (itr2 != m_meshList.end())
-		{
-			itr2->second.push_back(&this->m_data);
-		}
-		else
-		{
-			// リスト作成
-			std::vector<InstancingMeshData*> list;
-			list.push_back(&this->m_data);
-			m_meshList.emplace(tag, list);
-		}
-
 		// メッシュデータがない→
-		if (m_meshList[tag].size() <= 1)
+		if (m_meshList[tag].size() <= 0)
 		{
 			// システムに格納
 			RendererSystem* sys = GetEntityManager()->GetWorld()->GetSystem<RendererSystem>();
@@ -187,6 +173,20 @@ bool InstancingMeshRenderer::CreateMeshData(std::string tag)
 				// メッシュリストに
 				m_meshList[tag].push_back(&p->m_data);
 			}
+		}
+
+		// リストがある時
+		auto itr2 = m_meshList.find(tag);
+		if (itr2 != m_meshList.end())
+		{
+			itr2->second.push_back(&this->m_data);
+		}
+		else
+		{
+			// リスト作成
+			std::vector<InstancingMeshData*> list;
+			list.push_back(&this->m_data);
+			m_meshList.emplace(tag, list);
 		}
 
 		return false;

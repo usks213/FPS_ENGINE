@@ -28,6 +28,7 @@ struct SHADER_GLOBAL {
 	XMMATRIX	mLightWVP;		// ワールド×ビュー×射影行列(転置行列)
 	XMMATRIX	mW;			// ワールド行列(転置行列)
 	XMMATRIX	mTex;		// テクスチャ行列(転置行列)
+	XMVECTOR	vFog;		// フォグ係数
 };
 struct SHADER_GLOBAL2 {
 	XMVECTOR	vEye;		// 視点座標
@@ -42,6 +43,7 @@ struct SHADER_GLOBAL2 {
 	XMVECTOR	vSpecular;	// スペキュラ色(+スペキュラ強度)
 	XMVECTOR	vEmissive;	// エミッシブ色
 
+	int		bLight = true;
 	int		bBump = false;
 };
 
@@ -309,20 +311,21 @@ void DrawMesh(ID3D11DeviceContext* pDeviceContext, MESH* pMesh, int nTranslucntT
 
 	MATERIAL* pMaterial = pMesh->pMaterial;
 	if (!pMaterial) pMaterial = &g_material;
-	switch (nTranslucntType) {
-	case TT_OPACITYONLY:		// 不透明のみ
-		if (pMaterial->Diffuse.w < 1.0f || pMesh->fAlpha < 1.0f) {
-			return;
-		}
-		break;
-	case TT_TRANSLUCENTONLY:	// 半透明のみ
-		if (pMaterial->Diffuse.w >= 1.0f && pMesh->fAlpha >= 1.0f) {
-			return;
-		}
-		break;
-	default:					// 不透明度で区別しない
-		break;
-	}
+	//switch (nTranslucntType) {
+	//case TT_OPACITYONLY:		// 不透明のみ
+	//	if (pMaterial->Diffuse.w < 1.0f || pMesh->fAlpha < 1.0f) {
+	//		return;
+	//	}
+	//	break;
+	//case TT_TRANSLUCENTONLY:	// 半透明のみ
+	//	if (pMaterial->Diffuse.w >= 1.0f && pMesh->fAlpha >= 1.0f) {
+	//		return;
+	//	}
+	//	break;
+	//default:					// 不透明度で区別しない
+	//	break;
+	//}
+
 	// シェーダ設定
 	pDeviceContext->VSSetShader(g_pVertexShader, nullptr, 0);
 	pDeviceContext->PSSetShader(g_pPixelShader, nullptr, 0);
@@ -349,6 +352,8 @@ void DrawMesh(ID3D11DeviceContext* pDeviceContext, MESH* pMesh, int nTranslucntT
 	cb.mLightWVP = XMMatrixTranspose(mtxWorld * XMLoadFloat4x4(&g_pLight->GetViewMatrix()) * XMLoadFloat4x4(&g_pCamera->GetProjMatrix()) * SHADOW_BIAS);
 	cb.mW = XMMatrixTranspose(mtxWorld);
 	cb.mTex = XMMatrixTranspose(XMLoadFloat4x4(&pMesh->mtxTexture));
+	XMFLOAT2 fog = { FOG_FAR_Z / (FOG_FAR_Z - FOG_NEAR_Z), -1 / (FOG_FAR_Z - FOG_NEAR_Z) };
+	cb.vFog = XMLoadFloat2(&fog);
 	pDeviceContext->UpdateSubresource(g_pConstantBuffer[0], 0, nullptr, &cb, 0, 0);
 	pDeviceContext->VSSetConstantBuffers(0, 1, &g_pConstantBuffer[0]);
 
@@ -364,6 +369,7 @@ void DrawMesh(ID3D11DeviceContext* pDeviceContext, MESH* pMesh, int nTranslucntT
 	cb2.vEmissive = XMLoadFloat4(&pMaterial->Emissive);
 
 	cb2.bBump = pMesh->bBump;
+	cb2.bLight = pMesh->bLight;
 	
 	pDeviceContext->UpdateSubresource(g_pConstantBuffer[1], 0, nullptr, &cb2, 0, 0);
 	pDeviceContext->PSSetConstantBuffers(1, 1, &g_pConstantBuffer[1]);

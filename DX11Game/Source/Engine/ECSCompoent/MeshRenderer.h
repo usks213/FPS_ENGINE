@@ -47,6 +47,17 @@ namespace ECS
 		// スフィア
 		HRESULT MakeSphere(std::string tag,
 			int nSegment = 36, float fTexSplit = 1.0f, XMFLOAT3 pos = { 0,0,0 });
+		HRESULT MakeSphere2(std::string tag,
+			int nNumBlockX, int nNumBlockY, float fSize = 0.5f,
+			float fTexSizeX = 1.0f, float fTexSizeY = 1.0f,
+			float fPosX = 0.0f, float fPosY = 0.0f, float fPosZ = 0.0f);
+		// スカイドーム
+		HRESULT MakeSkyDome(std::string tag,
+			int nSegment = 36, float fTexSplit = 1.0f, XMFLOAT3 pos = { 0,0,0 });
+		HRESULT MakeSkyDome2(std::string tag,
+			int nNumBlockX, int nNumBlockY, float fSize = 0.5f,
+			float fTexSizeX = 1.0f, float fTexSizeY = 1.0f,
+			float fPosX = 0.0f, float fPosY = 0.0f, float fPosZ = 0.0f);
 
 		//--- マテリアル
 		// カラー変更
@@ -61,6 +72,9 @@ namespace ECS
 		void SetTranslucentType(eTranslucentType eType) { m_eTranslucentType = eType; }
 		// プリミティブ
 		void SetPrimitiveType(ePrimitiveType eType) { if (m_mesh) m_mesh->primitiveType = eType; }
+
+		// ライト
+		void SetLighting(bool bLight) { if (m_mesh) m_mesh->bLight = bLight; }
 
 	private:
 		// メッシュデータ

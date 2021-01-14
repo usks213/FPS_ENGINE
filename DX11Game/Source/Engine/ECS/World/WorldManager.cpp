@@ -239,7 +239,7 @@ void WorldManager::ClearnUpWorld()
 	for (auto obj : m_DestroyList)
 	{
 		//íœÀsŠÖ”
-		obj.second->second->End();
+		obj.second->second->OnDestroy();
 
 		// Š®‘SÁ‹
 		m_WorldList.erase(obj.second);

@@ -29,6 +29,7 @@
 #include "../../Scripts/PlayerScript.h"
 #include "../../Scripts/MakeEnemyScript.h"
 #include "../../Scripts/StartCrystalScript.h"
+#include "../../Scripts/SkyDomeScript.h"
 
 
 using namespace ECS;
@@ -88,14 +89,26 @@ void GameWorld::Start()
 	crystal->transform().lock()->m_pos = dir;
 	crystal->AddComponent<StartCrystalScript>()->SetPlayer(player);
 
+	// スカイドーム
+	const auto& sky = GetEntityManager()->CreateEntity<GameObject>();
+	const auto& skyRn = sky->AddComponent<MeshRenderer>();
+	skyRn->MakeSkyDome("Sky", 100);
+	skyRn->SetDiffuseTexture("data/texture/sky02.png");
+	skyRn->SetLighting(false);
+	skyRn->SetRendererBlendState(BS_ALPHABLEND);
+	//sky->transform().lock()->m_scale = Vector3{ VIEW_FAR_Z * 1.5f, VIEW_FAR_Z * 1.5f, VIEW_FAR_Z * 1.5f };
+	sky->transform().lock()->m_scale = Vector3{ FOG_FAR_Z * 2.0f, FOG_FAR_Z * 2.0f, FOG_FAR_Z * 2.0f };
+	sky->AddComponent<SkyDomeScript>()->SetTarget(player);
+
 	// 床
-	const auto& test = GetEntityManager()->CreateEntity<GameObject>();
-	const auto renderer = test->AddComponent<MeshRenderer>();
-	renderer->MakeCube("plane");
+	const auto& plane = GetEntityManager()->CreateEntity<GameObject>();
+	const auto& renderer = plane->AddComponent<MeshRenderer>();
+	renderer->MakePlane("plane", 1000, 1000, 500, 500, 1, 1);
 	renderer->SetDiffuseTexture("data/texture/grid.png");
-	renderer->SetTexSize({ 100, 100, 0 });
-	renderer->UpdateTexMatrix();
-	test->transform().lock()->m_scale = Vector3{ 100000, 1, 100000 };
+	//renderer->SetTexSize({ 100, 100, 0 });
+	//renderer->UpdateTexMatrix();
+	plane->transform().lock()->m_pos->y = -1;
+	
 
 }
 

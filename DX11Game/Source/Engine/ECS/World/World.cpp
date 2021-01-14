@@ -154,3 +154,24 @@ void World::CallOnCreate(ISystem* pSystem)
 	// OnCreateを呼び出す
 	pSystem->OnCreate();
 }
+
+//= ==================================
+//
+//	終了時
+//
+//===================================
+void World::OnDestroy()
+{
+	// エンティティの破棄
+	GetEntityManager()->ClearEntityPool();
+
+	// オブジェクトのプールの破棄
+	ObjectManager::GetInstance()->ClearnUpObject();
+
+	// システムリストの終了処理
+	for (auto&& system : m_SystemList)
+	{
+		// OnDestroyを呼び出す
+		system->OnDestroy();
+	}
+}

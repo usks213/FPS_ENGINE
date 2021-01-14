@@ -37,7 +37,7 @@ namespace ECS
 		// 毎フレーム呼ばれます
 		void Update() override;
 		// 毎フレーム更新後に呼ばれます
-		void LateUpdate() override;
+		virtual void LateUpdate() override;
 		// 終了時に呼ばれます
 		virtual void End() override;
 

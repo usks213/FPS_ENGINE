@@ -90,7 +90,13 @@ void MeshRenderer::LateDraw(ID3D11DeviceContext* pDC)
 		m_mesh->mtxTexture = m_mtxTexture;
 		m_mesh->pMaterial = &m_material;
 
+		// ブレンドステート
+		SetBlendState(this->m_eState);
+
 		DrawMesh(pDC, mesh, m_eTranslucentType);
+
+		// ブレンドステート
+		SetBlendState(BS_NONE);
 	}
 }
 
@@ -404,6 +410,303 @@ HRESULT MeshRenderer::MakeSphere(std::string tag, int nSegment, float fTexSplit,
 	delete[] pIndexWk;
 	return hr;
 
+}
+
+//========================================
+//
+// スフィア２
+//
+//========================================
+HRESULT MeshRenderer::MakeSphere2(std::string tag,
+	int nNumBlockX, int nNumBlockY, float fSize,
+	float fTexSizeX, float fTexSizeY,
+	float fPosX, float fPosY, float fPosZ)
+{
+	// メッシュの検索
+	const auto& itr = m_meshPool.find(tag);
+	if (m_meshPool.end() != itr)
+	{
+		m_mesh = itr->second;
+		return S_OK;
+	}
+
+	// 新規作成
+	m_mesh = new MESH();
+
+	// プールに格納
+	m_meshPool.emplace(tag, m_mesh);
+
+
+	// プリミティブ種別設定
+	m_mesh->primitiveType = PT_TRIANGLESTRIP;
+	// 頂点数の設定
+	m_mesh->nNumVertex = (nNumBlockX + 1) * (nNumBlockY + 1);
+	// インデックス数の設定(縮退ポリゴン用を考慮する)
+	m_mesh->nNumIndex = (nNumBlockX + 1) * 2 * nNumBlockY + (nNumBlockY - 1) * 2;
+	// 頂点配列の作成
+	VERTEX_3D* pVertexWk = new VERTEX_3D[m_mesh->nNumVertex];
+	// インデックス配列の作成
+	int* pIndexWk = new int[m_mesh->nNumIndex];
+	// 頂点配列の中身を埋める
+	VERTEX_3D* pVtx = pVertexWk;
+
+	for (int y = 0; y < nNumBlockY + 1; ++y) {
+		for (int x = 0; x < nNumBlockX + 1; ++x) {
+
+			// 頂点座標の設定
+			pVtx->vtx.x = 0.0f;
+			pVtx->vtx.y = 1.0f;
+			pVtx->vtx.z = 0.0f;
+			// 角度に対する回転マトリックスを求める
+			XMMATRIX mR = XMMatrixRotationX(XMConvertToRadians(-x * (-180.0f / nNumBlockX)));
+			mR *= XMMatrixRotationY(XMConvertToRadians(-y * (360.0f / nNumBlockY)));
+			// 座標を回転マトリックスで回転させる
+			XMVECTOR v = XMLoadFloat3(&pVtx->vtx);
+			v = XMVector3TransformCoord(v, mR);
+			v = XMVector3Normalize(v);
+			XMStoreFloat3(&pVtx->vtx, v);
+
+			// 法線の設定
+			pVtx->nor = pVtx->vtx;
+
+			// 大きさ
+			pVtx->vtx.x *= fSize;
+			pVtx->vtx.y *= fSize;
+			pVtx->vtx.z *= fSize;
+
+			// 位置
+			pVtx->vtx.x += fPosX;
+			pVtx->vtx.y += fPosY;
+			pVtx->vtx.z += fPosZ;
+
+			// 反射光の設定
+			pVtx->diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+			// テクスチャ座標の設定
+			pVtx->tex.x = fTexSizeX * x;
+			pVtx->tex.y = fTexSizeY * y;
+			++pVtx;
+		}
+	}
+	//インデックス配列の中身を埋める
+	int* pIdx = pIndexWk;
+	for (int z = 0; z < nNumBlockY; ++z) {
+		if (z > 0) {
+			// 縮退ポリゴンのためのダブりの設定
+			*pIdx++ = (z + 1) * (nNumBlockX + 1);
+		}
+		for (int x = 0; x < nNumBlockX + 1; ++x) {
+			*pIdx++ = (z + 1) * (nNumBlockX + 1) + x;
+			*pIdx++ = z * (nNumBlockX + 1) + x;
+		}
+		if (z < nNumBlockY - 1) {
+			// 縮退ポリゴンのためのダブりの設定
+			*pIdx++ = z * (nNumBlockX + 1) + nNumBlockX;
+		}
+	}
+
+	ID3D11Device* pDevice = GetDevice();
+	// 頂点バッファ/インデックス バッファ生成
+	HRESULT hr = MakeMeshVertex(pDevice, m_mesh, pVertexWk, pIndexWk);
+	// 一時配列の解放
+	delete[] pVertexWk;
+	delete[] pIndexWk;
+	return hr;
+}
+
+//========================================
+//
+// スカイドーム
+//
+//========================================
+HRESULT MeshRenderer::MakeSkyDome(std::string tag, int nSegment, float fTexSplit, XMFLOAT3 pos)
+{
+	// メッシュの検索
+	const auto& itr = m_meshPool.find(tag);
+	if (m_meshPool.end() != itr)
+	{
+		m_mesh = itr->second;
+		return S_OK;
+	}
+
+	// 新規作成
+	m_mesh = new MESH();
+
+	// プールに格納
+	m_meshPool.emplace(tag, m_mesh);
+
+
+	// プリミティブ種別設定
+	m_mesh->primitiveType = PT_TRIANGLE;
+	float fScale = 0.5f;
+
+	//頂点バッファ作成
+	m_mesh->nNumVertex = (nSegment + 1) * (nSegment / 2 + 1);
+	VERTEX_3D* pVertexWk = new VERTEX_3D[m_mesh->nNumVertex];
+
+	for (int i = 0; i <= (nSegment / 2); ++i) {
+		float irad = XM_PI * 2.0f / (float)nSegment * (float)i;
+		float y = (float)cos(irad);
+		float r = (float)sin(irad);
+		float v = (float)i / (float)(nSegment / 2) * fTexSplit;
+		for (int j = 0; j <= nSegment; ++j) {
+			float jrad = XM_PI * 2.0f / (float)nSegment * (float)j;
+			float x = r * (float)cos(-jrad);
+			float z = r * (float)sin(-jrad);
+			float u = (float)j / (float)nSegment * fTexSplit;
+			int   inx = i * (nSegment + 1) + j;
+			pVertexWk[inx].vtx.x = x * fScale + pos.x;
+			pVertexWk[inx].vtx.y = y * fScale + pos.y;
+			pVertexWk[inx].vtx.z = z * fScale + pos.z;
+			pVertexWk[inx].nor.x = x;
+			pVertexWk[inx].nor.y = y;
+			pVertexWk[inx].nor.z = z;
+			pVertexWk[inx].tex.x = u;
+			pVertexWk[inx].tex.y = v;
+			pVertexWk[inx].diffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
+		}
+	}
+
+	// インデックスバッファの作成
+	m_mesh->nNumIndex = nSegment * 3 + nSegment * (nSegment / 2 - 1) * 6 + nSegment * 3;
+	int* pIndexWk = new int[m_mesh->nNumIndex];
+
+	int icount = 0;
+	int i = 0;
+	for (int j = 0; j < nSegment; ++j) {
+		pIndexWk[icount] = i * (nSegment + 1) + j;
+		pIndexWk[icount + 1] = (i + 1) * (nSegment + 1) + j + 1;
+		pIndexWk[icount + 2] = (i + 1) * (nSegment + 1) + j;
+		icount += 3;
+	}
+	for (i = 1; i < nSegment / 2; ++i) {
+		for (int j = 0; j < nSegment; ++j) {
+			pIndexWk[icount] = i * (nSegment + 1) + j;
+			pIndexWk[icount + 1] = i * (nSegment + 1) + j + 1;
+			pIndexWk[icount + 2] = (i + 1) * (nSegment + 1) + j;
+			icount += 3;
+			pIndexWk[icount] = i * (nSegment + 1) + j + 1;
+			pIndexWk[icount + 1] = (i + 1) * (nSegment + 1) + j + 1;
+			pIndexWk[icount + 2] = (i + 1) * (nSegment + 1) + j;
+			icount += 3;
+		}
+	}
+	i = nSegment / 2;
+	for (int j = 0; j < nSegment; ++j) {
+		pIndexWk[icount] = i * (nSegment + 1) + j;
+		pIndexWk[icount + 1] = (i + 1) * (nSegment + 1) + j + 1;
+		pIndexWk[icount + 2] = (i + 1) * (nSegment + 1) + j;
+		icount += 3;
+	}
+
+	// 頂点バッファ/インデックス バッファ生成
+	ID3D11Device* pDevice = GetDevice();
+	HRESULT hr = MakeMeshVertex(pDevice, m_mesh, pVertexWk, pIndexWk);
+	// 一時配列の解放
+	delete[] pVertexWk;
+	delete[] pIndexWk;
+	return hr;
+
+}
+
+//========================================
+//
+// スカイドーム
+//
+//========================================
+HRESULT MeshRenderer::MakeSkyDome2(std::string tag,
+	int nNumBlockX, int nNumBlockY, float fSize,
+	float fTexSizeX, float fTexSizeY,
+	float fPosX, float fPosY, float fPosZ)
+{
+	// メッシュの検索
+	const auto& itr = m_meshPool.find(tag);
+	if (m_meshPool.end() != itr)
+	{
+		m_mesh = itr->second;
+		return S_OK;
+	}
+
+	// 新規作成
+	m_mesh = new MESH();
+
+	// プールに格納
+	m_meshPool.emplace(tag, m_mesh);
+
+
+	// プリミティブ種別設定
+	m_mesh->primitiveType = PT_TRIANGLESTRIP;
+	// 頂点数の設定
+	m_mesh->nNumVertex = (nNumBlockX + 1) * (nNumBlockY + 1);
+	// インデックス数の設定(縮退ポリゴン用を考慮する)
+	m_mesh->nNumIndex = (nNumBlockX + 1) * 2 * nNumBlockY + (nNumBlockY - 1) * 2;
+	// 頂点配列の作成
+	VERTEX_3D* pVertexWk = new VERTEX_3D[m_mesh->nNumVertex];
+	// インデックス配列の作成
+	int* pIndexWk = new int[m_mesh->nNumIndex];
+	// 頂点配列の中身を埋める
+	VERTEX_3D* pVtx = pVertexWk;
+
+	for (int y = 0; y < nNumBlockY + 1; ++y) {
+		for (int x = 0; x < nNumBlockX + 1; ++x) {
+
+			// 頂点座標の設定
+			pVtx->vtx.x = 0.0f;
+			pVtx->vtx.y = 1.0f;
+			pVtx->vtx.z = 0.0f;
+			// 角度に対する回転マトリックスを求める
+			XMMATRIX mR = XMMatrixRotationX(XMConvertToRadians(-x * (-180.0f / nNumBlockX)));
+			mR *= XMMatrixRotationY(XMConvertToRadians(-y * (360.0f / nNumBlockY)));
+			// 座標を回転マトリックスで回転させる
+			XMVECTOR v = XMLoadFloat3(&pVtx->vtx);
+			v = XMVector3TransformCoord(v, -mR);
+			v = XMVector3Normalize(v);
+			XMStoreFloat3(&pVtx->vtx, v);
+
+			// 法線の設定
+			pVtx->nor = pVtx->vtx;
+
+			// 大きさ
+			pVtx->vtx.x *= fSize;
+			pVtx->vtx.y *= fSize;
+			pVtx->vtx.z *= fSize;
+
+			// 位置
+			pVtx->vtx.x += fPosX;
+			pVtx->vtx.y += fPosY;
+			pVtx->vtx.z += fPosZ;
+
+			// 反射光の設定
+			pVtx->diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+			// テクスチャ座標の設定
+			pVtx->tex.x = fTexSizeX * x;
+			pVtx->tex.y = fTexSizeY * y;
+			++pVtx;
+		}
+	}
+	//インデックス配列の中身を埋める
+	int* pIdx = pIndexWk;
+	for (int z = 0; z < nNumBlockY; ++z) {
+		if (z > 0) {
+			// 縮退ポリゴンのためのダブりの設定
+			*pIdx++ = (z + 1) * (nNumBlockX + 1);
+		}
+		for (int x = 0; x < nNumBlockX + 1; ++x) {
+			*pIdx++ = (z + 1) * (nNumBlockX + 1) + x;
+			*pIdx++ = z * (nNumBlockX + 1) + x;
+		}
+		if (z < nNumBlockY - 1) {
+			// 縮退ポリゴンのためのダブりの設定
+			*pIdx++ = z * (nNumBlockX + 1) + nNumBlockX;
+		}
+	}
+
+	ID3D11Device* pDevice = GetDevice();
+	// 頂点バッファ/インデックス バッファ生成
+	HRESULT hr = MakeMeshVertex(pDevice, m_mesh, pVertexWk, pIndexWk);
+	// 一時配列の解放
+	delete[] pVertexWk;
+	delete[] pIndexWk;
+	return hr;
 }
 
 //========================================

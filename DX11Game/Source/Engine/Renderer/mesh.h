@@ -56,7 +56,7 @@ struct MESH {
 	ID3D11ShaderResourceView* pTexture = nullptr;		// テクスチャ
 	ID3D11ShaderResourceView* pNormalTexture = nullptr;		// テクスチャ
 	bool bBump = false;
-
+	bool bLight = true;
 	ePrimitiveType primitiveType;			// プリミティブ型
 
 	MATERIAL* pMaterial = nullptr;					// マテリアル

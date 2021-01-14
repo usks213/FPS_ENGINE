@@ -24,6 +24,7 @@
 // システム
 #include "../Engine/System/input.h"
 #include "../Engine/System/Sound.h"
+#include "../Engine/System/debugproc.h"
 
 // マネージャー
 #include "../Engine/ECS/Entity/EntityManager.h"
@@ -69,18 +70,49 @@ using namespace ECS;
 //========================================
 void StartCrystalScript::Start()
 {
-	// 継承元
-	BombCrystalScript::Start();
-
 	// 名前・タグ
 	gameObject().lock()->SetName("StartCrystal");
 	gameObject().lock()->SetTag("StartCrystal");
 
 	// スケール
 	transform().lock()->m_scale = Vector3{ 300,300,300 };
+	transform().lock()->m_rot->x = 90;
+
+	//--- コンポーネンの追加
+
+	// インスタンシングレンダラー
+	const auto& rn = gameObject().lock()->AddComponent<InstancingMeshRenderer>();
+	rn->MakeOctahedron("StartCrystal");
+	rn->SetDiffuseColor({ 1,0,1,1 });
+
+	// ECSリジッドボディ
+	const auto& rb = gameObject().lock()->AddComponent<Rigidbody>();
+	rb->SetDrag({ 0,0,0 });
+	rb->SetGravityForce({ 0,0,0 });
+	rb->SetStaticFriction(0);
+	rb->SetDynamicFriction(0);
+	rb->SetMass(10);
+	rb->SetTorqueDrag({ 0,0,0 });
+
+	// ECSコライダー
+	gameObject().lock()->AddComponent<DeltaCollider>()->SetMain(false);
+
+	// 継承元
+	//BombCrystalScript::Start();
 
 	// 生存時間
 	m_nExitTime = 3600;
+}
+
+//========================================
+//
+//	後更新
+//
+//========================================
+void StartCrystalScript::LateUpdate()
+{
+	Vector3 pos = transform().lock()->m_pos;
+	PrintDebugProc("pos.x:%f, pos.y:%f, pos.z:%f\n", pos->x, pos->y, pos->z);
 }
 
 //========================================
