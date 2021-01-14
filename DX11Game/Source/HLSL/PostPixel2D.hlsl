@@ -38,7 +38,7 @@ float4 main(VS_OUTPUT input) : SV_Target0
   //      Color.w = w;
 		
 		// êFé˚ç∑
-        float size = 0.012f;
+        float size = 0.013f;
         float2 uvBase = input.TexCoord - 0.5f;
 		// Ríl
         float2 uvR = uvBase * (1.0f - size * 2.0f) + 0.5f;

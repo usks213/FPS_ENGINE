@@ -97,14 +97,16 @@ void GameWorld::Start()
 	skyRn->SetLighting(false);
 	skyRn->SetRendererBlendState(BS_ALPHABLEND);
 	//sky->transform().lock()->m_scale = Vector3{ VIEW_FAR_Z * 1.5f, VIEW_FAR_Z * 1.5f, VIEW_FAR_Z * 1.5f };
-	sky->transform().lock()->m_scale = Vector3{ FOG_FAR_Z * 2.0f, FOG_FAR_Z * 2.0f, FOG_FAR_Z * 2.0f };
+	sky->transform().lock()->m_scale = Vector3{ FOG_FAR_Z * 2.5f, FOG_FAR_Z * 2.5f, FOG_FAR_Z * 2.5f };
 	sky->AddComponent<SkyDomeScript>()->SetTarget(player);
 
 	// °
 	const auto& plane = GetEntityManager()->CreateEntity<GameObject>();
 	const auto& renderer = plane->AddComponent<MeshRenderer>();
 	renderer->MakePlane("plane", 1000, 1000, 500, 500, 1, 1);
-	renderer->SetDiffuseTexture("data/texture/grid.png");
+	//renderer->SetDiffuseTexture("data/texture/grid.png");
+	renderer->SetNormalTexture("data/texture/sampledNormals.jpg");
+	renderer->SetAmbientTexture("data/texture/sky02.png");
 	//renderer->SetTexSize({ 100, 100, 0 });
 	//renderer->UpdateTexMatrix();
 	plane->transform().lock()->m_pos->y = -1;

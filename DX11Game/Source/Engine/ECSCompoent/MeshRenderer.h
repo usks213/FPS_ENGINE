@@ -67,6 +67,14 @@ namespace ECS
 		void SetDiffuseTexture(const char* filename);
 		// ベースカラーテクスチャのセット
 		void SetDiffuseTexture(const wchar_t* filename);
+		// ノーマルテクスチャのセット
+		void SetNormalTexture(const char* filename);
+		// ノーマルテクスチャのセット
+		void SetNormalTexture(const wchar_t* filename);
+		// 環境テクスチャのセット
+		void SetAmbientTexture(const char* filename);
+		// 環境テクスチャのセット
+		void SetAmbientTexture(const wchar_t* filename);
 
 		// 描画タイプ
 		void SetTranslucentType(eTranslucentType eType) { m_eTranslucentType = eType; }

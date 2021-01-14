@@ -45,6 +45,7 @@ struct SHADER_GLOBAL2 {
 
 	int		bLight = true;
 	int		bBump = false;
+	int		bAnbient = false;
 };
 
 //*****************************************************************************
@@ -341,10 +342,11 @@ void DrawMesh(ID3D11DeviceContext* pDeviceContext, MESH* pMesh, int nTranslucntT
 
 	//===== サンプラー、テクスチャ =====
 	ID3D11SamplerState* pState[2] = { g_pSamplerState, g_pShadowSamplerState };
-	ID3D11ShaderResourceView* pResource[3] = { pMesh->pTexture, g_pShadowResourceView, pMesh->pNormalTexture };
+	ID3D11ShaderResourceView* pResource[4] = { pMesh->pTexture, g_pShadowResourceView, 
+		pMesh->pNormalTexture, pMesh->pAmbientTexture };
 
 	pDeviceContext->PSSetSamplers(0, 2, pState);
-	pDeviceContext->PSSetShaderResources(0, 3, pResource);
+	pDeviceContext->PSSetShaderResources(0, 4, pResource);
 
 	SHADER_GLOBAL cb;
 	XMMATRIX mtxWorld = XMLoadFloat4x4(&pMesh->mtxWorld);
@@ -368,7 +370,13 @@ void DrawMesh(ID3D11DeviceContext* pDeviceContext, MESH* pMesh, int nTranslucntT
 	cb2.vSpecular = XMVectorSet(pMaterial->Specular.x, pMaterial->Specular.y, pMaterial->Specular.z, pMaterial->Power);
 	cb2.vEmissive = XMLoadFloat4(&pMaterial->Emissive);
 
-	cb2.bBump = pMesh->bBump;
+	bool bump = false;
+	if (pMesh->pNormalTexture) bump = true;
+	cb2.bBump = bump;
+	bool anbient = false;
+	if (pMesh->pAmbientTexture) anbient = true;
+	cb2.bAnbient = anbient;
+
 	cb2.bLight = pMesh->bLight;
 	
 	pDeviceContext->UpdateSubresource(g_pConstantBuffer[1], 0, nullptr, &cb2, 0, 0);

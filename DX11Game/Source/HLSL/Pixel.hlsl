@@ -16,6 +16,7 @@ cbuffer global : register(b1) {
     
     bool g_bLight;
     bool g_bBump;
+    bool g_bAnbient;
 };
 
 // パラメータ
@@ -37,7 +38,8 @@ SamplerState g_sampler : register(s0);	// サンプラ
 Texture2D<float>    g_shadowTexture : register(t1);	// シャドウテクスチャ
 SamplerComparisonState g_shadowSampler : register(s1);	// シャドウサンプラ
 
-Texture2D g_bumpMaptexture : register(t2); // テクスチャ
+Texture2D g_bumpMaptexture : register(t2);      // 法線マップ
+Texture2D g_anbientMaptexture : register(t3);   // 環境マップ
 
 // 引数には正規化された反射ベクトルを代入
 float2 envMapEquirect(float3 dir)
@@ -138,6 +140,12 @@ float4 main(VS_OUTPUT input) : SV_Target0
 
 //        }
         
+        //===== パノラマ環境マップ =====
+        if (g_bAnbient)
+        {
+            float3 r = 2.0f * N * dot(N, V) - V;
+            Diff = g_anbientMaptexture.Sample(g_sampler, -envMapEquirect(r));
+        }
         
         // ===== バンプマップ =====
         if (g_bBump)
@@ -171,25 +179,10 @@ float4 main(VS_OUTPUT input) : SV_Target0
             nm = (nm.x * t) + (nm.y * b) + (nm.z * n);
             nm = normalize(nm);
             N = nm;
-			
-    //        Diff = g_vLa.rgb * g_vKa.rgb + g_vLd.rgb *
-				//Diff * saturate(dot(l, nm)); // 拡散色 + 環境色
-    //        float3 Spec = g_vLs.rgb * g_vKs.rgb *
-				//pow(saturate(dot(nm, h)), g_vKs.a); // 鏡面反射色
-    //        Diff += Spec;
-    //        Diff += g_vKe.rgb; // エミッション
-            
-    //        return float4(Diff, Alpha);
-          //  discard;
-            
         }
-    //    else
-       // Diff *= sc;
         
-        //===== パノラマ環境マップ =====
-        float3 r = 2.0f * N * dot(N, V) - V;
-        //Diff = g_texture.Sample(g_sampler, -envMapEquirect(r));
         
+        //===== ライティング =====
         // Half Lambert
         float PI = 3.14159265359f;
         float val = max(dot(N, L), 0.0f) * 0.5f + 0.5f;

@@ -53,9 +53,9 @@ struct MESH {
 	int nNumIndex = 0;							// 総インデックス数
 
 	XMFLOAT4X4 mtxTexture;					// テクスチャ マトリックス
-	ID3D11ShaderResourceView* pTexture = nullptr;		// テクスチャ
-	ID3D11ShaderResourceView* pNormalTexture = nullptr;		// テクスチャ
-	bool bBump = false;
+	ID3D11ShaderResourceView* pTexture = nullptr;			// テクスチャ
+	ID3D11ShaderResourceView* pNormalTexture = nullptr;		// 法線テクスチャ
+	ID3D11ShaderResourceView* pAmbientTexture = nullptr;	// 環境テクスチャ
 	bool bLight = true;
 	ePrimitiveType primitiveType;			// プリミティブ型
 

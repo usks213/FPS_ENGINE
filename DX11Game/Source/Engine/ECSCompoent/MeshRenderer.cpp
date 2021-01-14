@@ -736,3 +736,59 @@ void MeshRenderer::SetDiffuseTexture(const wchar_t* filename)
 	if (pMesh)
 		pMesh->pTexture = CTexture::GetTexture(GetDevice(), filename);
 }
+
+//========================================
+//
+// ノーマルテクスチャのセット
+//
+//========================================
+void MeshRenderer::SetNormalTexture(const char* filename)
+{
+	// メッシュ取得
+	auto pMesh = m_mesh;
+	// テクスチャ
+	if (pMesh)
+		pMesh->pNormalTexture = CTexture::GetTexture(GetDevice(), filename);
+}
+
+//========================================
+//
+// ノーマルテクスチャのセット
+//
+//========================================
+void MeshRenderer::SetNormalTexture(const wchar_t* filename)
+{
+	// メッシュ取得
+	auto pMesh = m_mesh;
+	// テクスチャ
+	if (pMesh)
+		pMesh->pNormalTexture = CTexture::GetTexture(GetDevice(), filename);
+}
+
+//========================================
+//
+// 環境テクスチャのセット
+//
+//========================================
+void MeshRenderer::SetAmbientTexture(const char* filename)
+{
+	// メッシュ取得
+	auto pMesh = m_mesh;
+	// テクスチャ
+	if (pMesh)
+		pMesh->pAmbientTexture = CTexture::GetTexture(GetDevice(), filename);
+}
+
+//========================================
+//
+// 環境テクスチャのセット
+//
+//========================================
+void MeshRenderer::SetAmbientTexture(const wchar_t* filename)
+{
+	// メッシュ取得
+	auto pMesh = m_mesh;
+	// テクスチャ
+	if (pMesh)
+		pMesh->pAmbientTexture = CTexture::GetTexture(GetDevice(), filename);
+}
