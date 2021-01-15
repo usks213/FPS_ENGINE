@@ -93,6 +93,9 @@ void TitleWorld::Start()
 
 	// カーソルの表示
 	SetShowCursor(true);
+
+	// サウンド
+	CSound::PlayBGM("TitleBGM.mp3", 0.2f);
 }
 
 //===================================
@@ -102,4 +105,6 @@ void TitleWorld::Start()
 //===================================
 void TitleWorld::End()
 {
+	// サウンド
+	CSound::StopBGM("TitleBGM.mp3");
 }

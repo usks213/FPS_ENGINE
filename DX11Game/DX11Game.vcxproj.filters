@@ -316,6 +316,9 @@
     <ClCompile Include="Source\Scripts\EnemyEffectScript.cpp">
       <Filter>ソース\スクリプト\エネミー</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scripts\GameOverScript.cpp">
+      <Filter>ソース\スクリプト</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\main.h">
@@ -533,6 +536,9 @@
     </ClInclude>
     <ClInclude Include="Source\Scripts\EnemyEffectScript.h">
       <Filter>ソース\スクリプト\エネミー</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\GameOverScript.h">
+      <Filter>ソース\スクリプト</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

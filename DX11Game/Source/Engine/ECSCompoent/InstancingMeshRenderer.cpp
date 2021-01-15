@@ -134,10 +134,6 @@ void InstancingMeshRenderer::LateDraw(ID3D11DeviceContext* pDC)
 	{
 		DrawInstancingMesh(pDC, mesh, itr->second);
 	}
-
-
-	// デバック
-	PrintDebugProc("%s : %d\n", itr->first.c_str(), itr->second.size());
 }
 
 

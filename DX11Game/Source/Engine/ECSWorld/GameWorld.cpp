@@ -119,7 +119,12 @@ void GameWorld::Start()
 	//renderer->UpdateTexMatrix();
 	plane->transform().lock()->m_pos->y = -1;
 	
-
+	// ƒJ[ƒ\ƒ‹
+	const auto& cursor = GetEntityManager()->CreateEntity<GameObject>();
+	const auto& cursorRn = cursor->AddComponent<SpriteRenderer>();
+	cursorRn->SetDiffuseTexture("data/texture/Cursor.png");
+	cursorRn->SetLayer(cursorRn->eUI1);
+	cursor->transform().lock()->m_scale = Vector3{ 64,64,32 };
 }
 
 //===================================

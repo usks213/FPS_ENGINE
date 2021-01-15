@@ -53,7 +53,7 @@ namespace ECS
 		int	  m_nDamageCnt;
 		float m_fDamage;
 
-
+		bool m_bActive;
 
 	public:
 		// ƒfƒ‹ƒ^”æ“¾

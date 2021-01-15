@@ -87,7 +87,8 @@ void TitleButtonScript::Start()
 void TitleButtonScript::Update()
 {
 	// シーン遷移
-	if (GetMouseRelease(MOUSEBUTTON_L))
+	if (GetMouseRelease(MOUSEBUTTON_L) || GetMouseRelease(MOUSEBUTTON_R) ||
+		GetKeyRelease(VK_RETURN) || GetKeyRelease(VK_SPACE))
 	{
 		// ゲームスタート
 		WorldManager::GetInstance()->LoadWorld<GameWorld>("Game");

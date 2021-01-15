@@ -328,6 +328,7 @@
     <ClCompile Include="Source\Scripts\EnemyBaseScript.cpp" />
     <ClCompile Include="Source\Scripts\EnemyEffectScript.cpp" />
     <ClCompile Include="Source\Scripts\FadeScript.cpp" />
+    <ClCompile Include="Source\Scripts\GameOverScript.cpp" />
     <ClCompile Include="Source\Scripts\MakeEnemyScript.cpp" />
     <ClCompile Include="Source\Scripts\PlayerScript.cpp" />
     <ClCompile Include="Source\Scripts\ScriptBaseLayout.cpp" />
@@ -402,6 +403,7 @@
     <ClInclude Include="Source\Scripts\EnemyBaseScript.h" />
     <ClInclude Include="Source\Scripts\EnemyEffectScript.h" />
     <ClInclude Include="Source\Scripts\FadeScript.h" />
+    <ClInclude Include="Source\Scripts\GameOverScript.h" />
     <ClInclude Include="Source\Scripts\MakeEnemyScript.h" />
     <ClInclude Include="Source\Scripts\PlayerScript.h" />
     <ClInclude Include="Source\Scripts\SkyDomeScript.h" />

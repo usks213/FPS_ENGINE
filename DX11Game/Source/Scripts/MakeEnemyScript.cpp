@@ -136,9 +136,10 @@ void MakeEnemyScript::Update()
 		spawnPos = spawnPos.RotationY(rand() % 360) + temp;
 
 		//--- ボムクリスタルの生成
-		if (rand() % 100 < 30)
+		if (rand() % 100 < 50)
 		{
-			Vector3 bombPos = spawnPos * 0.75f;
+			float bombRand = 1.0f - (rand() % 26 / 100.0f);
+			Vector3 bombPos = spawnPos * bombRand;
 			bombPos->y = playerPos->y + (7) * 100;
 			const auto& bomb = Instantiate<GameObject>(bombPos);
 			bomb->AddComponent<BombCrystalScript>();

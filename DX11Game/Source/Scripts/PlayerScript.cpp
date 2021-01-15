@@ -50,6 +50,8 @@
 // スクリプト
 #include "BulletScript.h"
 #include "DropDeltaScript.h"
+#include "GameOverScript.h"
+
 
 #include <iostream>
 
@@ -119,6 +121,9 @@ void PlayerScript::Start()
 	// ダメージ
 	m_fDamage = 30.0f;
 	m_nDamageCnt = m_nDamageInteral;
+
+	// アクティブ
+	m_bActive = true;
 }
 
 //========================================
@@ -128,6 +133,9 @@ void PlayerScript::Start()
 //========================================
 void PlayerScript::Update()
 {
+	// アクティブ
+	if (!m_bActive) return;
+
 	const float speed = 1.0f;
 	const float jump = 20.0f;
 
@@ -182,7 +190,7 @@ void PlayerScript::Update()
 
 		Vector3 dir = CCamera::GetMainCamera()->GetForward().normalized();
 
-		test->transform().lock()->m_pos = transform().lock()->m_pos + dir * 300;
+		test->transform().lock()->m_pos = transform().lock()->m_pos + dir * 500;
 		rb->AddForce(dir * 100 + Vector3::WallVerticalVector(m_rb.lock()->GetForce(), dir));
 		rb->AddTorque(dir * 10);
 
@@ -201,6 +209,9 @@ void PlayerScript::Update()
 //========================================
 void PlayerScript::LateUpdate()
 {
+	// アクティブ
+	if (!m_bActive) return;
+
 	// デバック表示
 	PrintDebugProc("DeltaCount:%d\n", m_nDeltaCount);
 
@@ -278,6 +289,9 @@ void PlayerScript::End()
 //========================================
 void PlayerScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 {
+	// アクティブ
+	if (!m_bActive) return;
+
 	if (collider->gameObject().lock()->tag() == "DropDelta")
 	{
 		// カウンター加算
@@ -321,7 +335,14 @@ void PlayerScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 
 			if (m_fHP > 0) return;
 			// ゲームオーバー
-			WorldManager::GetInstance()->LoadWorld<TitleWorld>("Title");
+			const auto& gameover = GetEntityManager()->CreateEntity<GameObject>();
+			gameover->AddComponent<GameOverScript>();
+
+			// アクティブ
+			m_bActive = false;
+
+			// 削除
+			Destroy(gameObject().lock());
 		}
 	}
 }
