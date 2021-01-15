@@ -73,7 +73,7 @@ void StraightMoveEnemyScript::Start()
 
 	// インスタンシングレンダラー
 	const auto& render = gameObject().lock()->AddComponent<InstancingMeshRenderer>();
-	render->MakeOctahedron("StraightMoveEnemy");
+	render->MakeN15("StraightMoveEnemy");
 	render->SetDiffuseColor({ 1,1,0,1 });
 }
 

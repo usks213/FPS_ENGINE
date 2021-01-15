@@ -73,7 +73,7 @@ void BombCrystalScript::Start()
 	gameObject().lock()->SetTag("BombCrystal");
 
 	// 大きさ
-	transform().lock()->m_scale = Vector3(100, 100, 100);
+	transform().lock()->m_scale = Vector3(200, 200, 200);
 	transform().lock()->m_rot->x = 90;
 
 	//--- コンポーネンの追加

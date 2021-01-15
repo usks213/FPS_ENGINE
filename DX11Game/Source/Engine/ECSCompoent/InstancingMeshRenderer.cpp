@@ -1060,6 +1060,253 @@ HRESULT InstancingMeshRenderer::MakeIcosahedron(const std::string tag)
 
 //========================================
 //
+// S08
+//
+//========================================
+HRESULT InstancingMeshRenderer::MakeS08(const std::string tag)
+{
+	// メッシュデータの作成
+	if (!CreateMeshData(tag)) return S_OK;
+
+	// プリミティブ設定
+	m_mesh->primitiveType = PT_TRIANGLE;
+
+	// 頂点数
+	const int nVertexNum = 3 * 44;
+	const int nIndexNum = 3 * 44;
+
+	VERTEX_3D	vertexWk[nVertexNum];	// 頂点情報格納ワーク
+	int			indexWk[nIndexNum];	// インデックス格納ワーク
+
+	// 使いまわす頂点座標
+	XMFLOAT3 ver[24] = {
+		XMFLOAT3(-0.357407, - 0.862856,   0.357407),
+		XMFLOAT3(-0.862856, - 0.357407,   0.357407),
+		XMFLOAT3(-0.862856, - 0.357407, - 0.357407),
+		XMFLOAT3(-0.357407, - 0.862856, - 0.357407),
+		XMFLOAT3( 0.357407, - 0.862856, - 0.357407),
+		XMFLOAT3( 0.357407, - 0.862856,   0.357407),
+		XMFLOAT3( 0.357407, - 0.357407,   0.862856),
+		XMFLOAT3(-0.357407, - 0.357407,   0.862856),
+		XMFLOAT3(-0.862856,   0.357407,   0.357407),
+		XMFLOAT3(-0.862856,   0.357407, - 0.357407),
+		XMFLOAT3(-0.357407,   0.357407,   0.862856),
+		XMFLOAT3(-0.357407,   0.862856,   0.357407),
+		XMFLOAT3(-0.357407,   0.862856, - 0.357407),
+		XMFLOAT3( 0.357407,   0.862856,   0.357407),
+		XMFLOAT3( 0.357407,   0.862856, - 0.357407),
+		XMFLOAT3( 0.357407,   0.357407,   0.862856),
+		XMFLOAT3( 0.862856,   0.357407,   0.357407),
+		XMFLOAT3( 0.862856,   0.357407, - 0.357407),
+		XMFLOAT3( 0.862856, - 0.357407,   0.357407),
+		XMFLOAT3( 0.862856, - 0.357407, - 0.357407),
+		XMFLOAT3(-0.357407, - 0.357407, - 0.862856),
+		XMFLOAT3( 0.357407, - 0.357407, - 0.862856),
+		XMFLOAT3(-0.357407,   0.357407, - 0.862856),
+		XMFLOAT3( 0.357407,   0.357407, - 0.862856),
+	};
+
+	// 使いまわすインデックス
+	int index[nIndexNum] = {
+		2, 4, 1,
+		4, 6, 1,
+		6, 8, 1,
+		1, 8, 2,
+		9, 3, 2,
+		8, 9, 2,
+		12, 10, 9,
+		9, 11, 12,
+		14, 13, 12,
+		11, 14, 12,
+		17, 15, 14,
+		14, 16, 17,
+		19, 18, 17,
+		16, 19, 17,
+		6, 20, 19,
+		19, 7, 6,
+		4, 3, 21,
+		21, 5, 4,
+		10, 21, 3,
+		10, 13, 23,
+		15, 23, 13,
+		15, 18, 24,
+		20, 24, 18,
+		20, 5, 22,
+		7, 11, 8,
+		23, 22, 21,
+		2, 3, 4,
+		4, 5, 6,
+		6, 7, 8,
+		9, 10, 3,
+		8, 11, 9,
+		12, 13, 10,
+		14, 15, 13,
+		11, 16, 14,
+		17, 18, 15,
+		19, 20, 18,
+		16, 7, 19,
+		6, 5, 20,
+		21, 22, 5,
+		10, 23, 21,
+		15, 24, 23,
+		20, 22, 24,
+		7, 16, 11,
+		23, 24, 22,
+	};
+
+	// 頂点数
+	m_mesh->nNumVertex = nVertexNum;
+
+	// 頂点座標の設定
+	for (int i = 0; i < nVertexNum; ++i)
+	{
+		Vector3 halfV = ver[index[i] - 1];
+		halfV /= 2;
+		vertexWk[i].vtx = *halfV.GetFloat3();
+	}
+
+	// 法線ベクトルの設定
+	for (int i = 0; i < nVertexNum; i += 3)
+	{
+		XMFLOAT3 n = *Vector3::Cross(ver[index[i + 0] - 1], ver[index[i + 1] - 1], ver[index[i + 2] - 1]).GetFloat3();
+		vertexWk[i + 0].nor = n;
+		vertexWk[i + 1].nor = n;
+		vertexWk[i + 2].nor = n;
+	}
+
+	// 拡散反射光の設定
+	for (int i = 0; i < nVertexNum; i++)
+	{
+		vertexWk[i].diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	// テクスチャ座標の設定
+	for (int i = 0; i < nVertexNum; i += 4)
+	{
+		vertexWk[0 + i].tex = XMFLOAT2(0.0f, 0.0f);
+		vertexWk[1 + i].tex = XMFLOAT2(1.0f, 0.0f);
+		vertexWk[2 + i].tex = XMFLOAT2(0.0f, 1.0f);
+		vertexWk[3 + i].tex = XMFLOAT2(1.0f, 1.0f);
+	}
+
+	// インデックス数
+	m_mesh->nNumIndex = nIndexNum;
+
+	// インデックス配列の設定
+	for (int i = 0; i < nIndexNum; ++i)
+	{
+		indexWk[i] = i;
+	}
+
+	ID3D11Device* pDevice = GetDevice();
+	return MakeInstancingMeshVertex(pDevice, m_mesh, vertexWk, indexWk);
+}
+
+//========================================
+//
+// N15
+//
+//========================================
+HRESULT InstancingMeshRenderer::MakeN15(const std::string tag)
+{
+	// メッシュデータの作成
+	if (!CreateMeshData(tag)) return S_OK;
+
+	// プリミティブ設定
+	m_mesh->primitiveType = PT_TRIANGLE;
+
+	// 頂点数
+	const int nVertexNum = 3 * 16;
+	const int nIndexNum = 3 * 16;
+
+	VERTEX_3D	vertexWk[nVertexNum];	// 頂点情報格納ワーク
+	int			indexWk[nIndexNum];	// インデックス格納ワーク
+
+	// 使いまわす頂点座標
+	XMFLOAT3 ver[10] = {
+		XMFLOAT3(-0.414214, - 0.414214, 0.414214),
+		XMFLOAT3(-0.414214, - 0.414214, - 0.414214),
+		XMFLOAT3( 0.414214, - 0.414214, - 0.414214),
+		XMFLOAT3( 0.414214, - 0.414214, 0.414214),
+		XMFLOAT3( 0.414214,   0.414214, 0.414214),
+		XMFLOAT3(-0.414214,   0.414214, 0.414214),
+		XMFLOAT3(-1.000000,   0.000000, 0.000000),
+		XMFLOAT3( 0.414214,   0.414214, - 0.414214),
+		XMFLOAT3(-0.414214,   0.414214, - 0.414214),
+		XMFLOAT3( 1.000000,   0.000000, 0.000000),
+	};
+
+	// 使いまわすインデックス
+	int index[nIndexNum] = {
+		2, 4, 1,
+		4, 6, 1,
+		1, 6, 7,
+		1, 7, 2,
+		5, 9, 6,
+		6, 9, 7,
+		5, 4, 10,
+		5, 10, 8,
+		4, 3, 10,
+		9, 3, 2,
+		2, 7, 9,
+		8, 10, 3,
+		2, 3, 4,
+		4, 5, 6,
+		5, 8, 9,
+		9, 8, 3,
+	};
+
+	// 頂点数
+	m_mesh->nNumVertex = nVertexNum;
+
+	// 頂点座標の設定
+	for (int i = 0; i < nVertexNum; ++i)
+	{
+		Vector3 halfV = ver[index[i] - 1];
+		halfV /= 2;
+		vertexWk[i].vtx = *halfV.GetFloat3();
+	}
+
+	// 法線ベクトルの設定
+	for (int i = 0; i < nVertexNum; i += 3)
+	{
+		XMFLOAT3 n = *Vector3::Cross(ver[index[i + 0] - 1], ver[index[i + 1] - 1], ver[index[i + 2] - 1]).GetFloat3();
+		vertexWk[i + 0].nor = n;
+		vertexWk[i + 1].nor = n;
+		vertexWk[i + 2].nor = n;
+	}
+
+	// 拡散反射光の設定
+	for (int i = 0; i < nVertexNum; i++)
+	{
+		vertexWk[i].diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	// テクスチャ座標の設定
+	for (int i = 0; i < nVertexNum; i += 4)
+	{
+		vertexWk[0 + i].tex = XMFLOAT2(0.0f, 0.0f);
+		vertexWk[1 + i].tex = XMFLOAT2(1.0f, 0.0f);
+		vertexWk[2 + i].tex = XMFLOAT2(0.0f, 1.0f);
+		vertexWk[3 + i].tex = XMFLOAT2(1.0f, 1.0f);
+	}
+
+	// インデックス数
+	m_mesh->nNumIndex = nIndexNum;
+
+	// インデックス配列の設定
+	for (int i = 0; i < nIndexNum; ++i)
+	{
+		indexWk[i] = i;
+	}
+
+	ID3D11Device* pDevice = GetDevice();
+	return MakeInstancingMeshVertex(pDevice, m_mesh, vertexWk, indexWk);
+}
+
+
+//========================================
+//
 // ベースカラーテクスチャのセット
 //
 //========================================

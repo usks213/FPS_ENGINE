@@ -71,6 +71,11 @@ namespace ECS
 		// 二十面体 Icosahedron
 		HRESULT MakeIcosahedron(const std::string tag);
 
+		//  s08
+		HRESULT MakeS08(const std::string tag);
+		//  n15
+		HRESULT MakeN15(const std::string tag);
+
 		//--- マテリアル
 		// カラー変更
 		void SetDiffuseColor(XMFLOAT4 color) { if (m_mesh) m_mesh->material.Diffuse = color; }

@@ -171,7 +171,7 @@ void PlayerScript::Update()
 	{
 		m_rb.lock()->SetForceY(jump + m_nJump);
 		// サウンド
-		CSound::PlaySE("Jump.wav", 0.8f);
+		CSound::PlaySE("Jump.wav", 0.7f);
 		// 画面揺れ
 		CCamera::GetMainCamera()->SetShakeFrame(8);
 		m_bGround = false;
@@ -330,8 +330,9 @@ void PlayerScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 
 			// 画面揺れ
 			CCamera::GetMainCamera()->SetShakeFrame(16);
-			// サウンド
 
+			// サウンド
+			CSound::PlaySE("PlayerDamage.wav", 1.0f);
 
 			if (m_fHP > 0) return;
 			// ゲームオーバー

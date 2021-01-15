@@ -1,5 +1,7 @@
 Crystal.wav
 Delta.wav
+GameOver.wav
 Jump.wav
+PlayerDamage.wav
 PlayerGround.wav
 Shot.wav
