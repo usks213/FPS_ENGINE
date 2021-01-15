@@ -197,7 +197,7 @@ void PlayerScript::Update()
 		m_nShotCnt = 5;
 
 		// ƒTƒEƒ“ƒh
-		CSound::PlaySE("Shot.wav", 0.1f);
+		CSound::PlaySE("Shot.wav", 0.12f);
 
 	}
 }

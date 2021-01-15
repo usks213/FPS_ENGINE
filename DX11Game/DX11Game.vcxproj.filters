@@ -319,6 +319,12 @@
     <ClCompile Include="Source\Scripts\GameOverScript.cpp">
       <Filter>ソース\スクリプト</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scripts\GroupMoveEnemyScript.cpp">
+      <Filter>ソース\スクリプト\エネミー</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\FieldScript.cpp">
+      <Filter>ソース\スクリプト</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine\main.h">
@@ -538,6 +544,12 @@
       <Filter>ソース\スクリプト\エネミー</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scripts\GameOverScript.h">
+      <Filter>ソース\スクリプト</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\GroupMoveEnemyScript.h">
+      <Filter>ソース\スクリプト\エネミー</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\FieldScript.h">
       <Filter>ソース\スクリプト</Filter>
     </ClInclude>
   </ItemGroup>

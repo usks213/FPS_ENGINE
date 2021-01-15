@@ -71,6 +71,9 @@
 //	2021/01/15	カメラ揺れの追加
 //				TitleButton,TitleScoreUI,TitleWorld,
 //				DeltaUI,EnemyEffect の作成
+//
+//	2021/01/16	GameOver,GroupMoveEnemy,Field,の追加
+//				サウンドや演出の追加
 //				
 //
 //======================================================================

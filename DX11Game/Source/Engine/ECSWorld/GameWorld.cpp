@@ -32,6 +32,7 @@
 #include "../../Scripts/StartCrystalScript.h"
 #include "../../Scripts/SkyDomeScript.h"
 #include "../../Scripts/DeltaUIScript.h"
+#include "../../Scripts/FieldScript.h"
 
 
 using namespace ECS;
@@ -110,14 +111,15 @@ void GameWorld::Start()
 
 	// °
 	const auto& plane = GetEntityManager()->CreateEntity<GameObject>();
-	const auto& renderer = plane->AddComponent<MeshRenderer>();
-	renderer->MakePlane("plane", 1000, 1000, 500, 500, 1, 1);
-	//renderer->SetDiffuseTexture("data/texture/grid.png");
-	renderer->SetNormalTexture("data/texture/sampledNormals.jpg");
-	renderer->SetAmbientTexture("data/texture/sky02.png");
-	//renderer->SetTexSize({ 100, 100, 0 });
-	//renderer->UpdateTexMatrix();
-	plane->transform().lock()->m_pos->y = -1;
+	plane->AddComponent<FieldScript>()->SetTarget(player);
+	//const auto& renderer = plane->AddComponent<MeshRenderer>();
+	//renderer->MakePlane("plane", 100, 100, 500, 500, 1, 1);
+	////renderer->SetDiffuseTexture("data/texture/grid.png");
+	//renderer->SetNormalTexture("data/texture/sampledNormals.jpg");
+	//renderer->SetAmbientTexture("data/texture/sky02.png");
+	////renderer->SetTexSize({ 100, 100, 0 });
+	////renderer->UpdateTexMatrix();
+	//plane->transform().lock()->m_pos->y = -1;
 	
 	// ƒJ[ƒ\ƒ‹
 	const auto& cursor = GetEntityManager()->CreateEntity<GameObject>();

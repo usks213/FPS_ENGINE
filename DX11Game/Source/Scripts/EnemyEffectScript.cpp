@@ -80,6 +80,8 @@ void EnemyEffectScript::Start()
 	anim->SetAnimationSpeed(2);
 
 	anim->SetAnimation("Effect");
+
+	bill->UpdateTexMatrix();
 }
 
 //========================================

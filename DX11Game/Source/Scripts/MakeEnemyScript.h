@@ -31,7 +31,6 @@ namespace ECS
 		{
 			eStraightCircle,
 			eTracking,
-			eStraightTower,
 			eGroup,
 
 			eMaxType,

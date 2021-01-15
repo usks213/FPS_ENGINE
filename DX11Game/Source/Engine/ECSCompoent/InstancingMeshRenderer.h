@@ -75,6 +75,8 @@ namespace ECS
 		HRESULT MakeS08(const std::string tag);
 		//  n15
 		HRESULT MakeN15(const std::string tag);
+		//  s06
+		HRESULT MakeS06(const std::string tag);
 
 		//--- マテリアル
 		// カラー変更

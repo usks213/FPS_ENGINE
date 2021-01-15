@@ -49,6 +49,7 @@
 
 // スクリプト
 #include "StraightMoveEnemyScript.h"
+#include "GroupMoveEnemyScript.h"
 #include "TrackingMoveEnemyHostScript.h"
 #include "PlayerScript.h"
 #include "BombCrystalScript.h"
@@ -146,7 +147,7 @@ void MakeEnemyScript::Update()
 		}
 
 		// エンティティの数
-		if (GetEntityManager()->GetEntityCount() > 10000) break;
+		if (GetEntityManager()->GetEntityCount() > 6000) continue;
 
 		//--- タイプで分ける
 		switch (m_nType)
@@ -181,10 +182,10 @@ void MakeEnemyScript::Update()
 		}
 		break;
 		// 直進タイプ タワー
-		case ECS::MakeEnemyScript::eStraightTower:
+		case ECS::MakeEnemyScript::eGroup:
 		{
 			// 生成数
-			int SpawnNum = m_nSpawnNum / 2 + 3;
+			int SpawnNum = m_nSpawnNum / 2 + 6;
 
 			for (int y = 0; y < SpawnNum / 3; y++)
 				for (int x = 0; x < SpawnNum; x += 6)
@@ -199,7 +200,7 @@ void MakeEnemyScript::Update()
 						// エネミー生成
 						const auto& obj = Instantiate<GameObject>(pos + center);
 						// コンポーネントの追加
-						obj->AddComponent<StraightMoveEnemyScript>()->SetPlayer(player);
+						obj->AddComponent<GroupMoveEnemyScript>()->SetPlayer(player);
 						// 進む向き
 						const auto& rb = obj->GetComponent<Rigidbody>();
 						center->y = 0;
@@ -223,8 +224,6 @@ void MakeEnemyScript::Update()
 			tracking->CreateChild(SpawnNum);
 		}
 		break;
-		case ECS::MakeEnemyScript::eGroup:
-			break;
 		case ECS::MakeEnemyScript::eMaxType:
 			break;
 		}
