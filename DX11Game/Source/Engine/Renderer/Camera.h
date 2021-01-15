@@ -41,13 +41,18 @@ private:
 
 	// カメラの正面向き
 	Vector3 m_vForward;
+	Vector3 m_vRight;
 
+	// 画面揺れ
+	int m_nShakeFrame;
+	Vector3 m_vShakeOffset;
 
 	// マウス座標
 	Vector3 m_vOldPos;
 	Vector3 m_vCurPos;
 
 	std::weak_ptr<ECS::Transform> m_targetTrans;
+	bool m_bCursorFlg;
 
 	static CCamera* m_mainCamera;
 public:
@@ -82,4 +87,7 @@ public:
 	void UpdateCameraPos(int nNum) { for (int i = 0; i < nNum; i++) Update(); }
 
 	Vector3 GetForward() { return m_vForward; }
+
+	// 画面揺れ
+	void SetShakeFrame(int nFrame) { m_nShakeFrame = nFrame; }
 };

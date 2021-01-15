@@ -123,6 +123,9 @@ void Script::SendComponentMessage(const std::string& message, void* value)
 	}
 
 	// アニメーションコールバック
-
+	else if ("OnAnimationExit2D" == message)
+	{
+		this->OnAnimationExit2D(static_cast<Animator2D*>(value));
+	}
 
 }

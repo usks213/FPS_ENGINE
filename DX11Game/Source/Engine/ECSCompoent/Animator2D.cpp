@@ -25,6 +25,8 @@
 #include "Renderer.h"
 #include "SpriteRenderer.h"
 #include "MeshRenderer.h"
+#include "BillboardRenderer.h"
+#include "AssimpRenderer.h"
 
 
 
@@ -88,15 +90,15 @@ void Animator2D::OnCreate()
 		m_renderer = mesh;
 		if (!mesh)
 		{
-			//// レンダラー取得
-			//const auto& bill = m_Parent.lock()->GetComponent<BillboardRenderer>();
-			//m_renderer = bill;
-			//if (!bill)
-			//{
-			//	// アシンプ
-			//	const auto& assimp = m_Parent.lock()->GetComponent<AssimpRenderer>();
-			//	m_renderer = assimp;
-			//}
+			// レンダラー取得
+			const auto& bill = m_Parent.lock()->GetComponent<BillboardRenderer>();
+			m_renderer = bill;
+			if (!bill)
+			{
+				// アシンプ
+				const auto& assimp = m_Parent.lock()->GetComponent<AssimpRenderer>();
+				m_renderer = assimp;
+			}
 		}
 	}
 }

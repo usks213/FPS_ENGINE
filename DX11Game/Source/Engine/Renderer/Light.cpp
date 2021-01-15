@@ -64,7 +64,6 @@ void CLight::Init()
 	vDir.z -= m_vPos.z;
 	XMStoreFloat3(&m_direction, XMVector3Normalize(XMLoadFloat3(&vDir)));
 
-	m_pTargetPos = nullptr;
 }
 
 
@@ -88,12 +87,14 @@ void CLight::Update()
 	//{
 	//	m_vPos.z -= 10.f;
 	//}
-
-	if (m_pTargetPos)
+	const auto& trans = m_targetTrans.lock();
+	if (trans)
 	{
-		m_vTarget.x = m_pTargetPos->x;
-		m_vTarget.y = m_pTargetPos->y;
-		m_vTarget.z = m_pTargetPos->z;
+		Vector3 pos = trans->m_pos;
+
+		m_vTarget.x = pos->x;
+		m_vTarget.y = pos->y;
+		m_vTarget.z = pos->z;
 
 		m_vPos.x = m_vTarget.x + LIT_POS_P_X;
 		m_vPos.y = m_vTarget.y + LIT_POS_P_Y;

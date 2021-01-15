@@ -397,12 +397,12 @@ void DrawMesh(ID3D11DeviceContext* pDeviceContext, MESH* pMesh, int nTranslucntT
 	pDeviceContext->DrawIndexed(pMesh->nNumIndex, 0, 0);
 
 
-	SetPolygonSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-	SetPolygonPos(0, 0);
-	SetPolygonColor(1, 1, 1);
-	SetPolygonTexture(g_pShadowResourceView);
-	if(GetKeyPress(VK_O))
-		DrawPolygon(pDeviceContext);
+	//SetPolygonSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	//SetPolygonPos(0, 0);
+	//SetPolygonColor(1, 1, 1);
+	//SetPolygonTexture(g_pShadowResourceView);
+	//if(GetKeyPress(VK_O))
+	//	DrawPolygon(pDeviceContext);
 }
 
 //=============================================================================

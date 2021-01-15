@@ -23,7 +23,7 @@ SamplerComparisonState g_depthSampler : register(s1);	// 深度ステンシルサンプラ
 
 float4 main(VS_OUTPUT input) : SV_Target0
 {
-	float4 Color = input.Diffuse * g_color;
+	float4 Color = input.Diffuse;
 	if (g_mTexture._44 > 0.0f) {
 		Color *= g_texture.Sample(g_sampler, input.TexCoord);
         float w = Color.w;
@@ -60,5 +60,5 @@ float4 main(VS_OUTPUT input) : SV_Target0
 		
 	}
 	
-	return Color;
+	return Color * g_color;
 }

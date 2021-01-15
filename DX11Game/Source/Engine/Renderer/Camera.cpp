@@ -80,6 +80,8 @@ void CCamera::Init()
 	m_vTarget.z = (m_vPos.z + m_vRelTarget.z);
 
 
+	m_bCursorFlg = false;
+
 	CalcWorldMatrix();
 	SetCursorPos(SCREEN_CENTER_X, SCREEN_CENTER_Y);
 
@@ -90,109 +92,7 @@ void CCamera::Init()
 // 更新
 void CCamera::Update()
 {
-	//{
-	//	static float angle1;
-	//	angle1 = 0;
-
-	//	// カメラ回転
-	//	if (GetKeyPress(VK_Z))
-	//	{
-	//		angle1 += 1.0f;
-	//	}
-	//	if (GetKeyPress(VK_C))
-	//	{
-	//		angle1 -= 1.0f;
-	//	}
-
-	//	XMMATRIX mR = XMMatrixRotationY(XMConvertToRadians(angle1));
-	//	XMVECTOR v = XMVectorSet(m_vPos.x - m_vTarget.x, m_vPos.y - m_vTarget.y, m_vPos.z - m_vTarget.z, 1.0f);
-
-	//	v = XMVector3TransformCoord(v, mR);
-	//	XMStoreFloat3(&m_vPos, v);
-
-	//	m_vPos.x += m_vTarget.x;
-	//	m_vPos.y += m_vTarget.y;
-	//	m_vPos.z += m_vTarget.z;
-
-	//	// 注視点回転
-	//	static float angle;
-	//	angle = 0.0f;
-	//	if (GetKeyPress(VK_Q))
-	//	{
-	//		angle += 1.0f;
-	//	}
-	//	if (GetKeyPress(VK_E))
-	//	{
-	//		angle -= 1.0f;
-	//	}
-
-	//	mR = XMMatrixRotationY(XMConvertToRadians(angle));
-	//	v = XMVectorSet(m_vTarget.x - m_vPos.x, m_vTarget.y - m_vPos.y, m_vTarget.z - m_vPos.z, 1.0f);
-
-	//	v = XMVector3TransformCoord(v, mR);
-	//	XMStoreFloat3(&m_vTarget, v);
-
-	//	m_vTarget.x += m_vPos.x;
-	//	m_vTarget.y += m_vPos.y;
-	//	m_vTarget.z += m_vPos.z;
-
-	//	m_vAngle.y += angle + angle1;
-	//}
-
-
-	//{	// カメラ移動
-	//	float dx = 0.0f, dy = 0.0f, dz = 0.0f;	// 移動量
-
-	//	if (GetKeyPress(VK_W))
-	//	{
-	//		dx = CAMERA_MOVE_SPEED * CosDeg(-m_vAngle.y + 90);
-	//		dz = CAMERA_MOVE_SPEED * SinDeg(-m_vAngle.y + 90);
-	//	}
-	//	if (GetKeyPress(VK_S))
-	//	{
-	//		dx = CAMERA_MOVE_SPEED * CosDeg(-m_vAngle.y + 270);
-	//		dz = CAMERA_MOVE_SPEED * SinDeg(-m_vAngle.y + 270);
-	//	}
-	//	if (GetKeyPress(VK_A))
-	//	{
-	//		dx = CAMERA_MOVE_SPEED * CosDeg(-m_vAngle.y + 180);
-	//		dz = CAMERA_MOVE_SPEED * SinDeg(-m_vAngle.y + 180);
-	//	}
-	//	if (GetKeyPress(VK_D))
-	//	{
-	//		dx = CAMERA_MOVE_SPEED * CosDeg(-m_vAngle.y);
-	//		dz = CAMERA_MOVE_SPEED * SinDeg(-m_vAngle.y);
-	//	}
-	//	if (GetKeyPress(VK_Y))
-	//	{
-	//		dy = CAMERA_MOVE_SPEED;
-	//	}
-	//	if (GetKeyPress(VK_N))
-	//	{
-	//		dy = -CAMERA_MOVE_SPEED;
-	//	}
-	//	m_vPos.x += dx;
-	//	m_vPos.z += dz;
-	//	m_vPos.y += dy;
-	//	m_vTarget.x += dx;
-	//	m_vTarget.z += dz;
-
-	//	// 注視点移動
-	//	dy = 0.0f;
-	//	if (GetKeyPress(VK_T))
-	//	{
-	//		dy = CAMERA_MOVE_SPEED;
-	//	}
-	//	if (GetKeyPress(VK_B))
-	//	{
-	//		dy = -CAMERA_MOVE_SPEED;
-	//	}
-
-	//	m_vTarget.y += dy;
-	//}
-
-// ターゲット座標取得
-	//if (m_pTargetPos == nullptr) return;
+	// ターゲット座標取得
 	const auto& trans = m_targetTrans.lock();
 	if (!trans) return;
 
@@ -231,78 +131,60 @@ void CCamera::Update()
 		m_vRelPos.z = m_vTarget.z + vDir.z * m_fLengthInterval - pos.z;
 	}
 
-	static bool bFlag = false;
-	if (GetKeyTrigger(VK_RETURN)) bFlag ^= 1;
-	if (bFlag) return;
-
-	// マウス
-	m_vOldPos = Vector3{ (float)SCREEN_CENTER_X, (float)SCREEN_CENTER_Y, 0.0f };
-	m_vCurPos = Vector3{ (float)GetMousePosition()->x, (float)GetMousePosition()->y, 0.0f };
-
-	// 移動量
-	Vector3 axis = m_vCurPos - m_vOldPos;
-
-	// 戻す
-	//m_vCurPos = Vector3{ (float)SCREEN_CENTER_X, (float)SCREEN_CENTER_Y, 0.0f };
-	SetCursorPos(SCREEN_CENTER_X, SCREEN_CENTER_Y);
-	//SetShowCursor(false);
-
-	//===== 水平 =====
-	XMMATRIX mtx = XMMatrixRotationY(
-		XMConvertToRadians(axis->x * 0.1f));
-
-	// 更新
-	XMVECTOR v = XMVectorSet(
-		m_vRelTarget.x, m_vRelTarget.y, m_vRelTarget.z, 1.0f);
-	v = XMVector3TransformCoord(v, mtx);
-	v = XMVector3Normalize(v);
-	XMStoreFloat3(&m_vRelTarget, v);
-
-
-	//===== 垂直 =====
-	mtx = XMMatrixRotationAxis(
-		XMVectorSet(m_mtxWorld._11,
-			m_mtxWorld._12,
-			m_mtxWorld._13, 0.0f),
-		XMConvertToRadians(axis->y * 0.1f));
-
-	// バックアップ
-	XMFLOAT3 back = m_vRelTarget;
-
-	// 更新
-	v = XMVectorSet(
-		m_vRelTarget.x, m_vRelTarget.y, m_vRelTarget.z, 1.0f);
-	v = XMVector3TransformCoord(v, mtx);
-	v = XMVector3Normalize(v);
-	XMStoreFloat3(&m_vRelTarget, v);
-
-	// 補正 
-	if (m_vRelTarget.y > 0.99f || m_vRelTarget.y < -0.99f)
+	if (GetKeyTrigger(VK_RETURN)) m_bCursorFlg ^= 1;
+	if (!m_bCursorFlg)
 	{
-		m_vRelTarget = back;
+		// マウス
+		m_vOldPos = Vector3{ (float)SCREEN_CENTER_X, (float)SCREEN_CENTER_Y, 0.0f };
+		m_vCurPos = Vector3{ (float)GetMousePosition()->x, (float)GetMousePosition()->y, 0.0f };
+
+		// 移動量
+		Vector3 axis = m_vCurPos - m_vOldPos;
+
+		// 戻す
+		//m_vCurPos = Vector3{ (float)SCREEN_CENTER_X, (float)SCREEN_CENTER_Y, 0.0f };
+		SetCursorPos(SCREEN_CENTER_X, SCREEN_CENTER_Y);
+		SetShowCursor(false);
+
+		//===== 水平 =====
+		XMMATRIX mtx = XMMatrixRotationY(
+			XMConvertToRadians(axis->x * 0.1f));
+
+		// 更新
+		XMVECTOR v = XMVectorSet(
+			m_vRelTarget.x, m_vRelTarget.y, m_vRelTarget.z, 1.0f);
+		v = XMVector3TransformCoord(v, mtx);
+		v = XMVector3Normalize(v);
+		XMStoreFloat3(&m_vRelTarget, v);
+
+
+		//===== 垂直 =====
+		mtx = XMMatrixRotationAxis(
+			XMVectorSet(m_mtxWorld._11,
+				m_mtxWorld._12,
+				m_mtxWorld._13, 0.0f),
+			XMConvertToRadians(axis->y * 0.1f));
+
+		// バックアップ
+		XMFLOAT3 back = m_vRelTarget;
+
+		// 更新
+		v = XMVectorSet(
+			m_vRelTarget.x, m_vRelTarget.y, m_vRelTarget.z, 1.0f);
+		v = XMVector3TransformCoord(v, mtx);
+		v = XMVector3Normalize(v);
+		XMStoreFloat3(&m_vRelTarget, v);
+
+		// 補正 
+		if (m_vRelTarget.y > 0.99f || m_vRelTarget.y < -0.99f)
+		{
+			m_vRelTarget = back;
+		}
 	}
-	//if (m_vRelTarget.y >  0.99f) m_vRelTarget.y =  0.99f;
-	//if (m_vRelTarget.y < -0.99f) m_vRelTarget.y = -0.99f;
-
-	//m_vRelTarget.x += m_vRelPos.x;
-	//m_vRelTarget.y += m_vRelPos.y;
-	//m_vRelTarget.z += m_vRelPos.z;
-
-
-	//===== 垂直 =====
-	//mtx = XMMatrixRotationAxis(
-	//	XMVectorSet(m_mtxWorld._11,
-	//		m_mtxWorld._12,
-	//		m_mtxWorld._13, 0.0f),
-	//	XMConvertToRadians(axis->y * 0.1f));
-	//XMStoreFloat3(&m_vRelPos,
-	//	XMVector3TransformCoord(
-	//		XMLoadFloat3(&m_vRelPos), mtx));
-	//XMStoreFloat3(&m_vRelTarget,
-	//	XMVector3TransformCoord(
-	//		XMLoadFloat3(&m_vRelTarget), mtx));
-	//m_vAngle.x += axis->y * 0.1f;
-
+	else
+	{
+		SetShowCursor(true);
+	}
 
 	// カメラ操作
 	if (GetKeyPress(VK_RIGHT)) {
@@ -360,19 +242,64 @@ void CCamera::Update()
 		m_vAngle.x -= 1.0f;
 	}
 
-	//// カメラ移動
-	//m_vPos.x = m_vPos.x * 0.9f + (pos.x + m_vRelPos.x) * 0.1f;
-	//m_vPos.y = m_vPos.y * 0.9f + (pos.y + m_vRelPos.y) * 0.1f;
-	//m_vPos.z = m_vPos.z * 0.9f + (pos.z + m_vRelPos.z) * 0.1f;
-	//// 注視点移動
-	//m_vTarget.x = m_vTarget.x * 0.9f + (pos.x + m_vRelTarget.x) * 0.1f;
-	//m_vTarget.y = m_vTarget.y * 0.9f + (pos.y + m_vRelTarget.y) * 0.1f;
-	//m_vTarget.z = m_vTarget.z * 0.9f + (pos.z + m_vRelTarget.z) * 0.1f;
+	// カメラの向き
+	m_vForward->x = m_vRelTarget.x;
+	m_vForward->y = m_vRelTarget.y;
+	m_vForward->z = m_vRelTarget.z;
+	m_vForward = m_vForward.normalized();
+
+	// 画面揺れ
+	static float fOs = 50;
+	static float fSpeed = 2000 / 60.0f;
+	static float yOff = 0;
+	static bool  bUp = true;
+	if (m_nShakeFrame > 0)
+	{
+		//// 右ベクトル
+		//Vector3 up = Vector3{ 0.0f, 1.0f, 0.0f };
+		//m_vRight = Vector3::Cross(m_vForward, up).normalized();
+		//up = Vector3::Cross(m_vForward, m_vRight).normalized();
+
+		//// 揺らすオフセット
+		//const float fOs = 100;
+		//const float fspeed = 50 / 60;
+
+		//int ra1 = rand() % 100 - 50;
+		//int ra2 = rand() % 100 - 50;
+		//m_vShakeOffset = m_vRight * ra1;
+		//m_vShakeOffset = up * ra2;
+
+		yOff += fSpeed;
+		if (yOff > fOs && bUp)
+		{
+			fOs *= 0.8f;
+			fSpeed *= -1;
+			bUp = false;
+		}
+		if (yOff < -fOs && !bUp)
+		{
+			fOs *= 0.8f;
+			fSpeed *= -1;
+			bUp = true;
+		}
+		m_vShakeOffset->y = -yOff;
+
+		m_nShakeFrame--;
+	}
+	else
+	{
+		m_vShakeOffset = Vector3{ 0,0,0 };
+		fOs = 50;
+		fSpeed = 2000 / 60.0f;
+		yOff = 0;
+		bUp = true;
+	}
 
 	// カメラ移動
-	m_vPos.x = pos.x;
-	m_vPos.y = pos.y;
-	m_vPos.z = pos.z;
+	m_vPos.x = pos.x + m_vShakeOffset->x;
+	m_vPos.y = pos.y + m_vShakeOffset->y;
+	m_vPos.z = pos.z + m_vShakeOffset->z;
+
 	// 注視点移動
 	m_vTarget.x = (m_vPos.x + m_vRelTarget.x);
 	m_vTarget.y = (m_vPos.y + m_vRelTarget.y);
@@ -381,14 +308,8 @@ void CCamera::Update()
 	// マトリックス更新
 	UpdateMatrix();
 
-	// カメラの向き
-	m_vForward->x = m_vRelTarget.x;
-	m_vForward->y = m_vRelTarget.y;
-	m_vForward->z = m_vRelTarget.z;
-	m_vForward = m_vForward.normalized();
-
-	CalcWorldMatrix();// カメラのワールドマトリックス取得
-
+	// カメラのワールドマトリックス取得
+	CalcWorldMatrix();
 }
 
 // ビュー/プロジェクション マトリックス更新

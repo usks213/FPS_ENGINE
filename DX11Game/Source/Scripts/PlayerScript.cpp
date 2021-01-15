@@ -36,18 +36,22 @@
 #include "../Engine/ECSCompoent/SphereCollider.h"
 #include "../Engine/ECSCompoent/DeltaCollider.h"
 
+// レンダラー
 #include "../Engine/Renderer/Camera.h"
 #include "../Engine/Renderer/Light.h"
+#include "../Engine/Renderer/PostProcessing.h"
 
 #include "../Engine/ECSSystem/DeltaCollisionSystem.h"
 
 // ワールド
 #include "../Engine/ECS/World/WorldManager.h"
-#include "../Engine/ECSWorld/GameWorld.h"
+#include "../Engine/ECSWorld/TitleWorld.h"
 
 // スクリプト
 #include "BulletScript.h"
 #include "DropDeltaScript.h"
+
+#include <iostream>
 
 
 // ネームスペース
@@ -95,7 +99,7 @@ void PlayerScript::Start()
 	// カメラ
 	CCamera::GetMainCamera()->SetCameraTarget(gameObject().lock()->transform().lock());
 	// ライト
-	CLight::GetMainLight()->SetTargetPos(gameObject().lock()->transform().lock()->m_pos.GetFloat3());
+	CLight::GetMainLight()->SetLightTarget(gameObject().lock()->transform().lock());
 
 
 	// ジャンプ
@@ -104,6 +108,17 @@ void PlayerScript::Start()
 	m_nDeltaCount = 0;
 	// ショット
 	m_bShot = false;
+
+	//HP
+	m_fHP = m_fMaxHP;
+
+	// ヒール
+	m_fHeel = 5.0f / 60.0f;
+	m_nHeelCnt = m_nHeelInteral;
+
+	// ダメージ
+	m_fDamage = 30.0f;
+	m_nDamageCnt = m_nDamageInteral;
 }
 
 //========================================
@@ -149,6 +164,9 @@ void PlayerScript::Update()
 		m_rb.lock()->SetForceY(jump + m_nJump);
 		// サウンド
 		CSound::PlaySE("Jump.wav", 0.8f);
+		// 画面揺れ
+		CCamera::GetMainCamera()->SetShakeFrame(8);
+		m_bGround = false;
 	}
 	m_nJump--;
 	if (m_nJump < 0) m_nJump = 0;
@@ -185,6 +203,35 @@ void PlayerScript::LateUpdate()
 {
 	// デバック表示
 	PrintDebugProc("DeltaCount:%d\n", m_nDeltaCount);
+
+	if (!m_bGround && transform().lock()->m_pos->y <= transform().lock()->m_scale->y / 2)
+	{
+		m_bGround = true;
+		// 画面揺れ
+		CCamera::GetMainCamera()->SetShakeFrame(6);
+		// サウンド
+		CSound::PlaySE("PlayerGround.wav", 1.0f);
+	}
+
+
+	// ステータス
+	m_nHeelCnt--;
+	if (m_nHeelCnt < 0)
+	{
+		// 回復
+		m_fHP += m_fHeel;
+		if (m_fHP > m_fMaxHP)
+			m_fHP = m_fMaxHP;
+	}
+
+	// ダメージ
+	m_nDamageCnt--;
+
+
+	// HPを画面に反映
+	auto post = PostProcessing::GetMain();
+	post->GetColor()->y = m_fHP / m_fMaxHP;
+	post->GetColor()->z = m_fHP / m_fMaxHP;
 }
 
 //========================================
@@ -194,6 +241,31 @@ void PlayerScript::LateUpdate()
 //========================================
 void PlayerScript::End()
 {
+	FILE* fp;
+	int nScore = 0;
+
+	// 前回のスコアを読み込む
+	fopen_s(&fp, "data/score.bin", "rb");
+
+	if (fp)
+	{
+		fread(&nScore, sizeof(int), 1, fp);
+
+		fclose(fp);
+	}
+
+	if (m_nDeltaCount > nScore)
+	{
+		// スコアの書き出し
+		fopen_s(&fp, "data/score.bin", "wb");
+
+		if (fp)
+		{
+			fwrite(&m_nDeltaCount, sizeof(int), 1, fp);
+
+			fclose(fp);
+		}
+	}
 }
 
 
@@ -213,11 +285,18 @@ void PlayerScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 	}
 	else if (collider->gameObject().lock()->tag() == "BombCrystal")
 	{
-		m_nJump = 10;
+		m_nJump = 15;
+		// 画面揺れ
+		CCamera::GetMainCamera()->SetShakeFrame(6);
 	}
 	else if (collider->gameObject().lock()->tag() == "StartCrystal")
 	{
 		m_bShot = true;
+		// 画面揺れ
+		CCamera::GetMainCamera()->SetShakeFrame(6);
+		// BGM
+		CSound::PlayBGM("GameBGM.mp3", 0.3f);
+
 	}
 	else if (collider->gameObject().lock()->tag() == "Enemy")
 	{
@@ -225,10 +304,24 @@ void PlayerScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 		Vector3 vec = collider->transform().lock()->m_pos - transform().lock()->m_pos;
 		Vector3 forward = CCamera::GetMainCamera()->GetForward();
 
-		if (Vector3::Dot(vec.normalized(), forward.normalized()) < -0.8f)
+		if (Vector3::Dot(vec.normalized(), forward.normalized()) < -0.3f)
 		{
+			// ダメージ
+			if (m_nDamageCnt > 0) return;
+			m_nDamageCnt = m_nDamageInteral;
+
+			// HP
+			m_fHP -= m_fDamage;
+			m_nHeelCnt = m_nHeelInteral;
+
+			// 画面揺れ
+			CCamera::GetMainCamera()->SetShakeFrame(16);
+			// サウンド
+
+
+			if (m_fHP > 0) return;
 			// ゲームオーバー
-			WorldManager::GetInstance()->LoadWorld<GameWorld>("Game");
+			WorldManager::GetInstance()->LoadWorld<TitleWorld>("Title");
 		}
 	}
 }

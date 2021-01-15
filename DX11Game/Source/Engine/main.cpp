@@ -68,6 +68,10 @@
 //				フォグの実装、バンプ、環境マップの実装
 //				SkyDomeの作成
 //
+//	2021/01/15	カメラ揺れの追加
+//				TitleButton,TitleScoreUI,TitleWorld,
+//				DeltaUI,EnemyEffect の作成
+//				
 //
 //======================================================================
 #include "main.h"
@@ -91,6 +95,7 @@
 #include "ECS/World/WorldManager.h"
 // ワールド
 #include "ECSWorld/GameWorld.h"
+#include "ECSWorld/TitleWorld.h"
 
 
 
@@ -104,7 +109,7 @@
 // マクロ定義
 //*****************************************************************************
 #define CLASS_NAME		_T("AppClass")					// ウインドウのクラス名
-#define WINDOW_NAME		_T("FPS")			// ウインドウのキャプション名
+#define WINDOW_NAME		_T(" DELTA Δ")			// ウインドウのキャプション名
 
 //*****************************************************************************
 // プロトタイプ宣言
@@ -241,13 +246,13 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 				dwExecLastTime = dwCurrentTime;
 				// 更新処理
 				Update();
-				// 描画処理
-				Draw();
-				dwFrameCount++;
+				//// 描画処理
+				//Draw();
+				//dwFrameCount++;
 			}
-			//// 描画処理
-			//Draw();
-			//dwFrameCount++;
+			// 描画処理
+			Draw();
+			dwFrameCount++;
 		}
 	}
 
@@ -524,7 +529,7 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	WorldManager::Create();
 
 	// ゲームワールドの追加
-	WorldManager::GetInstance()->LoadWorld<GameWorld>("Game");
+	WorldManager::GetInstance()->LoadWorld<TitleWorld>("Title");
 	
 	return hr;
 }

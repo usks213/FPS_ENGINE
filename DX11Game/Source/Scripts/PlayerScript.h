@@ -36,6 +36,25 @@ namespace ECS
 		int m_nDeltaCount;
 		// ショット
 		bool m_bShot;
+		// 地面
+		bool m_bGround;
+
+		// ステータス
+		float m_fHP;
+		const float m_fMaxHP = 100.0f;
+
+		// ヒール
+		const int m_nHeelInteral = 480;
+		int	  m_nHeelCnt;
+		float m_fHeel;
+
+		// ダメージ
+		const int m_nDamageInteral = 300;
+		int	  m_nDamageCnt;
+		float m_fDamage;
+
+
+
 	public:
 		// デルタ数取得
 		int GetDeltaCount() { return m_nDeltaCount; }

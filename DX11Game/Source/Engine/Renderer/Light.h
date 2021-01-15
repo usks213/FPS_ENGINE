@@ -1,5 +1,6 @@
 #pragma once
 #include "../main.h"
+#include "../ECSCompoent/Transform.h"
 
 class CLight
 {
@@ -19,7 +20,7 @@ private:
 
 	float m_angle;
 
-	XMFLOAT3 *m_pTargetPos;
+	std::weak_ptr<ECS::Transform> m_targetTrans;
 
 	static CLight* m_mainLight;
 public:
@@ -34,7 +35,7 @@ public:
 	DirectX::XMFLOAT4X4& GetViewMatrix() { return m_mtxView; }
 	XMFLOAT4X4& GetProjMatrix() { return m_mtxProj; }
 
-	void SetTargetPos(XMFLOAT3 *pPos) { m_pTargetPos = pPos; }
+	void SetLightTarget(std::weak_ptr<ECS::Transform> trans) { m_targetTrans = trans; }
 
 	static void SetMainLight(CLight* pLight) { m_mainLight = pLight; }
 	static CLight* GetMainLight() { return m_mainLight; }

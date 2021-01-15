@@ -128,7 +128,16 @@ void BillboardRenderer::LateDraw(ID3D11DeviceContext* pDC)
 		m_mesh->pMaterial = &m_material;
 		m_mesh->pTexture = m_diffuseTexture;
 
+		SetBlendState(m_eState);
+		// Zバッファ無効
+		SetZBuffer(false);
+
 		DrawMesh(pDC, mesh, m_eTranslucentType);
+
+		SetBlendState(BS_NONE);
+
+		// Zバッファ
+		SetZBuffer(true);
 	}
 }
 
@@ -195,6 +204,8 @@ MESH* BillboardRenderer:: GetBillboardMesh()
 	delete[] pIndexWk;
 	delete[] pVertexWk;
 
+	m_masterMesh.bLight = false;
+
 	return &m_masterMesh;
 }
 
@@ -205,11 +216,7 @@ MESH* BillboardRenderer:: GetBillboardMesh()
 //========================================
 void BillboardRenderer::SetDiffuseTexture(const char* filename)
 {
-	// メッシュ取得
-	auto pBillboard = m_mesh;
-	// テクスチャ
-	if (pBillboard)
-		pBillboard->pTexture = CTexture::GetTexture(GetDevice(), filename);
+	m_diffuseTexture = CTexture::GetTexture(GetDevice(), filename);
 }
 
 //========================================
@@ -219,9 +226,5 @@ void BillboardRenderer::SetDiffuseTexture(const char* filename)
 //========================================
 void BillboardRenderer::SetDiffuseTexture(const wchar_t* filename)
 {
-	// メッシュ取得
-	auto pBillboard = m_mesh;
-	// テクスチャ
-	if (pBillboard)
-		pBillboard->pTexture = CTexture::GetTexture(GetDevice(), filename);
+	m_diffuseTexture = CTexture::GetTexture(GetDevice(), filename);
 }

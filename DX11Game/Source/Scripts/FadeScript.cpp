@@ -96,7 +96,7 @@ void FadeScript::Start()
 	render->SetLayer(render->eFade1);
 	render->SetRendererBlendState(EBlendState::BS_ALPHABLEND);
 	// テクスチャ
-	render->SetDiffuseTexture("data/texture/FadeDelta.png");
+	//render->SetDiffuseTexture("data/texture/FadeDelta.png");
 	m_render = render;
 
 	// サイズ

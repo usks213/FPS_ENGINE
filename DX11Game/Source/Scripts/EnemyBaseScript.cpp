@@ -46,6 +46,7 @@
 
 // スクリプト
 #include "DropDeltaScript.h"
+#include "EnemyEffectScript.h"
 
 
 // ネームスペース
@@ -141,6 +142,10 @@ void EnemyBaseScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 		// ドロップアイテムの生成
 		const auto& obj = Instantiate<GameObject>(transform().lock()->m_pos);
 		obj->AddComponent<DropDeltaScript>()->SetPlayer(m_player.lock());
+
+		// エフェクトの生成
+		const auto& effect = Instantiate<GameObject>(transform().lock()->m_pos);
+		effect->AddComponent<EnemyEffectScript>();
 
 		// 削除
 		Destroy(gameObject().lock());

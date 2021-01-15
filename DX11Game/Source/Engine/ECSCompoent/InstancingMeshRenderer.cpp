@@ -40,6 +40,7 @@ std::map<const std::string, std::vector<InstancingMeshData*>, std::less<>> Insta
 InstancingMeshRenderer::InstancingMeshRenderer()
 {
 	m_mesh = nullptr;
+	m_fLayer = VIEW_FAR_Z - 100;
 }
 
 //========================================

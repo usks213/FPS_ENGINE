@@ -56,6 +56,18 @@
     <Filter Include="ソース\エンジン\ECSWorld">
       <UniqueIdentifier>{e0f75631-3622-4408-8f0c-09cf3aa77d3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース\スクリプト\エネミー">
+      <UniqueIdentifier>{345eacf7-13a1-4bee-be8a-c94b9381abe8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース\スクリプト\プレイヤー">
+      <UniqueIdentifier>{bc8a34fb-062c-4a76-9468-85aa60ef724c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース\スクリプト\タイトル">
+      <UniqueIdentifier>{33f7bcea-b82a-4d99-b2b1-96e742baa283}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース\スクリプト\デルタ">
+      <UniqueIdentifier>{8ccb7f78-1cbc-4bde-b112-818ad56ac2c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11Game.rc">
@@ -193,9 +205,6 @@
     <ClCompile Include="Source\Scripts\ScriptBaseLayout.cpp">
       <Filter>ソース\スクリプト</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripts\PlayerScript.cpp">
-      <Filter>ソース\スクリプト</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Engine\ECSCompoent\Rigidbody.cpp">
       <Filter>ソース\エンジン\ECSComponent</Filter>
     </ClCompile>
@@ -226,24 +235,6 @@
     <ClCompile Include="Source\Engine\ECSCompoent\InstancingMeshRenderer.cpp">
       <Filter>ソース\エンジン\ECSComponent</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripts\BulletScript.cpp">
-      <Filter>ソース\スクリプト</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scripts\StraightMoveEnemyScript.cpp">
-      <Filter>ソース\スクリプト</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scripts\TrackingMoveEnemyScript.cpp">
-      <Filter>ソース\スクリプト</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scripts\TrackingMoveEnemyHostScript.cpp">
-      <Filter>ソース\スクリプト</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scripts\MakeEnemyScript.cpp">
-      <Filter>ソース\スクリプト</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scripts\DropDeltaScript.cpp">
-      <Filter>ソース\スクリプト</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Engine\ECSSystem\DeltaCollisionSystem.cpp">
       <Filter>ソース\エンジン\ECSSystem</Filter>
     </ClCompile>
@@ -252,18 +243,6 @@
     </ClCompile>
     <ClCompile Include="Source\Engine\ECS\System\ISystem.cpp">
       <Filter>ソース\エンジン\ECS\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scripts\EnemyBaseScript.cpp">
-      <Filter>ソース\スクリプト</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scripts\BombCrystalScript.cpp">
-      <Filter>ソース\スクリプト</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scripts\BombEffectScript.cpp">
-      <Filter>ソース\スクリプト</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scripts\BombCollisionScript.cpp">
-      <Filter>ソース\スクリプト</Filter>
     </ClCompile>
     <ClCompile Include="Source\Engine\ECS\World\WorldManager.cpp">
       <Filter>ソース\エンジン\ECS\World</Filter>
@@ -277,14 +256,65 @@
     <ClCompile Include="Source\Scripts\FadeScript.cpp">
       <Filter>ソース\スクリプト</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripts\StartCrystalScript.cpp">
-      <Filter>ソース\スクリプト</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Engine\Renderer\PostProcessing.cpp">
       <Filter>ソース\エンジン\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scripts\SkyDomeScript.cpp">
       <Filter>ソース\スクリプト</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSCompoent\SkyDomeRenderer.cpp">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine\ECSWorld\TitleWorld.cpp">
+      <Filter>ソース\エンジン\ECSWorld</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\BombCollisionScript.cpp">
+      <Filter>ソース\スクリプト\デルタ</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\BombCrystalScript.cpp">
+      <Filter>ソース\スクリプト\デルタ</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\BombEffectScript.cpp">
+      <Filter>ソース\スクリプト\デルタ</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\BulletScript.cpp">
+      <Filter>ソース\スクリプト\プレイヤー</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\DeltaUIScript.cpp">
+      <Filter>ソース\スクリプト\デルタ</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\DropDeltaScript.cpp">
+      <Filter>ソース\スクリプト\デルタ</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\EnemyBaseScript.cpp">
+      <Filter>ソース\スクリプト\エネミー</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\MakeEnemyScript.cpp">
+      <Filter>ソース\スクリプト\エネミー</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\PlayerScript.cpp">
+      <Filter>ソース\スクリプト\プレイヤー</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\StartCrystalScript.cpp">
+      <Filter>ソース\スクリプト\デルタ</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\StraightMoveEnemyScript.cpp">
+      <Filter>ソース\スクリプト\エネミー</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\TrackingMoveEnemyHostScript.cpp">
+      <Filter>ソース\スクリプト\エネミー</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\TrackingMoveEnemyScript.cpp">
+      <Filter>ソース\スクリプト\エネミー</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\TitleButtonScript.cpp">
+      <Filter>ソース\スクリプト\タイトル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\TitleScoreUIScript.cpp">
+      <Filter>ソース\スクリプト\タイトル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripts\EnemyEffectScript.cpp">
+      <Filter>ソース\スクリプト\エネミー</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -387,9 +417,6 @@
     <ClInclude Include="Source\Scripts\ScriptBaseLayout.h">
       <Filter>ソース\スクリプト</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripts\PlayerScript.h">
-      <Filter>ソース\スクリプト</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\ECSCompoent\Rigidbody.h">
       <Filter>ソース\エンジン\ECSComponent</Filter>
     </ClInclude>
@@ -423,24 +450,6 @@
     <ClInclude Include="Source\Engine\System\CCell.h">
       <Filter>ソース\エンジン\System</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripts\BulletScript.h">
-      <Filter>ソース\スクリプト</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scripts\StraightMoveEnemyScript.h">
-      <Filter>ソース\スクリプト</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scripts\TrackingMoveEnemyScript.h">
-      <Filter>ソース\スクリプト</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scripts\TrackingMoveEnemyHostScript.h">
-      <Filter>ソース\スクリプト</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scripts\MakeEnemyScript.h">
-      <Filter>ソース\スクリプト</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scripts\DropDeltaScript.h">
-      <Filter>ソース\スクリプト</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\ECSSystem\DeltaCollisionSystem.h">
       <Filter>ソース\エンジン\ECSSystem</Filter>
     </ClInclude>
@@ -452,18 +461,6 @@
     </ClInclude>
     <ClInclude Include="Source\Engine\ECS\System\System.h">
       <Filter>ソース\エンジン\ECS\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scripts\EnemyBaseScript.h">
-      <Filter>ソース\スクリプト</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scripts\BombCrystalScript.h">
-      <Filter>ソース\スクリプト</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scripts\BombEffectScript.h">
-      <Filter>ソース\スクリプト</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scripts\BombCollisionScript.h">
-      <Filter>ソース\スクリプト</Filter>
     </ClInclude>
     <ClInclude Include="Source\Engine\ECS\World\WorldManager.h">
       <Filter>ソース\エンジン\ECS\World</Filter>
@@ -477,14 +474,65 @@
     <ClInclude Include="Source\Scripts\FadeScript.h">
       <Filter>ソース\スクリプト</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripts\StartCrystalScript.h">
-      <Filter>ソース\スクリプト</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Engine\Renderer\PostProcessing.h">
       <Filter>ソース\エンジン\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scripts\SkyDomeScript.h">
       <Filter>ソース\スクリプト</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSCompoent\SkyDomeRenderer.h">
+      <Filter>ソース\エンジン\ECSComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine\ECSWorld\TitleWorld.h">
+      <Filter>ソース\エンジン\ECSWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\BombCollisionScript.h">
+      <Filter>ソース\スクリプト\デルタ</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\BombCrystalScript.h">
+      <Filter>ソース\スクリプト\デルタ</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\BombEffectScript.h">
+      <Filter>ソース\スクリプト\デルタ</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\BulletScript.h">
+      <Filter>ソース\スクリプト\プレイヤー</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\DeltaUIScript.h">
+      <Filter>ソース\スクリプト\デルタ</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\DropDeltaScript.h">
+      <Filter>ソース\スクリプト\デルタ</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\EnemyBaseScript.h">
+      <Filter>ソース\スクリプト\エネミー</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\MakeEnemyScript.h">
+      <Filter>ソース\スクリプト\エネミー</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\PlayerScript.h">
+      <Filter>ソース\スクリプト\プレイヤー</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\StartCrystalScript.h">
+      <Filter>ソース\スクリプト\デルタ</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\StraightMoveEnemyScript.h">
+      <Filter>ソース\スクリプト\エネミー</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\TrackingMoveEnemyHostScript.h">
+      <Filter>ソース\スクリプト\エネミー</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\TrackingMoveEnemyScript.h">
+      <Filter>ソース\スクリプト\エネミー</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\TitleButtonScript.h">
+      <Filter>ソース\スクリプト\タイトル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\TitleScoreUIScript.h">
+      <Filter>ソース\スクリプト\タイトル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripts\EnemyEffectScript.h">
+      <Filter>ソース\スクリプト\エネミー</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

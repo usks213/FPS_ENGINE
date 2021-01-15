@@ -64,6 +64,8 @@ namespace ECS
 
 		// ƒŒƒCƒ„[‚Ìæ“¾
 		float GetLayer() { return m_fLayer; }
+		void SetLayer(float fLayer) { m_fLayer = fLayer; }
+		void SetUpdateLayer(bool bUpdate) { m_bUpdateLayer = bUpdate; }
 
 	protected:
 		std::weak_ptr<Transform> m_transform;
@@ -76,5 +78,6 @@ namespace ECS
 		EBlendState m_eState;
 
 		float m_fLayer;
+		bool m_bUpdateLayer = true;
 	};
 }

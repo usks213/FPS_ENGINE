@@ -44,6 +44,7 @@ Renderer::Renderer()
 	// ブレンドステート
 	m_eState = BS_NONE;
 
+	m_bUpdateLayer = true;
 }
 
 //========================================
@@ -91,6 +92,8 @@ void Renderer::OnDestroy()
 //========================================
 void Renderer::LayerUpdate()
 {
+	if (!m_bUpdateLayer) return;
+
 	// カメラ座標
 	Vector3 cameraPos = CCamera::GetMainCamera()->GetPos();
 	// 距離を格納

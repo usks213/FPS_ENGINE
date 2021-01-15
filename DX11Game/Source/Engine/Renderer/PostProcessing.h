@@ -28,6 +28,9 @@ public:
 	void Uninit();
 	void Draw(ID3D11DeviceContext* pDeviceContext);
 
+	static PostProcessing* GetMain() { return m_pMain; }
+
+	XMFLOAT4* GetColor() { return &m_col; }
 public:
 	ID3D11VertexShader* m_pVertexShader;		// 頂点シェーダ
 	ID3D11PixelShader*	m_pPixelShader;			// ピクセルシェーダ
@@ -65,6 +68,8 @@ private:
 
 private:
 	HRESULT MakeVertex(ID3D11Device* pDevice);
+
+	static PostProcessing* m_pMain;
 };
 
 

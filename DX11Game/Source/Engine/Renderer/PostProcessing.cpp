@@ -55,6 +55,7 @@ GaussBlurParam CalcBlurParam(int width, int height, XMFLOAT2 dir, float deviatio
 
 //===== グローバル変数 =====
 static GaussBlurParam g_gaussParam;
+PostProcessing* PostProcessing::m_pMain = nullptr;
 
 
 
@@ -90,6 +91,7 @@ PostProcessing::PostProcessing()
 	m_pos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_rot = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_siz = XMFLOAT3(SCREEN_WIDTH, SCREEN_HEIGHT, 1.0f);
+
 	m_col = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	m_posTex = XMFLOAT2(0.0f, 0.0f);
@@ -98,6 +100,8 @@ PostProcessing::PostProcessing()
 
 	// ガウスブラーのパラメータ
 	g_gaussParam = CalcBlurParam(1.3f, 1.3f, XMFLOAT2{ 1,1 }, 1.0f);
+
+	m_pMain = this;
 }
 
 //===================================

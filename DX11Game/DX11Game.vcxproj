@@ -282,6 +282,7 @@
     <ClCompile Include="Source\Engine\ECSCompoent\Renderer.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\Rigidbody.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\Script.cpp" />
+    <ClCompile Include="Source\Engine\ECSCompoent\SkyDomeRenderer.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\SphereCollider.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\SpriteRenderer.cpp" />
     <ClCompile Include="Source\Engine\ECSCompoent\Transform.cpp" />
@@ -295,6 +296,7 @@
     <ClCompile Include="Source\Engine\ECSSystem\TransformSystem.cpp" />
     <ClCompile Include="Source\Engine\ECSWorld\GameWorld.cpp" />
     <ClCompile Include="Source\Engine\ECSWorld\MasterWorld.cpp" />
+    <ClCompile Include="Source\Engine\ECSWorld\TitleWorld.cpp" />
     <ClCompile Include="Source\Engine\ECS\Component\IComponent.cpp" />
     <ClCompile Include="Source\Engine\ECS\Entity\EntityManager.cpp" />
     <ClCompile Include="Source\Engine\ECS\Entity\IEntity.cpp" />
@@ -321,8 +323,10 @@
     <ClCompile Include="Source\Scripts\BombCrystalScript.cpp" />
     <ClCompile Include="Source\Scripts\BombEffectScript.cpp" />
     <ClCompile Include="Source\Scripts\BulletScript.cpp" />
+    <ClCompile Include="Source\Scripts\DeltaUIScript.cpp" />
     <ClCompile Include="Source\Scripts\DropDeltaScript.cpp" />
     <ClCompile Include="Source\Scripts\EnemyBaseScript.cpp" />
+    <ClCompile Include="Source\Scripts\EnemyEffectScript.cpp" />
     <ClCompile Include="Source\Scripts\FadeScript.cpp" />
     <ClCompile Include="Source\Scripts\MakeEnemyScript.cpp" />
     <ClCompile Include="Source\Scripts\PlayerScript.cpp" />
@@ -330,6 +334,8 @@
     <ClCompile Include="Source\Scripts\SkyDomeScript.cpp" />
     <ClCompile Include="Source\Scripts\StartCrystalScript.cpp" />
     <ClCompile Include="Source\Scripts\StraightMoveEnemyScript.cpp" />
+    <ClCompile Include="Source\Scripts\TitleButtonScript.cpp" />
+    <ClCompile Include="Source\Scripts\TitleScoreUIScript.cpp" />
     <ClCompile Include="Source\Scripts\TrackingMoveEnemyScript.cpp" />
     <ClCompile Include="Source\Scripts\TrackingMoveEnemyHostScript.cpp" />
   </ItemGroup>
@@ -346,6 +352,7 @@
     <ClInclude Include="Source\Engine\ECSCompoent\Renderer.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\Rigidbody.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\Script.h" />
+    <ClInclude Include="Source\Engine\ECSCompoent\SkyDomeRenderer.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\SphereCollider.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\SpriteRenderer.h" />
     <ClInclude Include="Source\Engine\ECSCompoent\Transform.h" />
@@ -359,6 +366,7 @@
     <ClInclude Include="Source\Engine\ECSSystem\TransformSystem.h" />
     <ClInclude Include="Source\Engine\ECSWorld\GameWorld.h" />
     <ClInclude Include="Source\Engine\ECSWorld\MasterWorld.h" />
+    <ClInclude Include="Source\Engine\ECSWorld\TitleWorld.h" />
     <ClInclude Include="Source\Engine\ECS\Component\IComponent.h" />
     <ClInclude Include="Source\Engine\ECS\Entity\EntityManager.h" />
     <ClInclude Include="Source\Engine\ECS\Entity\IEntity.h" />
@@ -389,8 +397,10 @@
     <ClInclude Include="Source\Scripts\BombCrystalScript.h" />
     <ClInclude Include="Source\Scripts\BombEffectScript.h" />
     <ClInclude Include="Source\Scripts\BulletScript.h" />
+    <ClInclude Include="Source\Scripts\DeltaUIScript.h" />
     <ClInclude Include="Source\Scripts\DropDeltaScript.h" />
     <ClInclude Include="Source\Scripts\EnemyBaseScript.h" />
+    <ClInclude Include="Source\Scripts\EnemyEffectScript.h" />
     <ClInclude Include="Source\Scripts\FadeScript.h" />
     <ClInclude Include="Source\Scripts\MakeEnemyScript.h" />
     <ClInclude Include="Source\Scripts\PlayerScript.h" />
@@ -398,6 +408,8 @@
     <ClInclude Include="Source\Scripts\StartCrystalScript.h" />
     <ClInclude Include="Source\Scripts\StraightMoveEnemyScript.h" />
     <ClInclude Include="Source\Scripts\ScriptBaseLayout.h" />
+    <ClInclude Include="Source\Scripts\TitleButtonScript.h" />
+    <ClInclude Include="Source\Scripts\TitleScoreUIScript.h" />
     <ClInclude Include="Source\Scripts\TrackingMoveEnemyScript.h" />
     <ClInclude Include="Source\Scripts\TrackingMoveEnemyHostScript.h" />
   </ItemGroup>

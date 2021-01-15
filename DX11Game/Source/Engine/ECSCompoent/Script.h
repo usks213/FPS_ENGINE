@@ -32,7 +32,7 @@ namespace ECS
 	class DeltaCollider;
 	class DeltaCollider;
 	class Rigidbody;
-
+	class Animator2D;
 
 	class Script : public IComponent
 	{
@@ -87,7 +87,7 @@ namespace ECS
 		virtual void OnDeltaCollisionExit(DeltaCollider* collider) {};
 
 		// アニメーション
-
+		virtual void OnAnimationExit2D(Animator2D* animator) {};
 
 	private:
 		// ゲームオブジェクト
