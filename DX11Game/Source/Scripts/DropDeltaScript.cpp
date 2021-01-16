@@ -68,7 +68,8 @@ void DropDeltaScript::Start()
 	gameObject().lock()->SetTag("DropDelta");
 
 	// 大きさ
-	transform().lock()->m_scale = Vector3(100, 100, 100);
+	m_fScale = 100.0f;
+	transform().lock()->m_scale = Vector3(m_fScale, m_fScale, m_fScale);
 	transform().lock()->m_rot->x = 90;
 
 	//--- コンポーネンの追加
@@ -111,6 +112,19 @@ void DropDeltaScript::Update()
 	{
 		// 自身の削除
 		GetEntityManager()->DestroyEntity(gameObject().lock());
+	}
+	else if (m_nExitTime < 120)
+	{
+		if (m_nExitTime % 16 < 8)
+		{
+			// 消える
+			transform().lock()->m_scale = Vector3(0, 0, 0);
+		}
+		else
+		{
+			// 見える
+			transform().lock()->m_scale = Vector3(m_fScale, m_fScale, m_fScale);
+		}
 	}
 
 	// 地面に着いてから追尾

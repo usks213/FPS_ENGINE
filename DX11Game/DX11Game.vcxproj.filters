@@ -75,7 +75,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\directx9.ico">
+    <Image Include="res\delta.ico">
       <Filter>リソース ファイル</Filter>
     </Image>
   </ItemGroup>

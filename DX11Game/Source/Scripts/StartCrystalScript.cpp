@@ -75,7 +75,8 @@ void StartCrystalScript::Start()
 	gameObject().lock()->SetTag("StartCrystal");
 
 	// スケール
-	transform().lock()->m_scale = Vector3{ 300,300,300 };
+	m_fScale = 300.0f;
+	transform().lock()->m_scale = Vector3{ m_fScale,m_fScale,m_fScale };
 	transform().lock()->m_rot->x = 90;
 
 	//--- コンポーネンの追加
@@ -112,7 +113,6 @@ void StartCrystalScript::Start()
 void StartCrystalScript::LateUpdate()
 {
 	Vector3 pos = transform().lock()->m_pos;
-	PrintDebugProc("pos.x:%f, pos.y:%f, pos.z:%f\n", pos->x, pos->y, pos->z);
 }
 
 //========================================

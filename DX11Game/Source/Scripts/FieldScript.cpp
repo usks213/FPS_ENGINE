@@ -66,7 +66,7 @@ void FieldScript::Start()
 	renderer->MakePlane("plane", 20, 20, 500, 500, 1, 1);
 	//renderer->SetDiffuseTexture("data/texture/grid.png");
 	renderer->SetNormalTexture("data/texture/sampledNormals.jpg");
-	renderer->SetAmbientTexture("data/texture/sky02.png");
+	renderer->SetAmbientTexture("data/texture/skydome.png");
 	m_renderer = renderer;
 	//renderer->SetTexSize({ 100, 100, 0 });
 	//renderer->UpdateTexMatrix();

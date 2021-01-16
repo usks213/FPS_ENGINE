@@ -100,7 +100,7 @@ void GameWorld::Start()
 	const auto& sky = GetEntityManager()->CreateEntity<GameObject>();
 	const auto& skyRn = sky->AddComponent<MeshRenderer>();
 	skyRn->MakeSkyDome("Sky", 100);
-	skyRn->SetDiffuseTexture("data/texture/sky02.png");
+	skyRn->SetDiffuseTexture("data/texture/skydome.png");
 	skyRn->SetLighting(false);
 	skyRn->SetLayer(VIEW_FAR_Z);
 	skyRn->SetUpdateLayer(false);
@@ -116,7 +116,7 @@ void GameWorld::Start()
 	//renderer->MakePlane("plane", 100, 100, 500, 500, 1, 1);
 	////renderer->SetDiffuseTexture("data/texture/grid.png");
 	//renderer->SetNormalTexture("data/texture/sampledNormals.jpg");
-	//renderer->SetAmbientTexture("data/texture/sky02.png");
+	//renderer->SetAmbientTexture("data/texture/skydome.png");
 	////renderer->SetTexSize({ 100, 100, 0 });
 	////renderer->UpdateTexMatrix();
 	//plane->transform().lock()->m_pos->y = -1;
@@ -126,7 +126,16 @@ void GameWorld::Start()
 	const auto& cursorRn = cursor->AddComponent<SpriteRenderer>();
 	cursorRn->SetDiffuseTexture("data/texture/Cursor.png");
 	cursorRn->SetLayer(cursorRn->eUI1);
-	cursor->transform().lock()->m_scale = Vector3{ 64,64,32 };
+	cursor->transform().lock()->m_scale = Vector3{ 64 * SCREEN_SCALE_X,64 * SCREEN_SCALE_Y,32 };
+
+	// ‘€ìUI
+	const auto& opUI = GetEntityManager()->CreateEntity<GameObject>();
+	const auto& opSpr = opUI->AddComponent<SpriteRenderer>();
+	opSpr->SetDiffuseTexture("data/texture/OperationUI.png");
+	opSpr->SetLayer(opSpr->eUI1);
+	opUI->transform().lock()->m_pos = Vector3{ -SCREEN_CENTER_X / 3.0f * 2, -SCREEN_HEIGHT / 3.85f, 1 };
+	opUI->transform().lock()->m_scale = Vector3{ 2400.0f / 6 * SCREEN_SCALE_X, 2100.0f / 6 * SCREEN_SCALE_Y, 1 };
+
 }
 
 //===================================

@@ -1,5 +1,6 @@
 //======================================================================
 //											main.cpp
+//	ゲームタイトル 「DELTA Δ」
 //	ECS設計フレームワーク(データ指向じゃない．．．)
 //
 //======================================================================
@@ -74,6 +75,10 @@
 //
 //	2021/01/16	GameOver,GroupMoveEnemy,Field,の追加
 //				サウンドや演出の追加
+//				エネミーの出現演出、消滅演出
+//				操作UIの表示
+//				
+//				デルタΔ完成！！
 //				
 //
 //======================================================================
@@ -678,13 +683,13 @@ void Draw(void)
 	SetZBuffer(false);
 
 
-//#ifdef _DEBUG
+#ifdef _DEBUG
 	// デバッグ文字列表示
 	SetBlendState(BS_ALPHABLEND);
 	SetPolygonColor(1.0f, 1.0f, 1.0f);
 	DrawDebugProc();
 	SetBlendState(BS_NONE);
-//#endif // _DEBUG
+#endif // _DEBUG
 
 	// バックバッファとフロントバッファの入れ替え
 	g_pSwapChain->Present(g_uSyncInterval, 0);

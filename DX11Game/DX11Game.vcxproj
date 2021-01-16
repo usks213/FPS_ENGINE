@@ -181,7 +181,7 @@
     <ResourceCompile Include="DX11Game.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\directx9.ico" />
+    <Image Include="res\delta.ico" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="source\HLSL\AssimpPixel.hlsl">

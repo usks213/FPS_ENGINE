@@ -65,7 +65,7 @@ DeltaCollisionSystem::~DeltaCollisionSystem()
 //===================================
 void DeltaCollisionSystem::OnCreate()
 {
-	// マップサイズ // 何故か二倍になってる？　現状9600x9600
+	// マップサイズ // 何故か二倍になってる？　現状4000x4000
 	CCell<DeltaCollider>::SetMapSize(100.0f * 5 * 10, 100.0f * 5 * 10);
 }
 

@@ -33,6 +33,8 @@ namespace ECS
 		std::weak_ptr<GameObject> m_player;
 		// 追尾フラグ
 		bool m_IsTracking;
+		// スケール
+		float m_fScale;
 	public:
 		// プレイヤーのセット
 		void SetPlayer(std::weak_ptr<GameObject> player) { m_player = player; }

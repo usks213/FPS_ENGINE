@@ -73,7 +73,8 @@ void BombCrystalScript::Start()
 	gameObject().lock()->SetTag("BombCrystal");
 
 	// 大きさ
-	transform().lock()->m_scale = Vector3(200, 200, 200);
+	m_fScale = 200.0f;
+	transform().lock()->m_scale = Vector3(m_fScale, m_fScale, m_fScale);
 	transform().lock()->m_rot->x = 90;
 
 	//--- コンポーネンの追加
@@ -112,6 +113,19 @@ void BombCrystalScript::Update()
 	{
 		// 自身の削除
 		GetEntityManager()->DestroyEntity(gameObject().lock());
+	}
+	else if (m_nExitTime < 120)
+	{
+		if (m_nExitTime % 16 < 8)
+		{
+			// 消える
+			transform().lock()->m_scale = Vector3(0, 0, 0);
+		}
+		else
+		{
+			// 見える
+			transform().lock()->m_scale = Vector3(m_fScale, m_fScale, m_fScale);
+		}
 	}
 }
 

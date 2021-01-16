@@ -54,7 +54,7 @@ using namespace ECS;
 
 
 //===== マクロ定義 =====
-
+#define ADD_SCALE (200.0f / 10.0f)
 
 
 //******************** スクリプトメソッド ********************
@@ -72,7 +72,10 @@ void EnemyBaseScript::Start()
 	gameObject().lock()->SetTag("Enemy");
 
 	// 大きさ
-	transform().lock()->m_scale = Vector3(200, 200, 200);
+	m_fMaxScale = 200;
+	m_fScale = 1.0f;
+	transform().lock()->m_scale = Vector3(m_fScale, m_fScale, m_fScale);
+
 
 	//--- コンポーネンの追加
 
@@ -106,6 +109,18 @@ void EnemyBaseScript::Start()
 //========================================
 void EnemyBaseScript::Update()
 {
+	// 大きさを徐々に大きくする
+	if (m_fScale < m_fMaxScale)
+	{
+		m_fScale += ADD_SCALE;
+		if (m_fScale > m_fMaxScale)
+		{
+			m_fScale = m_fMaxScale;
+		}
+
+		// 大きさを反映
+		transform().lock()->m_scale = Vector3(m_fScale, m_fScale, m_fScale);
+	}
 }
 
 //========================================

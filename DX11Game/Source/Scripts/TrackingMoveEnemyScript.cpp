@@ -69,8 +69,6 @@ void TrackingMoveEnemyScript::Start()
 	// 名前・タグ
 	gameObject().lock()->SetName("TrackingMoveEnemy");
 
-	// 大きさ
-	transform().lock()->m_scale = Vector3(200, 200, 200);
 
 	//--- コンポーネンの追加
 

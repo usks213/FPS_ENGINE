@@ -95,7 +95,7 @@ void TitleWorld::Start()
 	SetShowCursor(true);
 
 	// ƒTƒEƒ“ƒh
-	CSound::PlayBGM("TitleBGM.mp3", 0.2f);
+	CSound::PlayBGM("TitleBGM.mp3", 0.15f);
 }
 
 //===================================

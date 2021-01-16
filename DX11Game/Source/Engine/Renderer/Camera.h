@@ -5,7 +5,7 @@
 #define	VIEW_NEAR_Z			(50.0f)					// ビュー平面のNearZ値
 #define	VIEW_FAR_Z			(5000.0f)				// ビュー平面のFarZ値
 
-#define FOG_NEAR_Z	(VIEW_FAR_Z * 0.4f)
+#define FOG_NEAR_Z	(VIEW_FAR_Z * 0.3f)
 #define FOG_FAR_Z	(VIEW_FAR_Z * 0.6f)
 
 

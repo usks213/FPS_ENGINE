@@ -47,14 +47,14 @@ using namespace ECS;
 #define ANIM_DELTA_SPLIT_X (10)  // 画像の分割数(横)
 #define ANIM_DELTA_SPLIT_Y (1)  // 画像の分割数(縦)
 
-#define DELTA_SIZE_X	(64)
-#define DELTA_SIZE_Y	(64*2)
+#define DELTA_SIZE_X	(64 * SCREEN_SCALE_X)
+#define DELTA_SIZE_Y	(64*2 * SCREEN_SCALE_Y)
 #define DELTA_OFFSET_X	(DELTA_SIZE_X * 0.85f)
 #define DELTA_OFFSET_Y	(DELTA_SIZE_Y * 0.85f)
 
 #define MAX_DELTA (6)
 
-#define BEST_SCORE_SIZE_X (2400 / 5)
+#define BEST_SCORE_SIZE_X (2400 / 5 * SCREEN_SCALE_X)
 #define BEST_SCORE_SIZE_Y (DELTA_SIZE_Y)
 
 //******************** スクリプトメソッド ********************

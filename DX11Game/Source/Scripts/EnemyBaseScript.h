@@ -36,6 +36,10 @@ namespace ECS
 		std::weak_ptr<Rigidbody> m_rb;
 		// 移動速度
 		float m_speed;
+		// スケール
+		float m_fScale;
+		float m_fMaxScale;
+
 	public:
 		// リジッドボディ取得
 		std::weak_ptr<Rigidbody> GetRb() { return m_rb; }

@@ -53,7 +53,7 @@ using namespace ECS;
 #define ANIM_DELTA_SPLIT_X (10)  // ‰æ‘œ‚Ì•ªŠ„”(‰¡)
 #define ANIM_DELTA_SPLIT_Y (1)  // ‰æ‘œ‚Ì•ªŠ„”(c)
 
-#define DELTA_SIZE_X	(64*2)
+#define DELTA_SIZE_X	(64*2 * SCREEN_SCALE_X)
 #define DELTA_OFFSET_X	(DELTA_SIZE_X * 0.85f)
 
 #define MAX_DELTA (6)

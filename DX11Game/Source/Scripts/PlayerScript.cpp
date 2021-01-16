@@ -231,9 +231,10 @@ void PlayerScript::LateUpdate()
 	{
 		// 回復
 		m_fHP += m_fHeel;
-		if (m_fHP > m_fMaxHP)
-			m_fHP = m_fMaxHP;
 	}
+	// 最大値
+	if (m_fHP > m_fMaxHP)
+		m_fHP = m_fMaxHP;
 
 	// ダメージ
 	m_nDamageCnt--;
@@ -302,6 +303,8 @@ void PlayerScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 		m_nJump = 15;
 		// 画面揺れ
 		CCamera::GetMainCamera()->SetShakeFrame(6);
+		// 回復
+		m_fHP += m_fHeel * 60.0f;
 	}
 	else if (collider->gameObject().lock()->tag() == "StartCrystal")
 	{

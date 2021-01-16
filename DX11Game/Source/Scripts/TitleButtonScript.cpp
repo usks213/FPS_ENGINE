@@ -67,7 +67,7 @@ using namespace ECS;
 void TitleButtonScript::Start()
 {
 	// サイズ
-	transform().lock()->m_scale = Vector3{ 1920 / 4, 320 / 4, 1 };
+	transform().lock()->m_scale = Vector3{ 1920 / 4 * SCREEN_SCALE_X, 320 / 4 * SCREEN_SCALE_Y, 1 };
 
 	// スプライト
 	const auto& spr = gameObject().lock()->AddComponent<SpriteRenderer>();

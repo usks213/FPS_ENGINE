@@ -28,7 +28,8 @@ namespace ECS
 	protected:
 		// ----- メンバ -----
 		int m_nExitTime;	// 生存時間
-
+		// スケール
+		float m_fScale;
 	protected:
 		// ----- メソッド -----
 

@@ -72,7 +72,7 @@ void TrackingMoveEnemyHostScript::Start()
 	gameObject().lock()->SetTag("Host");
 
 	// 大きさ
-	transform().lock()->m_scale = Vector3(100, 100, 100);
+	m_fMaxScale = 100;
 
 	//--- コンポーネンの追加
 
