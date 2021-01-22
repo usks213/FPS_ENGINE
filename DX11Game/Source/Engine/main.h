@@ -100,3 +100,4 @@ void SetZWrite(bool bEnable);
 void SetBlendState(int nBlendState);
 void SetCullMode(int nCullMode);
 void SetRenderTarget();
+DXGI_SAMPLE_DESC GetMSAA();

@@ -79,6 +79,8 @@
 //				操作UIの表示
 //				
 //				デルタΔ完成！！
+//
+//	2021/01/23	マルチサンプリング(MSAA)対応
 //				
 //
 //======================================================================
@@ -145,6 +147,7 @@ UINT						g_uSyncInterval = 0;	// 垂直同期 (0:無, 1:有)
 ID3D11RasterizerState*		g_pRs[MAX_CULLMODE];	// ラスタライザ ステート
 ID3D11BlendState*			g_pBlendState[MAX_BLENDSTATE];// ブレンド ステート
 ID3D11DepthStencilState*	g_pDSS[2];				// Z/ステンシル ステート
+DXGI_SAMPLE_DESC			g_MSAA;					// マルチサンプリング
 
 int							g_nCountFPS;			// FPSカウンタ
 
@@ -352,8 +355,9 @@ HRESULT CreateBackBuffer(void)
 	td.MipLevels = 1;
 	td.ArraySize = 1;
 	td.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	td.SampleDesc.Count = 1;
-	td.SampleDesc.Quality = 0;
+	//td.SampleDesc.Count = 1;
+	//td.SampleDesc.Quality = 0;
+	td.SampleDesc = g_MSAA;
 	td.Usage = D3D11_USAGE_DEFAULT;
 	td.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	HRESULT hr = g_pDevice->CreateTexture2D(&td, nullptr, &g_pDepthStencilTexture);
@@ -395,21 +399,39 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 {
 	HRESULT hr = S_OK;
 
-	// デバイス、スワップチェーンの作成
-	DXGI_SWAP_CHAIN_DESC scd;
-	ZeroMemory(&scd, sizeof(scd));
-	scd.BufferCount = 1;
-	scd.BufferDesc.Width = SCREEN_WIDTH;
-	scd.BufferDesc.Height = SCREEN_HEIGHT;
-	scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	scd.BufferDesc.RefreshRate.Numerator = 60;
-	scd.BufferDesc.RefreshRate.Denominator = 1;
-	scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	scd.OutputWindow = hWnd;
-	scd.SampleDesc.Count = 1;
-	scd.SampleDesc.Quality = 0;
-	scd.Windowed = bWindow;
+	//// デバイス、スワップチェーンの作成
+	//DXGI_SWAP_CHAIN_DESC scd;
+	//ZeroMemory(&scd, sizeof(scd));
+	//scd.BufferCount = 1;
+	//scd.BufferDesc.Width = SCREEN_WIDTH;
+	//scd.BufferDesc.Height = SCREEN_HEIGHT;
+	//scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	//scd.BufferDesc.RefreshRate.Numerator = 60;
+	//scd.BufferDesc.RefreshRate.Denominator = 1;
+	//scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	//scd.OutputWindow = hWnd;
+	//scd.SampleDesc.Count = 1;
+	//scd.SampleDesc.Quality = 0;
+	//scd.Windowed = bWindow;
 
+	//D3D_FEATURE_LEVEL featureLevels[] = {
+	//	D3D_FEATURE_LEVEL_11_1,
+	//	D3D_FEATURE_LEVEL_11_0,
+	//	D3D_FEATURE_LEVEL_10_1,
+	//	D3D_FEATURE_LEVEL_10_0,
+	//	D3D_FEATURE_LEVEL_9_3,
+	//	D3D_FEATURE_LEVEL_9_2,
+	//	D3D_FEATURE_LEVEL_9_1,
+	//};
+
+	//hr = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE,
+	//	nullptr, 0, featureLevels, _countof(featureLevels), D3D11_SDK_VERSION, &scd,
+	//	&g_pSwapChain, &g_pDevice, nullptr, &g_pDeviceContext);
+	//if (FAILED(hr)) {
+	//	return hr;
+	//}
+
+	// フューチャーレベル
 	D3D_FEATURE_LEVEL featureLevels[] = {
 		D3D_FEATURE_LEVEL_11_1,
 		D3D_FEATURE_LEVEL_11_0,
@@ -420,12 +442,86 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 		D3D_FEATURE_LEVEL_9_1,
 	};
 
-	hr = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE,
-		nullptr, 0, featureLevels, _countof(featureLevels), D3D11_SDK_VERSION, &scd,
-		&g_pSwapChain, &g_pDevice, nullptr, &g_pDeviceContext);
+	//デバイスの生成
+	ID3D11Device* hpDevice = NULL;
+	ID3D11DeviceContext* hpDeviceContext = NULL;
+	hr = D3D11CreateDevice(
+		NULL,
+		D3D_DRIVER_TYPE_HARDWARE,
+		NULL,
+		0,
+		featureLevels,
+		7,
+		D3D11_SDK_VERSION,
+		&hpDevice,
+		NULL,
+		&hpDeviceContext);
 	if (FAILED(hr)) {
+		MessageBoxW(hWnd, L"D3D11CreateDevice", L"Err", MB_ICONSTOP);
 		return hr;
 	}
+
+	//使用可能なMSAAを取得
+	for (int i = 0; i <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; i++) {
+		UINT Quality;
+		if SUCCEEDED(hpDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_D24_UNORM_S8_UINT, i, &Quality)) {
+			if (0 < Quality) {
+				g_MSAA.Count = i;
+				g_MSAA.Quality = Quality - 1;
+			}
+		}
+	}
+
+	//インターフェース取得
+	IDXGIDevice1* hpDXGI = NULL;
+	if (FAILED(hpDevice->QueryInterface(__uuidof(IDXGIDevice1), (void**)&hpDXGI))) {
+		MessageBoxW(hWnd, L"QueryInterface", L"Err", MB_ICONSTOP);
+		return hr;
+	}
+
+	//アダプター取得
+	IDXGIAdapter* hpAdapter = NULL;
+	if (FAILED(hpDXGI->GetAdapter(&hpAdapter))) {
+		MessageBoxW(hWnd, L"GetAdapter", L"Err", MB_ICONSTOP);
+		return hr;
+	}
+
+	//ファクトリー取得
+	IDXGIFactory* hpDXGIFactory = NULL;
+	hpAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&hpDXGIFactory);
+	if (hpDXGIFactory == NULL) {
+		MessageBoxW(hWnd, L"GetParent", L"Err", MB_ICONSTOP);
+		return hr;
+	}
+
+	//スワップチェイン作成
+	IDXGISwapChain* hpDXGISwpChain = NULL;
+	DXGI_SWAP_CHAIN_DESC hDXGISwapChainDesc;
+	hDXGISwapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	hDXGISwapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	hDXGISwapChainDesc.SampleDesc = g_MSAA;
+	hDXGISwapChainDesc.BufferCount = 1;
+	hDXGISwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	hDXGISwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+
+	hDXGISwapChainDesc.BufferDesc.Width = SCREEN_WIDTH;
+	hDXGISwapChainDesc.BufferDesc.Height = SCREEN_HEIGHT;
+	hDXGISwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	hDXGISwapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
+	hDXGISwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+	hDXGISwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	hDXGISwapChainDesc.OutputWindow = hWnd;
+	hDXGISwapChainDesc.Windowed = bWindow;
+
+	if (FAILED(hpDXGIFactory->CreateSwapChain(hpDevice, &hDXGISwapChainDesc, &hpDXGISwpChain))) {
+		MessageBoxW(hWnd, L"CreateSwapChain", L"Err", MB_ICONSTOP);
+		return hr;
+	}
+
+	// デバイス、デバイスコンテキスト、スワップチェイン
+	g_pDevice = hpDevice;
+	g_pDeviceContext = hpDeviceContext;
+	g_pSwapChain = hpDXGISwpChain;
 
 	// バックバッファ生成
 	hr = CreateBackBuffer();
@@ -770,4 +866,9 @@ void SetRenderTarget()
 	// 各ターゲットビューをレンダーターゲットに設定
 	//g_pDeviceContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
 	g_pDeviceContext->OMSetRenderTargets(1, &g_post.m_pRenderTargetView, g_post.m_pDepthStencilView);
+}
+
+DXGI_SAMPLE_DESC GetMSAA()
+{ 
+	return g_MSAA; 
 }

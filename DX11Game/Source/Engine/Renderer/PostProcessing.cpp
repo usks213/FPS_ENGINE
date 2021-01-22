@@ -173,7 +173,7 @@ HRESULT PostProcessing::Init(ID3D11Device* pDevice)
 	renderTexture.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	renderTexture.MipLevels = 1;
 	renderTexture.ArraySize = 1;
-	renderTexture.SampleDesc.Count = 1;
+	renderTexture.SampleDesc = GetMSAA();
 	renderTexture.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
 	renderTexture.Height = static_cast<UINT>(SCREEN_HEIGHT);
 	renderTexture.Width = static_cast<UINT>(SCREEN_WIDTH);
@@ -191,7 +191,8 @@ HRESULT PostProcessing::Init(ID3D11Device* pDevice)
 	D3D11_RENDER_TARGET_VIEW_DESC renderTargetView;
 	ZeroMemory(&renderTargetView, sizeof(D3D11_RENDER_TARGET_VIEW_DESC));
 	renderTargetView.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	renderTargetView.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	//renderTargetView.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	renderTargetView.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
 
 	hr = pDevice->CreateRenderTargetView(
 		m_pRenderTexture,
@@ -206,7 +207,8 @@ HRESULT PostProcessing::Init(ID3D11Device* pDevice)
 	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
 	ZeroMemory(&shaderResourceViewDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
 	shaderResourceViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	//shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
 
 	hr = pDevice->CreateShaderResourceView(
 		m_pRenderTexture,
@@ -224,7 +226,7 @@ HRESULT PostProcessing::Init(ID3D11Device* pDevice)
 	shadowMapDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
 	shadowMapDesc.MipLevels = 1;
 	shadowMapDesc.ArraySize = 1;
-	shadowMapDesc.SampleDesc.Count = 1;
+	shadowMapDesc.SampleDesc = GetMSAA();
 	shadowMapDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL;
 	shadowMapDesc.Height = static_cast<UINT>(SCREEN_HEIGHT);
 	shadowMapDesc.Width = static_cast<UINT>(SCREEN_WIDTH);
@@ -242,7 +244,8 @@ HRESULT PostProcessing::Init(ID3D11Device* pDevice)
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 	ZeroMemory(&depthStencilViewDesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
 	depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	//depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
 	depthStencilViewDesc.Texture2D.MipSlice = 0;
 
 	hr = pDevice->CreateDepthStencilView(
@@ -257,7 +260,8 @@ HRESULT PostProcessing::Init(ID3D11Device* pDevice)
 	// 深度ステンシルシェーダーリソース
 	D3D11_SHADER_RESOURCE_VIEW_DESC DSshaderResourceViewDesc;
 	ZeroMemory(&DSshaderResourceViewDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
-	DSshaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	//DSshaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	DSshaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DMS;
 	DSshaderResourceViewDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
 	DSshaderResourceViewDesc.Texture2D.MipLevels = 1;
 
