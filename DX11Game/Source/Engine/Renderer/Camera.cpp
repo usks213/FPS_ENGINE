@@ -29,6 +29,8 @@
 #define CAM_DIST_MIN		(20.0f)					// カメラ最小距離
 #define CAM_DIST_MAX		(3000.0f)				// カメラ最大距離
 
+#define CAM_ROT_SPEED		(3.0f)
+
 CCamera* CCamera::m_mainCamera = nullptr;
 
 
@@ -189,27 +191,27 @@ void CCamera::Update()
 	// カメラ操作
 	if (GetKeyPress(VK_RIGHT)) {
 		XMMATRIX mtx = XMMatrixRotationY(
-			XMConvertToRadians(1));
+			XMConvertToRadians(CAM_ROT_SPEED));
 		XMStoreFloat3(&m_vRelPos,
 			XMVector3TransformCoord(
 				XMLoadFloat3(&m_vRelPos), mtx));
 		XMStoreFloat3(&m_vRelTarget,
 			XMVector3TransformCoord(
 				XMLoadFloat3(&m_vRelTarget), mtx));
-		m_vAngle.y += 1.0f;
+		m_vAngle.y += CAM_ROT_SPEED;
 		if (m_vAngle.y >= 180.0f)
 			m_vAngle.y -= 360.0f;
 	}
 	if (GetKeyPress(VK_LEFT)) {
 		XMMATRIX mtx = XMMatrixRotationY(
-			XMConvertToRadians(-1));
+			XMConvertToRadians(-CAM_ROT_SPEED));
 		XMStoreFloat3(&m_vRelPos,
 			XMVector3TransformCoord(
 				XMLoadFloat3(&m_vRelPos), mtx));
 		XMStoreFloat3(&m_vRelTarget,
 			XMVector3TransformCoord(
 				XMLoadFloat3(&m_vRelTarget), mtx));
-		m_vAngle.y -= 1.0f;
+		m_vAngle.y -= CAM_ROT_SPEED;
 		if (m_vAngle.y < -180.0f)
 			m_vAngle.y += 360.0f;
 	}
@@ -218,28 +220,28 @@ void CCamera::Update()
 			XMVectorSet(m_mtxWorld._11,
 				m_mtxWorld._12,
 				m_mtxWorld._13, 0.0f),
-			XMConvertToRadians(1));
+			XMConvertToRadians(CAM_ROT_SPEED));
 		XMStoreFloat3(&m_vRelPos,
 			XMVector3TransformCoord(
 				XMLoadFloat3(&m_vRelPos), mtx));
 		XMStoreFloat3(&m_vRelTarget,
 			XMVector3TransformCoord(
 				XMLoadFloat3(&m_vRelTarget), mtx));
-		m_vAngle.x += 1.0f;
+		m_vAngle.x += CAM_ROT_SPEED;
 	}
 	if (GetKeyPress(VK_UP) && m_vAngle.x - 1 > -80.0f) {
 		XMMATRIX mtx = XMMatrixRotationAxis(
 			XMVectorSet(m_mtxWorld._11,
 				m_mtxWorld._12,
 				m_mtxWorld._13, 0.0f),
-			XMConvertToRadians(-1));
+			XMConvertToRadians(-CAM_ROT_SPEED));
 		XMStoreFloat3(&m_vRelPos,
 			XMVector3TransformCoord(
 				XMLoadFloat3(&m_vRelPos), mtx));
 		XMStoreFloat3(&m_vRelTarget,
 			XMVector3TransformCoord(
 				XMLoadFloat3(&m_vRelTarget), mtx));
-		m_vAngle.x -= 1.0f;
+		m_vAngle.x -= CAM_ROT_SPEED;
 	}
 
 	// カメラの向き

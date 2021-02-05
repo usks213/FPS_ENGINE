@@ -81,10 +81,13 @@
 //				デルタΔ完成！！
 //
 //	2021/01/23	マルチサンプリング(MSAA)対応
+//
+//	2021/01/28	dGPU対応 アダプターでGPUを選択
 //				
 //
 //======================================================================
 #include "main.h"
+#include <dxgi.h>
 
 // システム
 #include "System/input.h"
@@ -114,6 +117,8 @@
 #pragma comment(lib, "winmm")
 #pragma comment(lib, "imm32")
 #pragma comment(lib, "d3d11")
+#pragma comment(lib, "dxgi.lib")
+
 
 //*****************************************************************************
 // マクロ定義
@@ -257,13 +262,13 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 				dwExecLastTime = dwCurrentTime;
 				// 更新処理
 				Update();
-				//// 描画処理
-				//Draw();
-				//dwFrameCount++;
+				// 描画処理
+				Draw();
+				dwFrameCount++;
 			}
-			// 描画処理
-			Draw();
-			dwFrameCount++;
+			//// 描画処理
+			//Draw();
+			//dwFrameCount++;
 		}
 	}
 
@@ -400,38 +405,20 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 	HRESULT hr = S_OK;
 
 	//// デバイス、スワップチェーンの作成
-	//DXGI_SWAP_CHAIN_DESC scd;
-	//ZeroMemory(&scd, sizeof(scd));
-	//scd.BufferCount = 1;
-	//scd.BufferDesc.Width = SCREEN_WIDTH;
-	//scd.BufferDesc.Height = SCREEN_HEIGHT;
-	//scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	//scd.BufferDesc.RefreshRate.Numerator = 60;
-	//scd.BufferDesc.RefreshRate.Denominator = 1;
-	//scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	//scd.OutputWindow = hWnd;
-	//scd.SampleDesc.Count = 1;
-	//scd.SampleDesc.Quality = 0;
-	//scd.Windowed = bWindow;
+//DXGI_SWAP_CHAIN_DESC scd;
+//ZeroMemory(&scd, sizeof(scd));
+//scd.BufferCount = 1;
+//scd.BufferDesc.Width = SCREEN_WIDTH;
+//scd.BufferDesc.Height = SCREEN_HEIGHT;
+//scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+//scd.BufferDesc.RefreshRate.Numerator = 60;
+//scd.BufferDesc.RefreshRate.Denominator = 1;
+//scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+//scd.OutputWindow = hWnd;
+//scd.SampleDesc.Count = 1;
+//scd.SampleDesc.Quality = 0;
+//scd.Windowed = bWindow;
 
-	//D3D_FEATURE_LEVEL featureLevels[] = {
-	//	D3D_FEATURE_LEVEL_11_1,
-	//	D3D_FEATURE_LEVEL_11_0,
-	//	D3D_FEATURE_LEVEL_10_1,
-	//	D3D_FEATURE_LEVEL_10_0,
-	//	D3D_FEATURE_LEVEL_9_3,
-	//	D3D_FEATURE_LEVEL_9_2,
-	//	D3D_FEATURE_LEVEL_9_1,
-	//};
-
-	//hr = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE,
-	//	nullptr, 0, featureLevels, _countof(featureLevels), D3D11_SDK_VERSION, &scd,
-	//	&g_pSwapChain, &g_pDevice, nullptr, &g_pDeviceContext);
-	//if (FAILED(hr)) {
-	//	return hr;
-	//}
-
-	// フューチャーレベル
 	D3D_FEATURE_LEVEL featureLevels[] = {
 		D3D_FEATURE_LEVEL_11_1,
 		D3D_FEATURE_LEVEL_11_0,
@@ -442,12 +429,47 @@ HRESULT Init(HWND hWnd, BOOL bWindow)
 		D3D_FEATURE_LEVEL_9_1,
 	};
 
+	//hr = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE,
+	//	nullptr, 0, featureLevels, _countof(featureLevels), D3D11_SDK_VERSION, &scd,
+	//	&g_pSwapChain, &g_pDevice, nullptr, &g_pDeviceContext);
+	//if (FAILED(hr)) {
+	//	return hr;
+	//}
+
+	// 列挙
+	IDXGIAdapter* iAdapter = NULL;
+	IDXGIFactory* iFactory = NULL;
+	std::vector<IDXGIAdapter*> aiAdapter;
+	aiAdapter.push_back(iAdapter);
+
+	hr = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)(&iFactory));
+
+	for (unsigned int index = 0;; index++)
+	{
+		HRESULT	ret = iFactory->EnumAdapters(index, &iAdapter);
+
+		if (ret == DXGI_ERROR_NOT_FOUND)
+		{
+			break;
+		}
+		// ～ アダプタの選択
+		 //iAdapter->Release();
+		aiAdapter.push_back(iAdapter);
+	}
+	//iFactory->Release();
+
+	aiAdapter.pop_back();
+	if (aiAdapter.size() <= 0)
+	{
+		aiAdapter.push_back(NULL);
+	}
+
 	//デバイスの生成
 	ID3D11Device* hpDevice = NULL;
 	ID3D11DeviceContext* hpDeviceContext = NULL;
 	hr = D3D11CreateDevice(
-		NULL,
-		D3D_DRIVER_TYPE_HARDWARE,
+		aiAdapter.back(),
+		aiAdapter.back() ? D3D_DRIVER_TYPE_UNKNOWN : D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
 		0,
 		featureLevels,

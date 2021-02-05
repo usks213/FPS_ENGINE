@@ -63,6 +63,8 @@ using namespace ECS;
 //===== マクロ定義 =====
 #define MAX_SPAWN_NUM (50)
 
+#define MAX_ENETETY_NUM (MAX_SPAWN_NUM * 120)
+
 
 //******************** スクリプトメソッド ********************
 
@@ -147,7 +149,7 @@ void MakeEnemyScript::Update()
 		}
 
 		// エンティティの数
-		if (GetEntityManager()->GetEntityCount() > 6000) continue;
+		if (GetEntityManager()->GetEntityCount() > MAX_ENETETY_NUM) continue;
 
 		//--- タイプで分ける
 		switch (m_nType)
