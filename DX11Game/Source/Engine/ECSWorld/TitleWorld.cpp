@@ -95,7 +95,7 @@ void TitleWorld::Start()
 	SetShowCursor(true);
 
 	// サウンド
-	CSound::PlayBGM("TitleBGM.mp3", 0.15f);
+	CSound::PlayBGM("TitleBGM.bin", 0.15f);
 }
 
 //===================================
@@ -106,5 +106,5 @@ void TitleWorld::Start()
 void TitleWorld::End()
 {
 	// サウンド
-	CSound::StopBGM("TitleBGM.mp3");
+	CSound::StopBGM("TitleBGM.bin");
 }

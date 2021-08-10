@@ -195,7 +195,7 @@ void BombCrystalScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 		Destroy(gameObject().lock());
 
 		// サウンド
-		CSound::PlaySE("Crystal.wav");
+		CSound::PlaySE("Crystal.bin");
 	}
 }
 
@@ -244,7 +244,7 @@ void BombCrystalScript::OnDeltaCollisionStay(DeltaCollider* collider)
 		Destroy(gameObject().lock());
 
 		// サウンド
-		CSound::PlaySE("Crystal.wav");
+		CSound::PlaySE("Crystal.bin");
 	}
 }
 

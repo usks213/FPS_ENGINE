@@ -93,6 +93,8 @@ void World::Update()
 	// システムリストの更新処理
 	for (auto&& system : m_SystemList)
 	{
+		// コンポーネントのソート
+		//system->SortComponentList();
 		// OnUpdateを呼び出す
 		system->OnUpdate();
 	}

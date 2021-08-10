@@ -171,7 +171,7 @@ void PlayerScript::Update()
 	{
 		m_rb.lock()->SetForceY(jump + m_nJump);
 		// サウンド
-		CSound::PlaySE("Jump.wav", 0.7f);
+		CSound::PlaySE("Jump.bin", 0.7f);
 		// 画面揺れ
 		CCamera::GetMainCamera()->SetShakeFrame(8);
 		m_bGround = false;
@@ -197,7 +197,7 @@ void PlayerScript::Update()
 		m_nShotCnt = 5;
 
 		// サウンド
-		CSound::PlaySE("Shot.wav", 0.12f);
+		CSound::PlaySE("Shot.bin", 0.12f);
 
 	}
 }
@@ -221,7 +221,7 @@ void PlayerScript::LateUpdate()
 		// 画面揺れ
 		CCamera::GetMainCamera()->SetShakeFrame(6);
 		// サウンド
-		CSound::PlaySE("PlayerGround.wav", 1.0f);
+		CSound::PlaySE("PlayerGround.bin", 1.0f);
 	}
 
 
@@ -312,7 +312,7 @@ void PlayerScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 		// 画面揺れ
 		CCamera::GetMainCamera()->SetShakeFrame(6);
 		// BGM
-		CSound::PlayBGM("GameBGM.mp3", 0.3f);
+		CSound::PlayBGM("GameBGM.bin", 0.3f);
 
 	}
 	else if (collider->gameObject().lock()->tag() == "Enemy")
@@ -335,7 +335,7 @@ void PlayerScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 			CCamera::GetMainCamera()->SetShakeFrame(16);
 
 			// サウンド
-			CSound::PlaySE("PlayerDamage.wav", 1.0f);
+			CSound::PlaySE("PlayerDamage.bin", 1.0f);
 
 			if (m_fHP > 0) return;
 			// ゲームオーバー

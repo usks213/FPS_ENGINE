@@ -1,7 +1,5 @@
-Crystal.wav
-Delta.wav
-GameOver.wav
-Jump.wav
-PlayerDamage.wav
-PlayerGround.wav
-Shot.wav
+Crystal.bin
+Delta.bin
+Jump.bin
+PlayerGround.bin
+Shot.bin

@@ -180,7 +180,7 @@ void DropDeltaScript::OnDeltaCollisionEnter(DeltaCollider* collider)
 		// 自身の削除
 		GetEntityManager()->DestroyEntity(gameObject().lock());
 		// サウンド
-		CSound::PlaySE("Delta.wav");
+		CSound::PlaySE("Delta.bin");
 	}
 }
 
@@ -196,7 +196,7 @@ void DropDeltaScript::OnDeltaCollisionStay(DeltaCollider* collider)
 		// 自身の削除
 		GetEntityManager()->DestroyEntity(gameObject().lock());
 		// サウンド
-		CSound::PlaySE("Delta.wav");
+		CSound::PlaySE("Delta.bin");
 	}
 }
 

@@ -1,2 +1,2 @@
-GameBGM.mp3
-TitleBGM.mp3
+GameBGM.bin
+TitleBGM.bin

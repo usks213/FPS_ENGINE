@@ -146,6 +146,6 @@ void GameWorld::Start()
 void GameWorld::End()
 {
 	// BGM
-	CSound::StopBGM("GameBGM.mp3");
+	CSound::StopBGM("GameBGM.bin");
 
 }

@@ -48,6 +48,8 @@ namespace ECS
 
 		// 更新処理の実行順を取得
 		int GetUpdateOrder() { return m_nUpdateOrder; }
+		// コンポーネントのソート
+		virtual void SortComponentList() = 0;
 
 		// IDの登録
 		template <class T>

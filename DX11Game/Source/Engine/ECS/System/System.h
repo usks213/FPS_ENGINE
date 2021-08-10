@@ -64,6 +64,15 @@ namespace ECS
 			m_ComponentPool.erase(itr);
 		}
 
+		// コンポーネントのソート
+		void SortComponentList() override
+		{
+			m_ComponentList.sort([](T* left, T* right)
+				{
+					return left < right;
+				});
+		}
+
 	protected:
 		std::list<T*> m_ComponentList;
 		using ComItr = typename std::list<T*>::iterator;

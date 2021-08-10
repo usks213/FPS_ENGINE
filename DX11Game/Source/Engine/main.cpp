@@ -805,6 +805,7 @@ void Draw(void)
 	// デバッグ文字列表示
 	SetBlendState(BS_ALPHABLEND);
 	SetPolygonColor(1.0f, 1.0f, 1.0f);
+	SetPolygonAlpha(1.0f);
 	DrawDebugProc();
 	SetBlendState(BS_NONE);
 #endif // _DEBUG

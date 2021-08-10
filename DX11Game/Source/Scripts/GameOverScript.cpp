@@ -82,8 +82,8 @@ void GameOverScript::Start()
 	m_fAddAlpha = 1.0f / 60.0f;
 
 	// ƒTƒEƒ“ƒh
-	CSound::StopBGM("GameBGM.mp3");
-	CSound::PlaySE("GameOver.wav", 1.0f);
+	CSound::StopBGM("GameBGM.bin");
+	CSound::PlaySE("GameOver.bin", 1.0f);
 
 }
 
